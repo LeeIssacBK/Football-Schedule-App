@@ -1,13 +1,45 @@
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
+    return MaterialApp(
+      title: '이건 안 보이네?',
+      theme: ThemeData.light().copyWith(
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.blue
+        )
+      ),
+      home: const MyHomePage(),
+    );
   }
+}
+
+class MyHomePage extends StatelessWidget {
+  const MyHomePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('scaffold title'),
+      ),
+      body: const Center(
+        child: Column(
+          children: [
+            Text('Hello World!!!1'),
+            Text('Hello World!!!2'),
+            Text('Hello World!!!3'),
+          ],
+        ),
+      ),
+    );
+  }
+
 
 }

@@ -28,16 +28,24 @@ class MyHomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('scaffold title'),
+        titleTextStyle: const TextStyle(
+            color: Colors.white,
+            fontSize: 30,
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.redAccent,
+        elevation: 0.0,
       ),
       body: const Center(
         child: Column(
-          children: [
-            Text('Hello World!!!1'),
-            Text('Hello World!!!2'),
-            Text('Hello World!!!3'),
-          ],
-        ),
-      ),
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('Hello'),
+              Text('Hello'),
+              Text('Hello'),
+            ],
+          ),
+      )
     );
   }
 

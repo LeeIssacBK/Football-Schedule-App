@@ -30,7 +30,10 @@ class MyPage extends StatelessWidget {
             flutterToast();
           },
           child: Text('I am Toast'),
-          style: FilledButton.styleFrom(foregroundColor: Colors.blue)
+          style: FilledButton.styleFrom(
+              foregroundColor: Colors.white,
+              backgroundColor: Colors.black
+          )
         ),
       ),
     );

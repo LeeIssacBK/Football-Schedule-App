@@ -18,12 +18,13 @@ class MyAppState extends State<MyApp> {
 
   void _incrementCounter() {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
       _counter++;
+    });
+  }
+
+  void _decrementCounter() {
+    setState(() {
+      _counter--;
     });
   }
 
@@ -32,7 +33,10 @@ class MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+          backgroundColor: Theme
+              .of(context)
+              .colorScheme
+              .inversePrimary,
           title: Text(widget.title),
         ),
         body: Center(
@@ -44,15 +48,30 @@ class MyAppState extends State<MyApp> {
               ),
               Text(
                 '$_counter',
-                style: Theme.of(context).textTheme.headlineMedium,
+                style: Theme
+                    .of(context)
+                    .textTheme
+                    .headlineMedium,
               ),
+              const SizedBox(
+                height: 30,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  FilledButton(
+                      onPressed: _incrementCounter,
+                      child: const Icon(Icons.add)),
+                  const SizedBox(
+                    width: 5.0,
+                  ),
+                  FilledButton(
+                      onPressed: _decrementCounter,
+                      child: const Icon(Icons.remove))
+                ],
+              )
             ],
           ),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: _incrementCounter,
-          tooltip: 'Increment',
-          child: const Icon(Icons.add),
         ),
       ),
     );

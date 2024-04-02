@@ -23,5 +23,4 @@ class ScreenA extends StatelessWidget {
       ),
     );
   }
-
 }

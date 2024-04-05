@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 
+import 'package:fluttertoast/fluttertoast.dart';
+
 class Dice extends StatefulWidget {
   @override
   State<Dice> createState() => _DiceState();
@@ -56,10 +58,20 @@ class _DiceState extends State<Dice> {
                       leftDice = Random().nextInt(6) + 1;
                       rightDice = Random().nextInt(6) + 1;
                     });
+                    showToast('left dice : [$leftDice], right dice : [$rightDice]');
                   },
               )
             ],
           ),
         ));
   }
+
+  void showToast(String msg) {
+    Fluttertoast.showToast(msg: msg,
+    backgroundColor: Colors.white,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM
+    );
+  }
+
 }

@@ -65,9 +65,7 @@ class MyApp extends StatelessWidget {
 }
 
 Future<Info> fetchInfo() async {
-  final response =
-  await http.get(Uri.parse('https://my.api.mockaroo.com/bank.json?key=fea24270'));
-
+  final response = await http.get(Uri.parse('https://my.api.mockaroo.com/bank.json?key=fea24270'));
   if (response.statusCode == 200) {
     return Info.fromJson(json.decode(response.body));
   } else {

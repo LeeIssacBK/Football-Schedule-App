@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'home.dart';
 
 class Login extends StatelessWidget {
+
+  final String url = 'https://kauth.kakao.com/oauth/authorize?client_id=be34591b9514798eec7010a400ecca1a&redirect_uri=http://localhost:8090/oauth/kakao&response_type=code';
+
   @override
   Widget build(BuildContext context) {
     return Builder(
@@ -15,6 +19,7 @@ class Login extends StatelessWidget {
                 Expanded(child: SizedBox()),
                 IconButton(
                   onPressed: () {
+                    kakaoLogin();
                     Navigator.push(
                         context, MaterialPageRoute(builder: (_) => Home()));
                   },
@@ -36,4 +41,9 @@ class Login extends StatelessWidget {
       }
     );
   }
+
+  Future<void> kakaoLogin() async {
+    final response = await http.get(Uri.parse(url));
+  }
+
 }

@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'login.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 
-void main() => runApp(App());
+void main() {
+  KakaoSdk.init(nativeAppKey: '6ef65107292ada731123dac02c2d72bc');
+  runApp(App());
+}
 
 class App extends StatelessWidget {
   @override

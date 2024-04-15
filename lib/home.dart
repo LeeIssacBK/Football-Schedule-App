@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'global.dart';
 
 class Home extends StatelessWidget {
   @override
@@ -12,7 +13,7 @@ class Home extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Expanded(child: SizedBox()),
-            Text('HOME', style: TextStyle(color: Colors.white),),
+            Text('${user.name}님 반갑습니다!', style: TextStyle(color: Colors.white),),
             Expanded(child: SizedBox()),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

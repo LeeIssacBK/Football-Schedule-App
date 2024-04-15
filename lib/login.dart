@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:http/http.dart' as http;
 import 'api/auth.dart';
+import 'api/apiUser.dart';
+import 'global.dart';
+import 'home.dart';
 
 class Login extends StatelessWidget {
-
-  String baseUrl = 'http://192.168.45.242:8090';
-  Map<String, String> baseHeader = {};
 
   @override
   Widget build(BuildContext context) {
@@ -47,25 +47,20 @@ class Login extends StatelessWidget {
       OAuthToken token = isInstalled
           ? await UserApi.instance.loginWithKakaoTalk()
           : await UserApi.instance.loginWithKakaoAccount();
-      print('token ::: ${token}');
 
       final response = await http.get(Uri.parse('$baseUrl/oauth/kakao?token=${token.accessToken}'));
       if (response.statusCode == 200) {
-        Auth auth = Auth.fromJson(json.decode(response.body));
-        print('accessToken ::: ${auth.accessToken}');
-
+        auth = Auth.fromJson(json.decode(response.body));
         baseHeader['Authorization'] = 'Bearer ${auth.accessToken}';
-
         final me = await http.get(Uri.parse('$baseUrl/oauth/me'), headers: baseHeader);
-        dynamic me_json = json.decode(utf8.decode(me.bodyBytes));
-        print('me ::: $me_json');
+        user = ApiUser.fromJson(json.decode(utf8.decode(me.bodyBytes)));
       }
     } catch (e) {
       print('error ::: ${e}');
     }
 
-    // Navigator.push(
-    //     context, MaterialPageRoute(builder: (_) => Home()));
+    Navigator.push(
+        context, MaterialPageRoute(builder: (_) => Home()));
   }
 
 }

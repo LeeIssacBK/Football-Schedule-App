@@ -21,7 +21,8 @@ class Login extends StatelessWidget {
               Expanded(child: SizedBox()),
               IconButton(
                 onPressed: () {
-                  kakaoLogin(context);
+                  kakaoLogin().then((_) => Navigator.push(
+                      context, MaterialPageRoute(builder: (_) => Home())));
                 },
                 icon: Image(
                     image: AssetImage('image/kakao_login_medium_narrow.png')),
@@ -41,26 +42,22 @@ class Login extends StatelessWidget {
     });
   }
 
-  Future<void> kakaoLogin(BuildContext context) async {
+  Future<void> kakaoLogin() async {
     try {
       bool isInstalled = await isKakaoTalkInstalled();
-      OAuthToken token = isInstalled
+      OAuthToken kakaoOauth = isInstalled
           ? await UserApi.instance.loginWithKakaoTalk()
           : await UserApi.instance.loginWithKakaoAccount();
-
-      final response = await http.get(Uri.parse('$baseUrl/oauth/kakao?token=${token.accessToken}'));
-      if (response.statusCode == 200) {
-        auth = Auth.fromJson(json.decode(response.body));
-        baseHeader['Authorization'] = 'Bearer ${auth.accessToken}';
-        final me = await http.get(Uri.parse('$baseUrl/oauth/me'), headers: baseHeader);
-        user = ApiUser.fromJson(json.decode(utf8.decode(me.bodyBytes)));
+      final authResponse = await http.get(Uri.parse('$baseUrl/oauth/kakao?token=${kakaoOauth.accessToken}'));
+      if (authResponse.statusCode == 200) {
+        auth = Auth.fromJson(json.decode(authResponse.body));
       }
+      baseHeader['Authorization'] = 'Bearer ${auth.accessToken}';
+      final userInfoResponse = await http.get(Uri.parse('$baseUrl/oauth/me'), headers: baseHeader);
+      user = ApiUser.fromJson(json.decode(utf8.decode(userInfoResponse.bodyBytes)));
     } catch (e) {
-      print('error ::: ${e}');
+      rethrow;
     }
-
-    Navigator.push(
-        context, MaterialPageRoute(builder: (_) => Home()));
   }
 
 }

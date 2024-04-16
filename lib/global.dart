@@ -15,6 +15,6 @@ void reissueToken() async {
   if (response.statusCode == 200) {
     auth = Auth.fromJson(json.decode(response.body));
   } else {
-    throw Exception('status Code is not 200');
+    throw Exception('response code ::: ${response.statusCode}\n ${response.body}');
   }
 }

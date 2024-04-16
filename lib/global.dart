@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'api/auth.dart';
 import 'api/apiUser.dart';
 import 'package:http/http.dart' as http;
@@ -15,6 +14,6 @@ void reissueToken() async {
   if (response.statusCode == 200) {
     auth = Auth.fromJson(json.decode(response.body));
   } else {
-    throw Exception('response code ::: ${response.statusCode}\n ${response.body}');
+    throw Exception(response.body);
   }
 }

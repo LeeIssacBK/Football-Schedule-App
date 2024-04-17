@@ -45,7 +45,7 @@ class League {
 class Team {
   final int apiId;
   final String name;
-  final String code;
+  final String? code;
   final int founded;
   final bool national;
   final String logo;

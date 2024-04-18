@@ -14,7 +14,6 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
 
-  String message = '';
   String? teamImageUrl;
   late Subscribe? subscribe;
 
@@ -27,6 +26,11 @@ class _HomeState extends State<Home> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Expanded(child: SizedBox()),
+            Text(
+              '${user.name}님 반갑습니다!',
+              style: TextStyle(color: Colors.white, fontSize: 20.0),),
+            teamImageUrl == null ? Image.asset('assets/saedaegal.gif') : Image
+                .network(teamImageUrl!),
             Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -43,12 +47,23 @@ class _HomeState extends State<Home> {
                   }, child: Text('경기 일정 확인하기')),
                 ]
             ),
-            teamImageUrl == null ? Image.asset('assets/saedaegal.gif') : Image.network(teamImageUrl!),
-            Text(
-              '${user.name}님 반갑습니다!', style: TextStyle(color: Colors.white, fontSize: 20.0),),
             SizedBox(height: 10,),
-            Text(
-              message, style: TextStyle(color: Colors.white),),
+            Row(
+              children: [
+                Text('다음 경기', style: TextStyle(color: Colors.white, fontSize: 20.0),),
+              ],
+            ),
+            Row(
+              children: [
+                Image.asset('assets/saedaegal.png', width: 100.0,),
+                Column(
+                  children: [
+                    Text('data', style: TextStyle(color: Colors.white, fontSize: 20.0),),
+                    Text('data', style: TextStyle(color: Colors.white, fontSize: 20.0),),
+                  ],
+                )
+              ],
+            ),
             SizedBox(height: 10,),
             Expanded(child: SizedBox()),
             Row(
@@ -69,25 +84,28 @@ class _HomeState extends State<Home> {
   }
 
   void checkSubscribe() async {
-    final response = await http.get(Uri.parse('$baseUrl/api/subscribe/?type=TEAM'), headers: baseHeader);
+    final response = await http.get(
+        Uri.parse('$baseUrl/api/subscribe/?type=TEAM'), headers: baseHeader);
     if (response.statusCode == 200) {
       dynamic body = jsonDecode(response.body);
       if (body is List && body.isNotEmpty) {
         subscribe = Subscribe.fromJson(body.first);
         teamImageUrl = subscribe?.team!.logo;
       }
-    } else {
-      message = '구독 정보가 없습니다.';
     }
   }
 
   void getSchedule() async {
-    final response = await http.get(Uri.parse('$baseUrl/api/fixture?teamId=${subscribe?.team!.apiId}'), headers: baseHeader);
+    final response = await http.get(
+        Uri.parse('$baseUrl/api/fixture?teamId=${subscribe?.team!.apiId}'),
+        headers: baseHeader);
     print(response);
     if (response.statusCode == 200) {
-      List<Fixture> fixtures = List<Fixture>.from(json.decode(response.body).map((model) => Fixture.fromJson(model)));
+      List<Fixture> fixtures = List<Fixture>.from(
+          json.decode(response.body).map((model) => Fixture.fromJson(model)));
       fixtures.forEach((v) {
-        print('round : ${v.round} | status : ${v.status} | match : ${v.home?.name} vs ${v.away?.name} | date : ${v.date}');
+        print('round : ${v.round} | status : ${v.status} | match : ${v.home
+            ?.name} vs ${v.away?.name} | date : ${v.date}');
       });
     }
   }

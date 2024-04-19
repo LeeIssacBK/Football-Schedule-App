@@ -32,7 +32,7 @@ class Fixture {
       round: json['round'],
       status: json['status'],
       referee: json['referee'],
-      date: DateTime.parse(json['date']),
+      date: DateTime.parse(json['date']).add(const Duration(hours: 9)),
       league: json['league'] != null ? League.fromJson(json['league']) : null,
       home: json['home'] != null ? Team.fromJson(json['home']) : null,
       away: json['away'] != null ? Team.fromJson(json['away']) : null,

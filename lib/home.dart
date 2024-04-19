@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:geolpo/dto/fixture.dart';
+import 'package:intl/intl.dart';
 import 'dart:convert';
+import 'dart:core';
 import 'dto/subscribe.dart';
 import 'global.dart';
 import 'package:http/http.dart' as http;
@@ -17,13 +19,14 @@ class _HomeState extends State<Home> {
   String? teamImageUrl;
   Subscribe? subscribe;
   List<Fixture>? fixtures;
+  Fixture? nextFixture;
 
   @override
   void initState() {
-    super.initState();
     checkSubscribe()
         .then((_) => getSchedule())
         .then((_) => setState(() {}));
+    super.initState();
   }
 
   @override
@@ -52,31 +55,68 @@ class _HomeState extends State<Home> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              teamImageUrl == null ? CircularProgressIndicator() : Image.network(teamImageUrl!),
-              SizedBox(height: 10,),
-              Row(
-                children: [
-                  Text('다음 경기', style: TextStyle(color: Colors.white, fontSize: 20.0),),
-                ],
+              Container(
+                padding: const EdgeInsets.all(15.0),
+                child: teamImageUrl == null ? const CircularProgressIndicator() :
+                Image.network(teamImageUrl!, width: 200.0, height: 200.0),
+              ),
+              Container(
+                color: Colors.deepPurpleAccent,
+                width: double.infinity,
+                  padding: const EdgeInsets.all(5.0),
+                child: const Text('다음 경기', style: TextStyle(color: Colors.white, fontSize: 20.0))
+              ),
+              Container(
+                padding: const EdgeInsets.all(15.0),
+                child: Row(
+                  children: nextFixture != null ? [
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
+                      child: Image.network(isHome(nextFixture!.home!) ?
+                      nextFixture!.away!.logo : nextFixture!.home!.logo, width: 100.0,),
+                    ),
+                    Column(
+                      children: [
+                        Text('${nextFixture!.round.replaceAll(RegExp(r'[^0-9]'), '')} 라운드 (${isHome(nextFixture!.home!) ? '홈' : '원정'})', style: TextStyle(color: Colors.white, fontSize: 20.0),),
+                        Text(DateFormat('y. M. d, EEE HH:mm').format(nextFixture!.date), style: TextStyle(color: Colors.white, fontSize: 20.0),),
+                        Text(isHome(nextFixture!.home!) ? nextFixture!.away!.name : nextFixture!.home!.name, style: TextStyle(color: Colors.white, fontSize: 20.0),),
+                        Text(nextFixture!.status == 'FT' ? '${nextFixture!.homeGoal}'' : ''${nextFixture!.awayGoal} (${matchResult(nextFixture!)})' : '경기 전', style: TextStyle(color: Colors.white, fontSize: 20.0),),
+                      ],
+                    ),
+                  ] : [const CircularProgressIndicator()]
+                ),
+              ),
+              Container(
+                color: Colors.deepPurpleAccent,
+                width: double.infinity,
+                padding: const EdgeInsets.all(5.0),
+                child: const Text('경기 일정', style: TextStyle(color: Colors.white, fontSize: 20.0))
               ),
               Column(
                 children: fixtures != null && fixtures!.isNotEmpty ?
                   fixtures!.map((fixture) {
-                    return Row(
-                      children: [
-                        Image.network(subscribe?.team!.apiId == fixture.home!.apiId ?
-                        fixture.away!.logo : fixture.home!.logo, width: 130.0,),
-                        Column(
-                          children: [
-                            Text('${fixture.round}', style: TextStyle(color: Colors.white, fontSize: 20.0),),
-                            Text('${fixture.date}', style: TextStyle(color: Colors.white, fontSize: 20.0),),
-                          ],
-                        )
-                      ],
+                    return Container(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
+                            child: Image.network(isHome(fixture.home!) ?
+                            fixture.away!.logo : fixture.home!.logo, width: 100.0,),
+                          ),
+                          Column(
+                            children: [
+                              Text('${fixture.round.replaceAll(RegExp(r'[^0-9]'), '')} 라운드 (${isHome(fixture.home!) ? '홈' : '원정'})', style: TextStyle(color: Colors.white, fontSize: 20.0),),
+                              Text(DateFormat('y. M. d, EEE HH:mm').format(fixture.date), style: TextStyle(color: Colors.white, fontSize: 20.0),),
+                              Text(isHome(fixture.home!) ? fixture.away!.name : fixture.home!.name, style: TextStyle(color: Colors.white, fontSize: 20.0),),
+                              Text(fixture.status == 'FT' ? '${fixture.homeGoal}'' : ''${fixture.awayGoal} (${matchResult(fixture)})' : '경기 전', style: TextStyle(color: Colors.white, fontSize: 20.0),),
+                            ],
+                          ),
+                        ],
+                      ),
                     );
-                  }).toList() : [CircularProgressIndicator()]
+                  }).toList() : [const CircularProgressIndicator()]
               ),
-              SizedBox(height: 10,),
             ],
           ),
         ),
@@ -102,7 +142,37 @@ class _HomeState extends State<Home> {
         headers: baseHeader);
     if (response.statusCode == 200) {
       fixtures = List<Fixture>.from(json.decode(response.body).map((_) => Fixture.fromJson(_)));
+      for (Fixture fixture in fixtures!) {
+        if (fixture.status == 'NS') {
+          nextFixture = fixture;
+          break;
+        }
+      }
     }
+  }
+
+  bool isHome(Team team) {
+    return subscribe?.team!.apiId == team.apiId;
+  }
+
+  String matchResult(Fixture fixture) {
+    bool flag = isHome(fixture.home!);
+    if (flag) {
+      if (fixture.matchResult.contains('HOME')) {
+        return '승';
+      }
+      if (fixture.matchResult.contains('AWAY')) {
+        return '패';
+      }
+    } else {
+      if (fixture.matchResult.contains('HOME')) {
+        return '패';
+      }
+      if (fixture.matchResult.contains('AWAY')) {
+        return '승';
+      }
+    }
+    return '무승부';
   }
 
 }

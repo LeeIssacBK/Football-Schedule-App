@@ -19,35 +19,40 @@ class _HomeState extends State<Home> {
   List<Fixture>? fixtures;
 
   @override
+  void initState() {
+    super.initState();
+    checkSubscribe()
+        .then((_) => getSchedule())
+        .then((_) => setState(() {}));
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: BottomNavigationBar(
+        items: [
+          BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: '홈'
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.find_replace),
+            label: '검색'
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.people),
+            label: '마이페이지'
+          ),
+        ],
+        selectedItemColor: Colors.lightGreen,
+      ),
       backgroundColor: Colors.black12,
       body: SingleChildScrollView(
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                '${user.name}님 반갑습니다!',
-                style: TextStyle(color: Colors.white, fontSize: 20.0),),
-              teamImageUrl == null ? Image.asset('assets/saedaegal.gif') : Image
-                  .network(teamImageUrl!),
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    FilledButton(onPressed: () {
-                      setState(() {
-                        checkSubscribe();
-                      });
-                    }, child: Text('구독정보 확인하기')),
-                    SizedBox(width: 20.0,),
-                    FilledButton(onPressed: () {
-                      setState(() {
-                        getSchedule();
-                      });
-                    }, child: Text('경기 일정 확인하기')),
-                  ]
-              ),
+              teamImageUrl == null ? CircularProgressIndicator() : Image.network(teamImageUrl!),
               SizedBox(height: 10,),
               Row(
                 children: [
@@ -64,7 +69,7 @@ class _HomeState extends State<Home> {
                         Column(
                           children: [
                             Text('${fixture.round}', style: TextStyle(color: Colors.white, fontSize: 20.0),),
-                            Text('data', style: TextStyle(color: Colors.white, fontSize: 20.0),),
+                            Text('${fixture.date}', style: TextStyle(color: Colors.white, fontSize: 20.0),),
                           ],
                         )
                       ],
@@ -72,17 +77,6 @@ class _HomeState extends State<Home> {
                   }).toList() : [CircularProgressIndicator()]
               ),
               SizedBox(height: 10,),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(child: IconButton(
-                      onPressed: () {}, icon: Icon(Icons.home))),
-                  Expanded(child: IconButton(
-                      onPressed: () {}, icon: Icon(Icons.find_replace))),
-                  Expanded(child: IconButton(
-                      onPressed: () {}, icon: Icon(Icons.face))),
-                ],
-              )
             ],
           ),
         ),
@@ -90,7 +84,7 @@ class _HomeState extends State<Home> {
     );
   }
 
-  void checkSubscribe() async {
+  Future<void> checkSubscribe() async {
     final response = await http.get(
         Uri.parse('$baseUrl/api/subscribe/?type=TEAM'), headers: baseHeader);
     if (response.statusCode == 200) {
@@ -102,17 +96,12 @@ class _HomeState extends State<Home> {
     }
   }
 
-  void getSchedule() async {
+  Future<void> getSchedule() async {
     final response = await http.get(
         Uri.parse('$baseUrl/api/fixture?teamId=${subscribe?.team!.apiId}'),
         headers: baseHeader);
-    print(response);
     if (response.statusCode == 200) {
       fixtures = List<Fixture>.from(json.decode(response.body).map((_) => Fixture.fromJson(_)));
-      // fixtures.forEach((v) {
-      //   print('round : ${v.round} | status : ${v.status} | match : ${v.home
-      //       ?.name} vs ${v.away?.name} | date : ${v.date}');
-      // });
     }
   }
 

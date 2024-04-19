@@ -13,27 +13,30 @@ class Login extends StatelessWidget {
   Widget build(BuildContext context) {
     return Builder(builder: (context) {
       return Scaffold(
-        backgroundColor: Colors.black12,
+        backgroundColor: Colors.blueGrey,
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Expanded(child: SizedBox()),
+              const Expanded(child: SizedBox()),
               IconButton(
                 onPressed: () {
                   kakaoLogin().then((_) => Navigator.push(
                       context, MaterialPageRoute(builder: (_) => Home())));
                 },
-                icon: Image(
+                icon: const Image(
                     image: AssetImage('image/kakao_login_medium_narrow.png')),
               ),
-              Expanded(child: SizedBox()),
-              Center(
-                child: Text("© Copyright 2024, 이병규",
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: Colors.white,
-                    )),
+              const Expanded(child: SizedBox()),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Center(
+                  child: Text("© Copyright 2024, 이병규",
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Colors.white,
+                      )),
+                ),
               )
             ],
           ),

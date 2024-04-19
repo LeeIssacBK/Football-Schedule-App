@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:geolpo/dto/fixture.dart';
 import 'package:intl/intl.dart';
 import 'dart:convert';
@@ -33,7 +31,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
-        items: [
+        items: const [
           BottomNavigationBarItem(
               icon: Icon(Icons.home),
               label: '홈'
@@ -47,24 +45,25 @@ class _HomeState extends State<Home> {
             label: '마이페이지'
           ),
         ],
-        selectedItemColor: Colors.lightGreen,
+        selectedItemColor: Colors.blueGrey,
       ),
-      backgroundColor: Colors.black12,
       body: SingleChildScrollView(
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
+                color: Colors.white12,
+                width: double.infinity,
                 padding: const EdgeInsets.all(15.0),
                 child: teamImageUrl == null ? const CircularProgressIndicator() :
                 Image.network(teamImageUrl!, width: 200.0, height: 200.0),
               ),
               Container(
-                color: Colors.deepPurpleAccent,
+                color: Colors.blueGrey,
                 width: double.infinity,
-                  padding: const EdgeInsets.all(5.0),
-                child: const Text('다음 경기', style: TextStyle(color: Colors.white, fontSize: 20.0))
+                padding: const EdgeInsets.all(5.0),
+                child: const Text('다음 경기', style: TextStyle(color: Colors.white, fontSize: 17.0, fontWeight: FontWeight.bold))
               ),
               Container(
                 padding: const EdgeInsets.all(15.0),
@@ -72,25 +71,24 @@ class _HomeState extends State<Home> {
                   children: nextFixture != null ? [
                     Container(
                       padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
-                      child: Image.network(isHome(nextFixture!.home!) ?
-                      nextFixture!.away!.logo : nextFixture!.home!.logo, width: 100.0,),
+                      child: Image.network(isHome(nextFixture!.home!) ? nextFixture!.away!.logo : nextFixture!.home!.logo, width: 100.0,),
                     ),
                     Column(
                       children: [
-                        Text('${nextFixture!.round.replaceAll(RegExp(r'[^0-9]'), '')} 라운드 (${isHome(nextFixture!.home!) ? '홈' : '원정'})', style: TextStyle(color: Colors.white, fontSize: 20.0),),
-                        Text(DateFormat('y. M. d, EEE HH:mm').format(nextFixture!.date), style: TextStyle(color: Colors.white, fontSize: 20.0),),
-                        Text(isHome(nextFixture!.home!) ? nextFixture!.away!.name : nextFixture!.home!.name, style: TextStyle(color: Colors.white, fontSize: 20.0),),
-                        Text(nextFixture!.status == 'FT' ? '${nextFixture!.homeGoal}'' : ''${nextFixture!.awayGoal} (${matchResult(nextFixture!)})' : '경기 전', style: TextStyle(color: Colors.white, fontSize: 20.0),),
+                        Text('${nextFixture!.round.replaceAll(RegExp(r'[^0-9]'), '')} 라운드 (${isHome(nextFixture!.home!) ? '홈' : '원정'})', style: const TextStyle(fontSize: 15.0),),
+                        Text(DateFormat('y. M. d, EEE HH:mm').format(nextFixture!.date), style: const TextStyle(fontSize: 15.0)),
+                        Text(isHome(nextFixture!.home!) ? nextFixture!.away!.name : nextFixture!.home!.name, style: const TextStyle(fontSize: 15.0),),
+                        Text(nextFixture!.status == 'FT' ? '${nextFixture!.homeGoal}'' : ''${nextFixture!.awayGoal} (${matchResult(nextFixture!)})' : '경기 전', style: const TextStyle(fontSize: 15.0),),
                       ],
                     ),
                   ] : [const CircularProgressIndicator()]
                 ),
               ),
               Container(
-                color: Colors.deepPurpleAccent,
+                color: Colors.blueGrey,
                 width: double.infinity,
                 padding: const EdgeInsets.all(5.0),
-                child: const Text('경기 일정', style: TextStyle(color: Colors.white, fontSize: 20.0))
+                child: const Text('경기 일정', style: TextStyle(color: Colors.white, fontSize: 17.0, fontWeight: FontWeight.bold))
               ),
               Column(
                 children: fixtures != null && fixtures!.isNotEmpty ?
@@ -106,10 +104,10 @@ class _HomeState extends State<Home> {
                           ),
                           Column(
                             children: [
-                              Text('${fixture.round.replaceAll(RegExp(r'[^0-9]'), '')} 라운드 (${isHome(fixture.home!) ? '홈' : '원정'})', style: TextStyle(color: Colors.white, fontSize: 20.0),),
-                              Text(DateFormat('y. M. d, EEE HH:mm').format(fixture.date), style: TextStyle(color: Colors.white, fontSize: 20.0),),
-                              Text(isHome(fixture.home!) ? fixture.away!.name : fixture.home!.name, style: TextStyle(color: Colors.white, fontSize: 20.0),),
-                              Text(fixture.status == 'FT' ? '${fixture.homeGoal}'' : ''${fixture.awayGoal} (${matchResult(fixture)})' : '경기 전', style: TextStyle(color: Colors.white, fontSize: 20.0),),
+                              Text('${fixture.round.replaceAll(RegExp(r'[^0-9]'), '')} 라운드 (${isHome(fixture.home!) ? '홈' : '원정'})', style: const TextStyle(fontSize: 15.0),),
+                              Text(DateFormat('y. M. d, EEE HH:mm').format(fixture.date), style: const TextStyle(fontSize: 15.0),),
+                              Text(isHome(fixture.home!) ? fixture.away!.name : fixture.home!.name, style: const TextStyle(fontSize: 15.0),),
+                              Text(fixture.status == 'FT' ? '${fixture.homeGoal}'' : ''${fixture.awayGoal} (${matchResult(fixture)})' : '경기 전', style: const TextStyle(fontSize: 15.0),),
                             ],
                           ),
                         ],

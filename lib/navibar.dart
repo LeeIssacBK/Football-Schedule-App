@@ -32,15 +32,15 @@ class _NavibarState extends State<Navibar> {
         items: const [
           BottomNavigationBarItem(
               icon: Icon(Icons.home),
-              label: '홈'
+              label: '홈',
           ),
           BottomNavigationBarItem(
               icon: Icon(Icons.find_replace),
-              label: '검색'
+              label: '검색',
           ),
           BottomNavigationBarItem(
               icon: Icon(Icons.people),
-              label: '마이페이지'
+              label: '마이페이지',
           ),
         ],
         selectedItemColor: Colors.blueGrey,

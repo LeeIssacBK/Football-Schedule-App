@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:geolpo/dto/fixture.dart';
-import 'package:geolpo/navibar.dart';
-import 'package:geolpo/search.dart';
 import 'package:intl/intl.dart';
 import 'dart:convert';
 import 'dart:core';
@@ -107,8 +105,7 @@ class _HomeState extends State<Home> {
   }
 
   Future<void> checkSubscribe() async {
-    final response = await http.get(
-        Uri.parse('$baseUrl/api/subscribe/?type=TEAM'), headers: baseHeader);
+    final response = await http.get(Uri.parse('$baseUrl/api/subscribe/?type=TEAM'), headers: baseHeader);
     if (response.statusCode == 200) {
       dynamic body = jsonDecode(response.body);
       if (body is List && body.isNotEmpty) {
@@ -120,8 +117,7 @@ class _HomeState extends State<Home> {
 
   Future<void> getSchedule() async {
     final response = await http.get(
-        Uri.parse('$baseUrl/api/fixture?teamId=${subscribe?.team!.apiId}'),
-        headers: baseHeader);
+        Uri.parse('$baseUrl/api/fixture?teamId=${subscribe?.team!.apiId}'), headers: baseHeader);
     if (response.statusCode == 200) {
       fixtures = List<Fixture>.from(json.decode(response.body).map((_) => Fixture.fromJson(_)));
       for (Fixture fixture in fixtures!) {

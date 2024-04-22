@@ -1,12 +1,13 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:geolpo/navibar.dart';
-import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:http/http.dart' as http;
-import 'api/auth.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
+
 import 'api/apiUser.dart';
+import 'api/auth.dart';
 import 'global.dart';
-import 'home.dart';
 
 class Login extends StatelessWidget {
 

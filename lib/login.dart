@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:geolpo/navibar.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:http/http.dart' as http;
 import 'api/auth.dart';
@@ -22,7 +23,7 @@ class Login extends StatelessWidget {
               IconButton(
                 onPressed: () {
                   kakaoLogin().then((_) => Navigator.push(
-                      context, MaterialPageRoute(builder: (_) => Home())));
+                      context, MaterialPageRoute(builder: (_) => Navibar())));
                 },
                 icon: const Image(
                     image: AssetImage('image/kakao_login_medium_narrow.png')),

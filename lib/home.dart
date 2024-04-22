@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:geolpo/dto/fixture.dart';
+import 'package:geolpo/navibar.dart';
+import 'package:geolpo/search.dart';
 import 'package:intl/intl.dart';
 import 'dart:convert';
 import 'dart:core';
@@ -13,7 +15,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
   String? teamImageUrl;
   Subscribe? subscribe;
   List<Fixture>? fixtures;
@@ -30,23 +31,6 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: '홈'
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.find_replace),
-            label: '검색'
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.people),
-            label: '마이페이지'
-          ),
-        ],
-        selectedItemColor: Colors.blueGrey,
-      ),
       body: SingleChildScrollView(
         child: Center(
           child: Column(

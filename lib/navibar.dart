@@ -36,7 +36,7 @@ class _NavibarState extends State<Navibar> {
           ),
           BottomNavigationBarItem(
               icon: Icon(Icons.find_replace),
-              label: '검색',
+              label: '팀 선택',
           ),
           BottomNavigationBarItem(
               icon: Icon(Icons.people),

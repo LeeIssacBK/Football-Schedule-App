@@ -15,7 +15,7 @@ class Login extends StatelessWidget {
   Widget build(BuildContext context) {
     return Builder(builder: (context) {
       return Scaffold(
-        backgroundColor: Colors.blueGrey,
+        backgroundColor: Colors.indigo,
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

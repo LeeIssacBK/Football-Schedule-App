@@ -43,14 +43,14 @@ class _SplashScreenState extends State<SplashScreen> {
                 data: MediaQuery.of(context)
                     .copyWith(textScaler: const TextScaler.linear(1.0)),
                 child: const Scaffold(
-                  backgroundColor: Colors.blueGrey,
+                  backgroundColor: Colors.indigo,
                   body: Column(
                     children: [
                       Expanded(child: SizedBox()),
                       Center(
                         child: CircleAvatar(
                           backgroundImage: AssetImage('assets/saedaegal.png'),
-                          backgroundColor: Colors.blueGrey,
+                          backgroundColor: Colors.white,
                           radius: 60.0,
                         ),
                       ),

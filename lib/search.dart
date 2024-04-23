@@ -17,42 +17,118 @@ class _SearchState extends State<Search> {
   @override
   void initState() {
     super.initState();
-    getCountries()
-    .then((_) => setState(() {}));
+    getCountries().then((_) => setState(() {}));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Container(
-            padding: EdgeInsets.all(15.0),
-            child: Column(
-              children: countries != null && countries!.isNotEmpty ? countries!.map((country) {
-                return Container(
-                  child: Row(
-                    children: [
-                      SvgPicture.network('https://media.api-sports.io/flags/KR.svg',
-                        semanticsLabel: country.krName,
-                        placeholderBuilder: (BuildContext context) => Container(
-                            padding: const EdgeInsets.all(5.0),
-                            child: const CircularProgressIndicator()),
-                        height: 50.0,
-                        width: 150.0,
-                      ),
-                      Text(country.krName),
-                    ],
-                  )
-                );
-              }).toList() : [],
-      ),
-    )));
+        body: Center(
+      child: Column(children: [
+        Container(
+            color: Colors.indigo,
+            width: double.infinity,
+            padding: const EdgeInsets.all(5.0),
+            child: const Text('국가 선택',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 17.0,
+                    fontWeight: FontWeight.bold))),
+        const Expanded(child: SizedBox()),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextButton(
+                  onPressed: () {},
+                  child: Text(
+                    '유럽',
+                    style: TextStyle(
+                        color: Colors.indigo,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold),
+                  )),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextButton(
+                  onPressed: () {},
+                  child: Text(
+                    '아시아',
+                    style: TextStyle(
+                        color: Colors.indigo,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold),
+                  )),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextButton(
+                  onPressed: () {},
+                  child: Text(
+                    '오세아니아',
+                    style: TextStyle(
+                        color: Colors.indigo,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold),
+                  )),
+            ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextButton(
+                  onPressed: () {},
+                  child: Text(
+                    '남미',
+                    style: TextStyle(
+                        color: Colors.indigo,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold),
+                  )),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextButton(
+                  onPressed: () {},
+                  child: Text(
+                    '북미',
+                    style: TextStyle(
+                        color: Colors.indigo,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold),
+                  )),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextButton(
+                  onPressed: () {},
+                  child: Text(
+                    '아프리카',
+                    style: TextStyle(
+                        color: Colors.indigo,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold),
+                  )),
+            ),
+          ],
+        ),
+        const Expanded(child: SizedBox()),
+      ]),
+    ));
   }
 
   Future<void> getCountries() async {
-    final response = await http.get(Uri.parse('$baseUrl/api/country'), headers: baseHeader);
+    final response =
+        await http.get(Uri.parse('$baseUrl/api/country'), headers: baseHeader);
     if (response.statusCode == 200) {
-      countries = List<Country>.from(json.decode(utf8.decode(response.bodyBytes)).map((_) => Country.fromJson(_)));
+      countries = List<Country>.from(json
+          .decode(utf8.decode(response.bodyBytes))
+          .map((_) => Country.fromJson(_)));
     }
   }
 }

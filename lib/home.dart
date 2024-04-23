@@ -42,7 +42,7 @@ class _HomeState extends State<Home> {
                 Image.network(teamImageUrl!, width: 200.0, height: 200.0),
               ),
               Container(
-                color: Colors.blueGrey,
+                color: Colors.indigo,
                 width: double.infinity,
                 padding: const EdgeInsets.all(5.0),
                 child: const Text('다음 경기', style: TextStyle(color: Colors.white, fontSize: 17.0, fontWeight: FontWeight.bold))
@@ -67,7 +67,7 @@ class _HomeState extends State<Home> {
                 ),
               ),
               Container(
-                color: Colors.blueGrey,
+                color: Colors.indigo,
                 width: double.infinity,
                 padding: const EdgeInsets.all(5.0),
                 child: const Text('경기 일정', style: TextStyle(color: Colors.white, fontSize: 17.0, fontWeight: FontWeight.bold))

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:geolpo/search2.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:flutter_svg/flutter_svg.dart';
 
 import 'dto/country.dart';
 import 'global.dart';
@@ -29,7 +29,7 @@ class _SearchState extends State<Search> {
             color: Colors.indigo,
             width: double.infinity,
             padding: const EdgeInsets.all(5.0),
-            child: const Text('국가 선택',
+            child: const Text('팀 선택',
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 17.0,
@@ -41,7 +41,9 @@ class _SearchState extends State<Search> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    moveSearch2(context, Continent.europe);
+                  },
                   child: Text(
                     '유럽',
                     style: TextStyle(
@@ -53,7 +55,9 @@ class _SearchState extends State<Search> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    moveSearch2(context, Continent.asia);
+                  },
                   child: Text(
                     '아시아',
                     style: TextStyle(
@@ -65,7 +69,9 @@ class _SearchState extends State<Search> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    moveSearch2(context, Continent.oceania);
+                  },
                   child: Text(
                     '오세아니아',
                     style: TextStyle(
@@ -82,7 +88,9 @@ class _SearchState extends State<Search> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    moveSearch2(context, Continent.southAmerica);
+                  },
                   child: Text(
                     '남미',
                     style: TextStyle(
@@ -94,7 +102,9 @@ class _SearchState extends State<Search> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    moveSearch2(context, Continent.northAmerica);
+                  },
                   child: Text(
                     '북미',
                     style: TextStyle(
@@ -106,7 +116,9 @@ class _SearchState extends State<Search> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    moveSearch2(context, Continent.africa);
+                  },
                   child: Text(
                     '아프리카',
                     style: TextStyle(
@@ -131,4 +143,11 @@ class _SearchState extends State<Search> {
           .map((_) => Country.fromJson(_)));
     }
   }
+
+  void moveSearch2(context, Continent continent) {
+    Navigator.push(
+      context, MaterialPageRoute(builder: (_) => Search2(data: continent,))
+    );
+  }
+
 }

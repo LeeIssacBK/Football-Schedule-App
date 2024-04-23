@@ -32,7 +32,7 @@ class _SearchState extends State<Search> {
                 return Container(
                   child: Row(
                     children: [
-                      SvgPicture.network(country.flag,
+                      SvgPicture.network('https://media.api-sports.io/flags/KR.svg',
                         semanticsLabel: country.krName,
                         placeholderBuilder: (BuildContext context) => Container(
                             padding: const EdgeInsets.all(5.0),

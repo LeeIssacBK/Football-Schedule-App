@@ -23,7 +23,7 @@ class Login extends StatelessWidget {
               const Expanded(child: SizedBox()),
               IconButton(
                 onPressed: () {
-                  kakaoLogin().then((_) => Navigator.push(
+                  kakaoLogin().then((_) => Navigator.pushReplacement(
                       context, MaterialPageRoute(builder: (_) => Navibar())));
                 },
                 icon: const Image(

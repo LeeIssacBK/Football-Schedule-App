@@ -25,8 +25,11 @@ class _NavibarState extends State<Navibar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: _widgetOptions.elementAt(_selectedIndex),
+      body: PopScope(
+        canPop: false,
+        child: SafeArea(
+          child: _widgetOptions.elementAt(_selectedIndex),
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const [

@@ -29,7 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(milliseconds: 2000), () {
+    Timer(const Duration(milliseconds: 3000), () {
       Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
     });
   }
@@ -38,49 +38,48 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Builder(
       builder: (context) {
-        return PopScope(
-            child: MediaQuery(
-                data: MediaQuery.of(context)
-                    .copyWith(textScaler: const TextScaler.linear(1.0)),
-                child: const Scaffold(
-                  backgroundColor: Colors.indigo,
-                  body: Column(
-                    children: [
-                      Expanded(child: SizedBox()),
-                      Center(
-                        child: Image(
-                          image: AssetImage('assets/main.png'),
-                          height: 200.0,
-                          width: 200.0,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20.0,
-                      ),
-                      Center(
-                        child: Text(
-                          'Football Scheduler🗓',
-                          style: TextStyle(
-                              fontSize: 30.0,
-                              fontStyle: FontStyle.italic,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
-                        ),
-                      ),
-                      Expanded(child: SizedBox()),
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Center(
-                          child: Text("© Copyright 2024, 이병규",
-                              style: TextStyle(
-                                fontSize: 13,
-                                color: Colors.white,
-                              )),
-                        ),
-                      )
-                    ],
+        return MediaQuery(
+            data: MediaQuery.of(context)
+                .copyWith(textScaler: const TextScaler.linear(1.0)),
+            child: const Scaffold(
+              backgroundColor: Colors.indigo,
+              body: Column(
+                children: [
+                  Expanded(child: SizedBox()),
+                  Center(
+                    child: Image(
+                      image: AssetImage('assets/main.png'),
+                      height: 200.0,
+                      width: 200.0,
+                    ),
                   ),
-                )));
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  Center(
+                    child: Text(
+                      'Football Scheduler🗓',
+                      style: TextStyle(
+                          fontSize: 30.0,
+                          fontStyle: FontStyle.italic,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                    ),
+                  ),
+                  Expanded(child: SizedBox()),
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Center(
+                      child: Text("© Copyright 2024, 이병규",
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.white,
+                          )),
+                    ),
+                  )
+                ],
+              ),
+            ));
       }
     );
   }

@@ -48,10 +48,10 @@ class _SplashScreenState extends State<SplashScreen> {
                     children: [
                       Expanded(child: SizedBox()),
                       Center(
-                        child: CircleAvatar(
-                          backgroundImage: AssetImage('assets/saedaegal.png'),
-                          backgroundColor: Colors.white,
-                          radius: 60.0,
+                        child: Image(
+                          image: AssetImage('assets/main.png'),
+                          height: 200.0,
+                          width: 200.0,
                         ),
                       ),
                       SizedBox(
@@ -59,7 +59,7 @@ class _SplashScreenState extends State<SplashScreen> {
                       ),
                       Center(
                         child: Text(
-                          'Football Scheduler',
+                          'Football Scheduler🗓',
                           style: TextStyle(
                               fontSize: 30.0,
                               fontStyle: FontStyle.italic,

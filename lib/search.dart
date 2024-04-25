@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
@@ -12,7 +13,7 @@ class Search extends StatefulWidget {
 
 class _SearchState extends State<Search> {
   Step stepHandle = Step.first;
-  late String stepDescription;
+  late String stepDescription = '대륙';
   late List<Country> countries;
   late Continent continent;
 
@@ -24,6 +25,18 @@ class _SearchState extends State<Search> {
 
   void movePage(Step step) {
     setState(() {
+      if (Step.first == step) {
+        stepDescription = '대륙';
+      }
+      if (Step.second == step) {
+        stepDescription = '국가';
+      }
+      if (Step.third == step) {
+        stepDescription = '리그';
+      }
+      if (Step.fourth == step) {
+        stepDescription = '팀';
+      }
       stepHandle = step;
     });
   }
@@ -31,27 +44,33 @@ class _SearchState extends State<Search> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Center(
-          child: Column(children: [
-            Container(
-                color: Colors.indigo,
-                width: double.infinity,
-                padding: const EdgeInsets.all(5.0),
-                child: Text('$stepDescription 선택',
-                    style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 17.0,
-                        fontWeight: FontWeight.bold))),
-            const Expanded(child: SizedBox()),
-            Container(child: getStep(stepHandle)),
-            const Expanded(child: SizedBox()),
-          ]),
-        ));
+        body: SingleChildScrollView(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(5.0),
+                  height: 40.0,
+                  width: double.infinity,
+                  color: Colors.indigo,
+                  child: Text('$stepDescription 선택',
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 17.0,
+                          fontWeight: FontWeight.bold)),
+                ),
+                Container(child: getStep(stepHandle)),
+              ],
+            ),
+          ),
+        ),
+    );
   }
 
   Future<void> getCountries() async {
     final response =
-        await http.get(Uri.parse('$baseUrl/api/country'), headers: baseHeader);
+    await http.get(Uri.parse('$baseUrl/api/country'), headers: baseHeader);
     if (response.statusCode == 200) {
       countries = List<Country>.from(json
           .decode(utf8.decode(response.bodyBytes))
@@ -62,16 +81,12 @@ class _SearchState extends State<Search> {
   Widget getStep(Step handle) {
     switch (handle) {
       case Step.first:
-        stepDescription = '대륙';
         return getStep1();
       case Step.second:
-        stepDescription = '국가';
         return getStep2();
       case Step.third:
-        stepDescription = '리그';
       // TODO: Handle this case.
       case Step.fourth:
-        stepDescription = '팀';
       // TODO: Handle this case.
     }
     throw Exception('not found step');
@@ -191,19 +206,27 @@ class _SearchState extends State<Search> {
 
   Widget getStep2() {
     return Column(
-      children: [
-        Row(
-          children: [
-            ElevatedButton(onPressed: (){
-              movePage(Step.first);
-            }, child: const Text('뒤로 가기'))
-          ],
-        ),
-      ],
+      mainAxisSize: MainAxisSize.min,
+      children: countries.isNotEmpty ?
+          countries.map((country) {
+            try {
+              return Row(
+                  children: [
+                    Text(country.krName),
+                  ]
+              );
+            } catch(e) {
+              return const Row();
+            }
+          }).toList() : [Container()]
+      ,
     );
   }
 }
 
 enum Step {
-  first, second, third, fourth;
+  first,
+  second,
+  third,
+  fourth;
 }

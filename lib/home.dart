@@ -38,8 +38,11 @@ class _HomeState extends State<Home> {
                   color: Colors.indigo,
                   width: double.infinity,
                   padding: const EdgeInsets.all(5.0),
-                  child: const Text('내 팀', style: TextStyle(color: Colors.white, fontSize: 17.0, fontWeight: FontWeight.bold))
-              ),
+                  child: const Text('내 팀',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 17.0,
+                          fontWeight: FontWeight.bold))),
               Container(
                 color: Colors.white12,
                 width: double.infinity,

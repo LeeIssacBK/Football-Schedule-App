@@ -41,4 +41,5 @@ class Fixture {
       matchResult: json['matchResult'],
     );
   }
+
 }

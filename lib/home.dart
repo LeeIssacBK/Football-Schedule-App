@@ -38,6 +38,7 @@ class _HomeState extends State<Home> {
                   color: Colors.indigo,
                   width: double.infinity,
                   padding: const EdgeInsets.all(5.0),
+                  height: 40.0,
                   child: const Text('내 팀',
                       style: TextStyle(
                           color: Colors.white,
@@ -47,8 +48,8 @@ class _HomeState extends State<Home> {
                 color: Colors.white12,
                 width: double.infinity,
                 padding: const EdgeInsets.all(15.0),
-                child: teamImageUrl == null ? const CircularProgressIndicator() :
-                Image.network(teamImageUrl!, width: 200.0, height: 200.0),
+                child: teamImageUrl != null ?
+                  Image.network(teamImageUrl!, width: 200.0, height: 200.0) : null,
               ),
               Container(
                 color: Colors.indigo,
@@ -135,6 +136,8 @@ class _HomeState extends State<Home> {
           break;
         }
       }
+    } else {
+      reissueToken();
     }
   }
 

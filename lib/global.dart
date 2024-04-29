@@ -4,9 +4,9 @@ import 'api/apiUser.dart';
 import 'package:http/http.dart' as http;
 
 const String baseUrl = 'http://192.168.45.5:8090';
-final Map<String, String> baseHeader = {};
 late Auth auth;
 late ApiUser user;
+Map<String, String> baseHeader = {};
 
 void reissueToken() async {
   baseHeader['RefreshToken'] = auth.refreshToken;

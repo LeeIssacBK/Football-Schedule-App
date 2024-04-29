@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import 'dto/country.dart';
-import 'dto/league.dart';
+import 'dto/subscribe.dart';
 import 'global.dart';
 
 class Search extends StatefulWidget {
@@ -18,6 +18,7 @@ class _SearchState extends State<Search> {
   late List<Country> countries;
   late Continent continent;
   late String countryCode;
+  late int leagueId;
 
   @override
   void initState() {
@@ -124,6 +125,17 @@ class _SearchState extends State<Search> {
     }
   }
 
+  Future<List<Team>> getTeams(int leagueId) async {
+    final response = await http.get(Uri.parse('$baseUrl/api/team?leagueId=$leagueId'), headers: baseHeader);
+    if (response.statusCode == 200) {
+      return List<Team>.from(json
+          .decode(utf8.decode(response.bodyBytes))
+          .map((_) => Team.fromJson(_)));
+    } else {
+      return List.empty();
+    }
+  }
+
   Widget getStep(Step handle) {
     switch (handle) {
       case Step.first:
@@ -133,7 +145,7 @@ class _SearchState extends State<Search> {
       case Step.third:
         return getStep3();
       case Step.fourth:
-      // TODO: Handle this case.
+        return getStep4();
     }
     throw Exception('not found step');
   }
@@ -283,7 +295,10 @@ class _SearchState extends State<Search> {
               return Column(
                 children: [
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      leagueId = league.apiId;
+                      movePage(Step.fourth);
+                    },
                     style: const ButtonStyle(
                       alignment: Alignment.centerLeft,
                     ),
@@ -304,6 +319,46 @@ class _SearchState extends State<Search> {
       },
     );
   }
+
+  Widget getStep4() {
+    return FutureBuilder<List<Team>>(
+      future: getTeams(leagueId),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else {
+          List<Team> teams = snapshot.data!;
+          return Column(
+            children: teams.map((team) {
+              return Column(
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      const AlertDialog(title: Text('ㅎㅇㅎㅇ'),);
+                    },
+                    style: const ButtonStyle(
+                      alignment: Alignment.centerLeft,
+                    ),
+                    child: Text(
+                      team.name,
+                      style: const TextStyle(
+                        color: Colors.indigo,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            }).toList(),
+          );
+        }
+      },
+    );
+  }
+
 }
 
 enum Step {

@@ -50,7 +50,7 @@ class Team {
   final bool national;
   final String logo;
   final String stadium;
-  final String address;
+  final String? address;
   final String city;
   final int capacity;
   final String stadiumImage;

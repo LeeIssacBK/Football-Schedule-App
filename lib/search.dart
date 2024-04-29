@@ -13,7 +13,7 @@ class Search extends StatefulWidget {
 
 class _SearchState extends State<Search> {
   Step stepHandle = Step.first;
-  late String stepDescription = '대륙';
+  String stepDescription = '대륙';
   late List<Country> countries;
   late Continent continent;
 
@@ -208,11 +208,11 @@ class _SearchState extends State<Search> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: countries.isNotEmpty ?
-          countries.map((country) {
+          countries.where((country) => country.continent == continent).map((country) {
             try {
               return Row(
                   children: [
-                    Text(country.krName),
+                    TextButton(onPressed: (){}, child: Text(country.krName),)
                   ]
               );
             } catch(e) {

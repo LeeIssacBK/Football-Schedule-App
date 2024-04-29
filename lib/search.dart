@@ -17,7 +17,7 @@ class _SearchState extends State<Search> {
   String stepDescription = '대륙';
   late List<Country> countries;
   late Continent continent;
-  late List<League> leagues;
+  late String countryCode;
 
   @override
   void initState() {
@@ -111,6 +111,19 @@ class _SearchState extends State<Search> {
     }
   }
 
+  Future<List<League>> getLeagues(String countryCode) async {
+    final response = await http.get(
+        Uri.parse('$baseUrl/api/league?countryCode=$countryCode'),
+        headers: baseHeader);
+    if (response.statusCode == 200) {
+      return List<League>.from(json
+          .decode(utf8.decode(response.bodyBytes))
+          .map((_) => League.fromJson(_)));
+    } else {
+      return List.empty();
+    }
+  }
+
   Widget getStep(Step handle) {
     switch (handle) {
       case Step.first:
@@ -118,7 +131,7 @@ class _SearchState extends State<Search> {
       case Step.second:
         return getStep2();
       case Step.third:
-      // TODO: Handle this case.
+        return getStep3();
       case Step.fourth:
       // TODO: Handle this case.
     }
@@ -231,7 +244,10 @@ class _SearchState extends State<Search> {
               try {
                 return Column(children: [
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      countryCode = country.code!;
+                      movePage(Step.third);
+                    },
                     style: const ButtonStyle(
                       alignment: Alignment.centerLeft,
                     ),
@@ -248,12 +264,45 @@ class _SearchState extends State<Search> {
                 return const Row();
               }
             }).toList()
-          : [Container()],
+          : [const CircularProgressIndicator()],
     );
   }
 
   Widget getStep3() {
-    return Column();
+    return FutureBuilder<List<League>>(
+      future: getLeagues(countryCode),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else {
+          List<League> leagues = snapshot.data!;
+          return Column(
+            children: leagues.map((league) {
+              return Column(
+                children: [
+                  TextButton(
+                    onPressed: () {},
+                    style: const ButtonStyle(
+                      alignment: Alignment.centerLeft,
+                    ),
+                    child: Text(
+                      league.name,
+                      style: const TextStyle(
+                        color: Colors.indigo,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            }).toList(),
+          );
+        }
+      },
+    );
   }
 }
 

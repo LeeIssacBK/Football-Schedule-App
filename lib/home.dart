@@ -136,8 +136,6 @@ class _HomeState extends State<Home> {
           break;
         }
       }
-    } else {
-      reissueToken();
     }
   }
 

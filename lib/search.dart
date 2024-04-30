@@ -8,6 +8,8 @@ import 'dto/subscribe.dart';
 import 'global.dart';
 
 class Search extends StatefulWidget {
+  const Search({super.key});
+
   @override
   State<Search> createState() => _SearchState();
 }
@@ -126,7 +128,9 @@ class _SearchState extends State<Search> {
   }
 
   Future<List<Team>> getTeams(int leagueId) async {
-    final response = await http.get(Uri.parse('$baseUrl/api/team?leagueId=$leagueId'), headers: baseHeader);
+    final response = await http.get(
+        Uri.parse('$baseUrl/api/team?leagueId=$leagueId'),
+        headers: baseHeader);
     if (response.statusCode == 200) {
       return List<Team>.from(json
           .decode(utf8.decode(response.bodyBytes))
@@ -147,7 +151,6 @@ class _SearchState extends State<Search> {
       case Step.fourth:
         return getStep4();
     }
-    throw Exception('not found step');
   }
 
   Widget getStep1() {
@@ -330,13 +333,64 @@ class _SearchState extends State<Search> {
           return Text('Error: ${snapshot.error}');
         } else {
           List<Team> teams = snapshot.data!;
+          if (teams.isEmpty) {
+            return const Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: 100.0,
+                ),
+                Text(
+                  '팀 정보를 찾을 수 없습니다.',
+                  style: TextStyle(
+                    color: Colors.indigo,
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            );
+          }
           return Column(
             children: teams.map((team) {
               return Column(
                 children: [
                   TextButton(
                     onPressed: () {
-                      const AlertDialog(title: Text('ㅎㅇㅎㅇ'),);
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text(team.name, style: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.indigo),),
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Container(padding: const EdgeInsets.all(30.0), child: Image.network(team.logo)),
+                                  Container(padding: const EdgeInsets.all(5.0), child: Text('${team.name} 을 구독하시겠습니까?')),
+                                ],
+                              ),
+                              contentTextStyle: const TextStyle(color: Colors.indigo),
+                              actions: [
+                                Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(5.0),
+                                        child: ElevatedButton(
+                                            onPressed: () {}, child: const Text('예')),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(5.0),
+                                        child: ElevatedButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: const Text('아니오')),
+                                      ),
+                                    ]),
+                              ],
+                            );
+                          });
                     },
                     style: const ButtonStyle(
                       alignment: Alignment.centerLeft,
@@ -358,7 +412,6 @@ class _SearchState extends State<Search> {
       },
     );
   }
-
 }
 
 enum Step {

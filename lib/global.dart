@@ -3,7 +3,8 @@ import 'api/auth.dart';
 import 'api/apiUser.dart';
 import 'package:http/http.dart' as http;
 
-const String baseUrl = 'http://192.168.45.5:8090';
+// const String baseUrl = 'http://192.168.45.5:8090'; //집
+const String baseUrl = 'http://192.168.219.140:8090';  //원장커피
 late Auth auth;
 late ApiUser user;
 Map<String, String> baseHeader = {};

@@ -25,7 +25,6 @@ class _SearchState extends State<Search> {
   @override
   void initState() {
     super.initState();
-    getCountries().then((_) => setState(() {}));
   }
 
   void movePage(Step step) {
@@ -104,17 +103,18 @@ class _SearchState extends State<Search> {
     );
   }
 
-  Future<void> getCountries() async {
-    final response =
-        await http.get(Uri.parse('$baseUrl/api/country'), headers: baseHeader);
+  Future<List<Country>> getCountries() async {
+    final response = await http.get(Uri.parse('$baseUrl/api/country?continent=${Continent.enumToStr(continent)}'), headers: baseHeader);
     if (response.statusCode == 200) {
-      countries = List<Country>.from(json
+      return List<Country>.from(json
           .decode(utf8.decode(response.bodyBytes))
           .map((_) => Country.fromJson(_)));
+    } else {
+      return List.empty();
     }
   }
 
-  Future<List<League>> getLeagues(String countryCode) async {
+  Future<List<League>> getLeagues() async {
     final response = await http.get(
         Uri.parse('$baseUrl/api/league?countryCode=$countryCode'),
         headers: baseHeader);
@@ -127,7 +127,7 @@ class _SearchState extends State<Search> {
     }
   }
 
-  Future<List<Team>> getTeams(int leagueId) async {
+  Future<List<Team>> getTeams() async {
     final response = await http.get(
         Uri.parse('$baseUrl/api/team?leagueId=$leagueId'),
         headers: baseHeader);
@@ -137,6 +137,19 @@ class _SearchState extends State<Search> {
           .map((_) => Team.fromJson(_)));
     } else {
       return List.empty();
+    }
+  }
+
+  Future<void> subscribeTeam(int teamId) async {
+    Map<String, String> requestHeader = baseHeader;
+    requestHeader['Content-Type'] = 'application/json';
+    print(requestHeader);
+    final response = await http.post(Uri.parse('$baseUrl/api/subscribe/'),
+        body: jsonEncode(SubscribeRequest(type: SubscribeType.TEAM.name, apiId: teamId).toJson()), headers: requestHeader);
+    if (response.statusCode == 200) {
+      print(response.body);
+    } else {
+      print(response.body);
     }
   }
 
@@ -250,14 +263,38 @@ class _SearchState extends State<Search> {
     );
   }
 
+
   Widget getStep2() {
-    return Column(
-      children: countries.isNotEmpty
-          ? countries
-              .where((country) => country.continent == continent)
-              .map((country) {
-              try {
-                return Column(children: [
+    return FutureBuilder<List<Country>>(
+      future: getCountries(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else {
+          List<Country> leagues = snapshot.data!;
+          if (leagues.isEmpty) {
+            return Container(
+              padding: EdgeInsets.fromLTRB(0, 100.0, 0, 100.0),
+              child: Column(
+                children: [
+                  Text(
+                    '준비중 입니다.',
+                    style: const TextStyle(
+                      color: Colors.indigo,
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
+          return Column(
+            children: leagues.map((country) {
+              return Column(
+                children: [
                   TextButton(
                     onPressed: () {
                       countryCode = country.code!;
@@ -269,23 +306,24 @@ class _SearchState extends State<Search> {
                     child: Text(
                       country.krName,
                       style: const TextStyle(
-                          color: Colors.indigo,
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.bold),
+                        color: Colors.indigo,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  )
-                ]);
-              } catch (e) {
-                return const Row();
-              }
-            }).toList()
-          : [const CircularProgressIndicator()],
+                  ),
+                ],
+              );
+            }).toList(),
+          );
+        }
+      },
     );
   }
 
   Widget getStep3() {
     return FutureBuilder<List<League>>(
-      future: getLeagues(countryCode),
+      future: getLeagues(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const CircularProgressIndicator();
@@ -325,7 +363,7 @@ class _SearchState extends State<Search> {
 
   Widget getStep4() {
     return FutureBuilder<List<Team>>(
-      future: getTeams(leagueId),
+      future: getTeams(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const CircularProgressIndicator();
@@ -377,7 +415,18 @@ class _SearchState extends State<Search> {
                                       Padding(
                                         padding: const EdgeInsets.all(5.0),
                                         child: ElevatedButton(
-                                            onPressed: () {}, child: const Text('예')),
+                                            onPressed: () {
+                                              subscribeTeam(team.apiId).then((_) => Navigator.of(context).pop());
+                                              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                                content: Text(
+                                                  '팀 구독이 완료되었습니다.',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(color: Colors.white),
+                                                ),
+                                                backgroundColor: Colors.teal,
+                                                duration: Duration(milliseconds: 1000),
+                                              ));
+                                            }, child: const Text('예')),
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.all(5.0),

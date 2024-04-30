@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class Subscribe {
   final String type;
   final League? league;
@@ -19,6 +21,21 @@ class Subscribe {
         team: team,
         isDelete: json['delete']);
   }
+}
+
+class SubscribeRequest {
+  final String type;
+  final int apiId;
+
+  SubscribeRequest({required this.type, required this.apiId});
+
+  Map<String, dynamic> toJson() {
+    return {
+      'type': type,
+      'apiId': apiId,
+    };
+  }
+
 }
 
 class League {
@@ -84,4 +101,8 @@ class Team {
       stadiumImage: json['stadiumImage'],
     );
   }
+}
+
+enum SubscribeType {
+  TEAM, PLAYER
 }

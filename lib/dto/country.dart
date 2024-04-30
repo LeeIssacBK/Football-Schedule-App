@@ -49,4 +49,21 @@ enum Continent {
     throw Exception('not found continent');
   }
 
+  static String enumToStr(Continent continent) {
+    switch (continent) {
+      case Continent.asia:
+        return 'ASIA';
+      case Continent.europe:
+        return 'EUROPE';
+      case Continent.southAmerica:
+        return 'SOUTH_AMERICA';
+      case Continent.northAmerica:
+        return 'NORTH_AMERICA';
+      case Continent.africa:
+        return 'AFRICA';
+      case Continent.oceania:
+        return 'OCEANIA';
+    }
+  }
+
 }

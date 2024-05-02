@@ -4,9 +4,11 @@ import 'dart:convert';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'dto/fixture.dart';
 import 'dto/subscribe.dart';
 import 'global.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 class Home2 extends StatefulWidget {
   @override
@@ -42,27 +44,96 @@ class _HomeState2 extends State<Home2> {
                           color: Colors.white,
                           fontSize: 17.0,
                           fontWeight: FontWeight.bold))),
-              subscribeTeams != null ?
-              Container(
-                padding: const EdgeInsets.all(10.0),
-                child: Stack(
-                  children: [
-                    slider(screenHeight / 3.7),
-                    Positioned.fill(
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: indicator(subscribeTeams),
+              subscribeTeams != null
+                  ? Container(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Stack(
+                        children: [
+                          slider(screenHeight / 3.7),
+                          Positioned.fill(
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: indicator(subscribeTeams),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
-                ),
-              ) : const CircularProgressIndicator(),
+                    )
+                  : const CircularProgressIndicator(),
               Container(
                   color: Colors.indigo,
                   width: double.infinity,
                   padding: const EdgeInsets.all(5.0),
-                  child: const Text('경기 일정', style: TextStyle(color: Colors.white, fontSize: 17.0, fontWeight: FontWeight.bold))
-              ),
+                  height: 40.0,
+                  child: const Text('경기 일정',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 17.0,
+                          fontWeight: FontWeight.bold))),
+              FutureBuilder(
+                  future: getSchedule(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    } else {
+                      List<List<Fixture>> subscribeTeams = snapshot.data!;
+                      if (subscribeTeams.isEmpty) {
+                        return const Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              height: 100.0,
+                            ),
+                            Text(
+                              '경기 정보를 찾을 수 없습니다.',
+                              style: TextStyle(
+                                color: Colors.indigo,
+                                fontSize: 17.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        );
+                      }
+                      return Column(
+                        children: subscribeTeams.map((teamMatches) {
+                          return Column(
+                            children: teamMatches.map((fixture) {
+                              return Container(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Row(
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          fixture.league!.name,
+                                          style:
+                                          const TextStyle(fontSize: 15.0),
+                                        ),
+                                        Text(
+                                          '${fixture.round.replaceAll(RegExp(r'[^0-9]'), '')} 라운드',
+                                          style:
+                                              const TextStyle(fontSize: 15.0),
+                                        ),
+                                        Text(
+                                          DateFormat('y. M. d, EEE HH:mm')
+                                              .format(fixture.date),
+                                          style:
+                                              const TextStyle(fontSize: 15.0),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }).toList(),
+                          );
+                        }).toList(),
+                      );
+                    }
+                  }),
             ],
           ),
         ),
@@ -71,12 +142,30 @@ class _HomeState2 extends State<Home2> {
   }
 
   Future<void> getSubscribes() async {
-    final response = await http.get(Uri.parse('$baseUrl/api/subscribe/?type=TEAM'), headers: baseHeader);
+    final response = await http.get(
+        Uri.parse('$baseUrl/api/subscribe/?type=TEAM'),
+        headers: baseHeader);
     if (response.statusCode == 200) {
       dynamic body = jsonDecode(response.body);
       if (body is List && body.isNotEmpty) {
-        subscribeTeams = List<Subscribe>.from(json.decode(response.body).map((_) => Subscribe.fromJson(_)));
+        subscribeTeams = List<Subscribe>.from(
+            json.decode(response.body).map((_) => Subscribe.fromJson(_)));
       }
+    }
+  }
+
+  Future<List<List<Fixture>>> getSchedule() async {
+    final response = await http.get(Uri.parse('$baseUrl/api/fixture/subscribe'),
+        headers: baseHeader);
+    if (response.statusCode == 200) {
+      List<List<Fixture>> fixtures = [];
+      List<dynamic> subscribeFixtures = json.decode(response.body);
+      for (dynamic data in subscribeFixtures) {
+        fixtures.add(List<Fixture>.from(data.map((_) => Fixture.fromJson(_))));
+      }
+      return fixtures;
+    } else {
+      return List.empty();
     }
   }
 
@@ -85,23 +174,26 @@ class _HomeState2 extends State<Home2> {
       return Column(
         children: [
           Image.network(subscribe.team!.logo),
-          Text(subscribe.team!.name, style: const TextStyle(color: Colors.indigo, fontSize: 20.0, fontWeight: FontWeight.bold)),
+          Text(subscribe.team!.name,
+              style: const TextStyle(
+                  color: Colors.indigo,
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold)),
         ],
       );
     }).toList();
     return CarouselSlider(
-      items: images,
-      options: CarouselOptions(
-        height: height,
-        autoPlay: false,
-        viewportFraction: 1,
-        enlargeCenterPage: true,
-        initialPage: 0,
-        onPageChanged: (index, reason) => setState(() {
-          sliderIndex = index;
-        }),
-      )
-    );
+        items: images,
+        options: CarouselOptions(
+          height: height,
+          autoPlay: false,
+          viewportFraction: 1,
+          enlargeCenterPage: true,
+          initialPage: 0,
+          onPageChanged: (index, reason) => setState(() {
+            sliderIndex = index;
+          }),
+        ));
   }
 
 // Indicator
@@ -117,5 +209,4 @@ class _HomeState2 extends State<Home2> {
             activeDotColor: Colors.grey,
             dotColor: Colors.grey.withOpacity(0.6)),
       ));
-
 }

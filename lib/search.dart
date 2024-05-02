@@ -8,8 +8,6 @@ import 'dto/subscribe.dart';
 import 'global.dart';
 
 class Search extends StatefulWidget {
-  const Search({super.key});
-
   @override
   State<Search> createState() => _SearchState();
 }

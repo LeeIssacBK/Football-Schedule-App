@@ -59,7 +59,22 @@ class _HomeState2 extends State<Home2> {
                         ],
                       ),
                     )
-                  : const CircularProgressIndicator(),
+                  : Container(
+                      padding: const EdgeInsets.all(50.0),
+                      child: const Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            '팀 정보를 찾을 수 없습니다.',
+                            style: TextStyle(
+                              color: Colors.indigo,
+                              fontSize: 17.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      )
+                    ),
               Container(
                   color: Colors.indigo,
                   width: double.infinity,
@@ -78,21 +93,21 @@ class _HomeState2 extends State<Home2> {
                     } else {
                       List<List<Fixture>> subscribeTeams = snapshot.data!;
                       if (subscribeTeams.isEmpty) {
-                        return const Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              height: 100.0,
-                            ),
-                            Text(
-                              '경기 정보를 찾을 수 없습니다.',
-                              style: TextStyle(
-                                color: Colors.indigo,
-                                fontSize: 17.0,
-                                fontWeight: FontWeight.bold,
+                        return Container(
+                          padding: const EdgeInsets.all(50.0),
+                          child: const Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                '경기 정보를 찾을 수 없습니다.',
+                                style: TextStyle(
+                                  color: Colors.indigo,
+                                  fontSize: 17.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         );
                       }
                       return Column(

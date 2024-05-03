@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:geolpo/global.dart';
 import 'package:geolpo/home.dart';
 import 'package:geolpo/mypage.dart';
 import 'package:geolpo/search.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 import 'alert.dart';
 import 'home2.dart';
@@ -25,11 +28,29 @@ class _NavibarState extends State<Navibar> {
     });
   }
 
+
+  @override
+  void initState() {
+    hasSubscribe().then((flag) {
+      if (!flag) {
+        setState(() {
+          _selectedIndex = 1;
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return getTeamSearchAlert();
+            },
+          );
+        });
+      }
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: PopScope(
-        canPop: false,
         child: SafeArea(
           child: _widgetOptions.elementAt(_selectedIndex),
         ),
@@ -62,4 +83,43 @@ class _NavibarState extends State<Navibar> {
       ),
     );
   }
+
+  Future<bool> hasSubscribe() async {
+    final response = await http.get(Uri.parse('$baseUrl/api/subscribe/?type=TEAM'), headers: baseHeader);
+    if (response.statusCode == 200) {
+      dynamic body = jsonDecode(response.body);
+      if (body is List && body.isNotEmpty) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  Widget getTeamSearchAlert() {
+    return AlertDialog(
+      title: const Text('알림', style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.indigo)),
+      content: const Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text('현재 구독하고 있는 팀이 없습니다.'),
+          Text('원하는 팀을 구독하고 알림을 받아보세요.'),
+        ],
+      ),
+      contentTextStyle: const TextStyle(color: Colors.indigo),
+      actions: [
+        Center(
+          child: Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('확인')),
+          ),
+        ),
+      ],
+    );
+  }
+
+
 }

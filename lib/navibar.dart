@@ -66,8 +66,8 @@ class _NavibarState extends State<Navibar> {
             label: '팀 찾기',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.add_alert),
-            label: '알람 설정',
+            icon: Icon(Icons.alarm),
+            label: '알람 목록',
           ),
           BottomNavigationBarItem(
               icon: Icon(Icons.people),

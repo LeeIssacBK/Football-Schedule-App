@@ -29,6 +29,7 @@ class _HomeState2 extends State<Home2> {
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       body: SingleChildScrollView(
         child: Center(
@@ -66,7 +67,7 @@ class _HomeState2 extends State<Home2> {
                       padding: const EdgeInsets.all(10.0),
                       child: Stack(
                         children: [
-                          slider(screenHeight / 3.7),
+                          slider(screenHeight / 3.8),
                           Positioned.fill(
                             child: Align(
                               alignment: Alignment.center,
@@ -103,35 +104,122 @@ class _HomeState2 extends State<Home2> {
                         ],
                       ),
                     )
-                  : Column(
-                      children: schedules.map((fixture) {
-                        return Container(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Row(
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    fixture.league!.name,
-                                    style: const TextStyle(fontSize: 15.0),
+                  : Container(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Column(
+                        children: schedules.map((fixture) {
+                          return Container(
+                            padding: const EdgeInsets.all(5.0),
+                            child: Row(
+                              children: [
+                                SizedBox(
+                                  width: 170,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        fixture.league!.name,
+                                        style: const TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(
+                                        getKoreanRound(fixture.round),
+                                        style: const TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(
+                                        DateFormat('y. M. d, ${getKoreanWeekDay(fixture.date)} HH:mm')
+                                            .format(fixture.date),
+                                        style: const TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(
+                                        fixture.home!.stadium,
+                                        style: const TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),
+                                        overflow: TextOverflow.ellipsis
+                                      ),
+                                    ],
                                   ),
-                                  Text(
-                                    '${fixture.round.replaceAll(RegExp(r'[^0-9]'), '')} 라운드',
-                                    style: const TextStyle(fontSize: 15.0),
+                                ),
+                                SizedBox(
+                                  width: 170,
+                                  child: Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Image.network(fixture.home!.logo, height: 60,),
+                                      ),
+                                      const Text('vs'),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Image.network(fixture.away!.logo, height: 60,),
+                                      )
+                                    ],
                                   ),
-                                  Text(
-                                    DateFormat('y. M. d, EEE HH:mm')
-                                        .format(fixture.date),
-                                    style: const TextStyle(fontSize: 15.0),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        );
-                      }).toList(),
-                    )
+                                ),
+                                IconButton(
+                                  onPressed: (){
+                                    showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: const Text('알람 추가',
+                                              style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold, color: Colors.indigo),
+                                            ),
+                                            contentTextStyle: const TextStyle(color: Colors.indigo, fontWeight: FontWeight.bold, fontSize: 15.0),
+                                            content: Container(
+                                              padding: const EdgeInsets.all(10.0),
+                                              child: Column(
+                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                mainAxisSize: MainAxisSize.min,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Row(
+                                                    children: [
+                                                      Padding(
+                                                        padding: const EdgeInsets.all(5.0),
+                                                        child: Image.network(fixture.league!.logo, height: 30,),
+                                                      ),
+                                                      Padding(
+                                                        padding: const EdgeInsets.all(5.0),
+                                                        child: Text('${fixture.league!.name} ${getKoreanRound(fixture.round)}'),
+                                                      )
+                                                    ],
+                                                  ),
+                                                  Text('${fixture.home!.name} vs ${fixture.away!.name} 경기를 알람 설정 하시겠습니까?'),
+                                                ],
+                                              ),
+                                            ),
+                                            actions: [
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  Padding(
+                                                    padding: const EdgeInsets.all(5.0),
+                                                    child: ElevatedButton(
+                                                      onPressed: () {  },
+                                                      child: const Text('예'),
+                                                    )
+                                                  ),
+                                                  Padding(
+                                                    padding: const EdgeInsets.all(5.0),
+                                                    child: ElevatedButton(
+                                                      onPressed: () {
+                                                        Navigator.of(context).pop();
+                                                      },
+                                                      child: const Text('아니오'),
+                                                    )
+                                                  )
+                                                ],
+                                              )
+                                            ],
+                                          );
+                                        });
+                                  }, icon: const Icon(Icons.add_alert)
+                                )
+                              ],
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                  )
             ],
           ),
         ),
@@ -201,5 +289,7 @@ class _HomeState2 extends State<Home2> {
             dotWidth: 6,
             activeDotColor: Colors.grey,
             dotColor: Colors.grey.withOpacity(0.6)),
-      ));
+      )
+  );
+
 }

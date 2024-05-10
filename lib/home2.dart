@@ -17,11 +17,12 @@ class Home2 extends StatefulWidget {
 
 class _HomeState2 extends State<Home2> {
   int sliderIndex = 0;
-  List<Subscribe>? subscribeTeams;
+  List<Subscribe> subscribes = List.empty();
+  List<Fixture> schedules = List.empty();
 
   @override
   void initState() {
-    getSubscribes().then((_) => setState(() {}));
+    getSubscribes().then((_) => getSchedule().then((_) => setState(() {})));
     super.initState();
   }
 
@@ -44,28 +45,14 @@ class _HomeState2 extends State<Home2> {
                           color: Colors.white,
                           fontSize: 17.0,
                           fontWeight: FontWeight.bold))),
-              subscribeTeams != null
+              subscribes.isEmpty
                   ? Container(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Stack(
-                        children: [
-                          slider(screenHeight / 3.7),
-                          Positioned.fill(
-                            child: Align(
-                              alignment: Alignment.center,
-                              child: indicator(subscribeTeams),
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  : Container(
                       padding: const EdgeInsets.all(50.0),
                       child: const Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            '팀 정보를 찾을 수 없습니다.',
+                            '구독된 팀이 없습니다.',
                             style: TextStyle(
                               color: Colors.indigo,
                               fontSize: 17.0,
@@ -73,7 +60,21 @@ class _HomeState2 extends State<Home2> {
                             ),
                           ),
                         ],
-                      )
+                      ),
+                    )
+                  : Container(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Stack(
+                        children: [
+                          slider(screenHeight / 3.7),
+                          Positioned.fill(
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: indicator(subscribes),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
               Container(
                   color: Colors.indigo,
@@ -85,70 +86,52 @@ class _HomeState2 extends State<Home2> {
                           color: Colors.white,
                           fontSize: 17.0,
                           fontWeight: FontWeight.bold))),
-              FutureBuilder(
-                  future: getSchedule(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
-                    } else {
-                      List<List<Fixture>> subscribeTeams = snapshot.data!;
-                      if (subscribeTeams.isEmpty) {
+              schedules.isEmpty
+                  ? Container(
+                      padding: const EdgeInsets.all(50.0),
+                      child: const Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            '경기 정보를 찾을 수 없습니다.',
+                            style: TextStyle(
+                              color: Colors.indigo,
+                              fontSize: 17.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : Column(
+                      children: schedules.map((fixture) {
                         return Container(
-                          padding: const EdgeInsets.all(50.0),
-                          child: const Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
+                          padding: const EdgeInsets.all(15.0),
+                          child: Row(
                             children: [
-                              Text(
-                                '경기 정보를 찾을 수 없습니다.',
-                                style: TextStyle(
-                                  color: Colors.indigo,
-                                  fontSize: 17.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    fixture.league!.name,
+                                    style: const TextStyle(fontSize: 15.0),
+                                  ),
+                                  Text(
+                                    '${fixture.round.replaceAll(RegExp(r'[^0-9]'), '')} 라운드',
+                                    style: const TextStyle(fontSize: 15.0),
+                                  ),
+                                  Text(
+                                    DateFormat('y. M. d, EEE HH:mm')
+                                        .format(fixture.date),
+                                    style: const TextStyle(fontSize: 15.0),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
                         );
-                      }
-                      return Column(
-                        children: subscribeTeams.map((teamMatches) {
-                          return Column(
-                            children: teamMatches.map((fixture) {
-                              return Container(
-                                padding: const EdgeInsets.all(15.0),
-                                child: Row(
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          fixture.league!.name,
-                                          style:
-                                          const TextStyle(fontSize: 15.0),
-                                        ),
-                                        Text(
-                                          '${fixture.round.replaceAll(RegExp(r'[^0-9]'), '')} 라운드',
-                                          style:
-                                              const TextStyle(fontSize: 15.0),
-                                        ),
-                                        Text(
-                                          DateFormat('y. M. d, EEE HH:mm')
-                                              .format(fixture.date),
-                                          style:
-                                              const TextStyle(fontSize: 15.0),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              );
-                            }).toList(),
-                          );
-                        }).toList(),
-                      );
-                    }
-                  }),
+                      }).toList(),
+                    )
             ],
           ),
         ),
@@ -163,61 +146,56 @@ class _HomeState2 extends State<Home2> {
     if (response.statusCode == 200) {
       dynamic body = jsonDecode(response.body);
       if (body is List && body.isNotEmpty) {
-        subscribeTeams = List<Subscribe>.from(
+        subscribes = List<Subscribe>.from(
             json.decode(response.body).map((_) => Subscribe.fromJson(_)));
       }
     }
   }
 
-  Future<List<List<Fixture>>> getSchedule() async {
+  Future<void> getSchedule() async {
     final response = await http.get(Uri.parse('$baseUrl/api/fixture/subscribe'),
         headers: baseHeader);
     if (response.statusCode == 200) {
-      List<List<Fixture>> fixtures = [];
-      List<dynamic> subscribeFixtures = json.decode(response.body);
-      for (dynamic data in subscribeFixtures) {
-        fixtures.add(List<Fixture>.from(data.map((_) => Fixture.fromJson(_))));
-      }
-      return fixtures;
-    } else {
-      return List.empty();
+      schedules = List<Fixture>.from(
+          json.decode(response.body).map((_) => Fixture.fromJson(_)));
     }
   }
 
   Widget slider(height) {
-    List<Column>? images = subscribeTeams!.map((subscribe) {
+    List<Column> images = subscribes.map((subscribe) {
       return Column(
         children: [
           Image.network(subscribe.team!.logo),
-          Text(subscribe.team!.name,
-              style: const TextStyle(
-                  color: Colors.indigo,
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold)),
+          Padding(
+            padding: const EdgeInsets.only(top: 20.0),
+            child: Text(subscribe.team!.name,
+                style: const TextStyle(
+                    color: Colors.indigo,
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold)),
+          ),
         ],
       );
     }).toList();
     return CarouselSlider(
         items: images,
         options: CarouselOptions(
-          height: height,
-          autoPlay: false,
-          viewportFraction: 1,
-          enlargeCenterPage: true,
-          initialPage: 0,
-          onPageChanged: (index, reason) => setState(() {
-            sliderIndex = index;
-          }),
-        ));
+            height: height,
+            autoPlay: true,
+            viewportFraction: 1,
+            enlargeCenterPage: false,
+            initialPage: sliderIndex,
+            onPageChanged: (index, reason) => setState(() {
+                  sliderIndex = index;
+                })));
   }
 
-// Indicator
-  Widget indicator(subscribeTeams) => Container(
+  Widget indicator(List<Subscribe>? subscribes) => Container(
       margin: const EdgeInsets.only(bottom: 10.0),
       alignment: Alignment.bottomCenter,
       child: AnimatedSmoothIndicator(
         activeIndex: sliderIndex,
-        count: subscribeTeams.length,
+        count: subscribes!.length,
         effect: JumpingDotEffect(
             dotHeight: 6,
             dotWidth: 6,

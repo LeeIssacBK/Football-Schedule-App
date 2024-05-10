@@ -20,10 +20,10 @@ class _HomeState extends State<Home> {
 
   @override
   void initState() {
+    super.initState();
     checkSubscribe()
         .then((_) => getSchedule())
         .then((_) => setState(() {}));
-    super.initState();
   }
 
   @override

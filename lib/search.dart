@@ -268,18 +268,19 @@ class _SearchState extends State<Search> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const CircularProgressIndicator();
-        } else if (snapshot.hasError) {
+        }
+        if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else {
           List<Country> leagues = snapshot.data!;
           if (leagues.isEmpty) {
             return Container(
-              padding: EdgeInsets.fromLTRB(0, 100.0, 0, 100.0),
-              child: Column(
+              padding: const EdgeInsets.fromLTRB(0, 100.0, 0, 100.0),
+              child: const Column(
                 children: [
                   Text(
                     '준비중 입니다.',
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: Colors.indigo,
                       fontSize: 20.0,
                       fontWeight: FontWeight.bold,

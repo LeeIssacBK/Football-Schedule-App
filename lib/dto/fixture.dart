@@ -4,6 +4,7 @@ import 'subscribe.dart';
 
 @JsonSerializable()
 class Fixture {
+  final int apiId;
   final String round;
   final String status;
   final String? referee;
@@ -16,7 +17,9 @@ class Fixture {
   final String matchResult;
 
   Fixture(
-      {required this.round,
+      {
+      required this.apiId,
+      required this.round,
       required this.status,
       required this.referee,
       required this.date,
@@ -29,6 +32,7 @@ class Fixture {
 
   factory Fixture.fromJson(Map<dynamic, dynamic> json) {
     return Fixture(
+      apiId: json['apiId'],
       round: json['round'],
       status: json['status'],
       referee: json['referee'],

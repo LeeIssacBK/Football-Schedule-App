@@ -6,7 +6,7 @@ import 'package:geolpo/search.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-import 'alert.dart';
+import 'alarm.dart';
 import 'home2.dart';
 
 class Navibar extends StatefulWidget {
@@ -19,7 +19,7 @@ class _NavibarState extends State<Navibar> {
   int _selectedIndex = 0;
 
   final List<Widget> _widgetOptions = [
-    Home2(), Search(), Alert(), MyPage()
+    Home2(), Search(), Alarm(), MyPage()
   ];
 
   void _onItemTapped(int index) {

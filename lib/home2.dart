@@ -41,11 +41,15 @@ class _HomeState2 extends State<Home2> {
                   width: double.infinity,
                   padding: const EdgeInsets.all(5.0),
                   height: 40.0,
-                  child: const Text('내 팀',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 17.0,
-                          fontWeight: FontWeight.bold))),
+                  child: const Row(
+                    children: [
+                      Text('내 팀',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 17.0,
+                              fontWeight: FontWeight.bold)),
+                    ],
+                  )),
               subscribes.isEmpty
                   ? Container(
                       padding: const EdgeInsets.all(50.0),
@@ -82,11 +86,15 @@ class _HomeState2 extends State<Home2> {
                   width: double.infinity,
                   padding: const EdgeInsets.all(5.0),
                   height: 40.0,
-                  child: const Text('경기 일정',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 17.0,
-                          fontWeight: FontWeight.bold))),
+                  child: const Row(
+                    children: [
+                      Text('경기 일정',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 17.0,
+                              fontWeight: FontWeight.bold)),
+                    ],
+                  )),
               schedules.isEmpty
                   ? Container(
                       padding: const EdgeInsets.all(50.0),
@@ -113,7 +121,7 @@ class _HomeState2 extends State<Home2> {
                             child: Row(
                               children: [
                                 SizedBox(
-                                  width: 170,
+                                  width: screenWidth * 0.4,
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
@@ -139,80 +147,106 @@ class _HomeState2 extends State<Home2> {
                                   ),
                                 ),
                                 SizedBox(
-                                  width: 170,
+                                  width: screenWidth * 0.44,
                                   child: Row(
                                     children: [
                                       Padding(
-                                        padding: const EdgeInsets.all(8.0),
+                                        padding: const EdgeInsets.all(5.0),
                                         child: Image.network(fixture.home!.logo, height: 60,),
                                       ),
                                       const Text('vs'),
                                       Padding(
-                                        padding: const EdgeInsets.all(8.0),
+                                        padding: const EdgeInsets.all(5.0),
                                         child: Image.network(fixture.away!.logo, height: 60,),
                                       )
                                     ],
                                   ),
                                 ),
-                                IconButton(
-                                  onPressed: (){
-                                    showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return AlertDialog(
-                                            title: const Text('알람 추가',
-                                              style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold, color: Colors.indigo),
-                                            ),
-                                            contentTextStyle: const TextStyle(color: Colors.indigo, fontWeight: FontWeight.bold, fontSize: 15.0),
-                                            content: Container(
-                                              padding: const EdgeInsets.all(10.0),
-                                              child: Column(
-                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                mainAxisSize: MainAxisSize.min,
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Row(
-                                                    children: [
-                                                      Padding(
-                                                        padding: const EdgeInsets.all(5.0),
-                                                        child: Image.network(fixture.league!.logo, height: 30,),
-                                                      ),
-                                                      Padding(
-                                                        padding: const EdgeInsets.all(5.0),
-                                                        child: Text('${fixture.league!.name} ${getKoreanRound(fixture.round)}'),
-                                                      )
-                                                    ],
-                                                  ),
-                                                  Text('${fixture.home!.name} vs ${fixture.away!.name} 경기를 알람 설정 하시겠습니까?'),
-                                                ],
+                                SizedBox(
+                                  width: screenWidth * 0.1,
+                                  child: IconButton(
+                                    onPressed: (){
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: const Text('알람 추가',
+                                                style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold, color: Colors.indigo),
                                               ),
-                                            ),
-                                            actions: [
-                                              Row(
-                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                children: [
-                                                  Padding(
-                                                    padding: const EdgeInsets.all(5.0),
-                                                    child: ElevatedButton(
-                                                      onPressed: () {  },
-                                                      child: const Text('예'),
+                                              contentTextStyle: const TextStyle(color: Colors.indigo, fontWeight: FontWeight.bold, fontSize: 15.0),
+                                              content: Container(
+                                                padding: const EdgeInsets.all(10.0),
+                                                child: Column(
+                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                  mainAxisSize: MainAxisSize.min,
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    Row(
+                                                      children: [
+                                                        Padding(
+                                                          padding: const EdgeInsets.all(5.0),
+                                                          child: Image.network(fixture.league!.logo, height: 30,),
+                                                        ),
+                                                        Padding(
+                                                          padding: const EdgeInsets.all(5.0),
+                                                          child: Text('${fixture.league!.name} ${getKoreanRound(fixture.round)}'),
+                                                        )
+                                                      ],
+                                                    ),
+                                                    Text('${fixture.home!.name} vs ${fixture.away!.name} 경기를 알람 설정 하시겠습니까?'),
+                                                  ],
+                                                ),
+                                              ),
+                                              actions: [
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  children: [
+                                                    Padding(
+                                                      padding: const EdgeInsets.all(5.0),
+                                                      child: ElevatedButton(
+                                                        onPressed: () {
+                                                          Navigator.of(context).pop();
+                                                          saveAlert(fixture.apiId).then((flag) => {
+                                                            if (flag) {
+                                                              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                                                content: Text('알람 등록이 완료되었습니다!',
+                                                                  textAlign: TextAlign.center,
+                                                                  style: TextStyle(color: Colors.teal),
+                                                                ),
+                                                                backgroundColor: Colors.white12,
+                                                                duration: Duration(milliseconds: 1000),
+                                                              ))
+                                                            } else {
+                                                              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                                                content: Text('알람 등록이 실패하였습니다. 다시 시도해주세요.',
+                                                                  textAlign: TextAlign.center,
+                                                                  style: TextStyle(color: Colors.white),
+                                                                ),
+                                                                backgroundColor: Colors.redAccent,
+                                                                duration: Duration(milliseconds: 1000),
+                                                              ))
+                                                            }
+                                                          });
+                                                        },
+                                                        child: const Text('예'),
+                                                      )
+                                                    ),
+                                                    Padding(
+                                                      padding: const EdgeInsets.all(5.0),
+                                                      child: ElevatedButton(
+                                                        onPressed: () {
+                                                          Navigator.of(context).pop();
+                                                        },
+                                                        child: const Text('아니오'),
+                                                      )
                                                     )
-                                                  ),
-                                                  Padding(
-                                                    padding: const EdgeInsets.all(5.0),
-                                                    child: ElevatedButton(
-                                                      onPressed: () {
-                                                        Navigator.of(context).pop();
-                                                      },
-                                                      child: const Text('아니오'),
-                                                    )
-                                                  )
-                                                ],
-                                              )
-                                            ],
-                                          );
-                                        });
-                                  }, icon: const Icon(Icons.add_alert)
+                                                  ],
+                                                )
+                                              ],
+                                            );
+                                          });
+                                    }, icon: const Icon(Icons.add_alarm)
+                                  ),
                                 )
                               ],
                             ),
@@ -247,6 +281,12 @@ class _HomeState2 extends State<Home2> {
       schedules = List<Fixture>.from(
           json.decode(response.body).map((_) => Fixture.fromJson(_)));
     }
+  }
+
+  Future<bool> saveAlert(int apiId) async {
+    final response = await http.post(Uri.parse('$baseUrl/api/alert?fixtureId=$apiId'),
+        headers: baseHeader);
+    return response.statusCode == 200;
   }
 
   Widget slider(height) {

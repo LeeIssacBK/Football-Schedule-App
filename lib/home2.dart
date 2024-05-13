@@ -211,9 +211,9 @@ class _HomeState2 extends State<Home2> {
                                                               ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                                                                 content: Text('알람 등록이 완료되었습니다!',
                                                                   textAlign: TextAlign.center,
-                                                                  style: TextStyle(color: Colors.teal),
+                                                                  style: TextStyle(color: Colors.white),
                                                                 ),
-                                                                backgroundColor: Colors.white12,
+                                                                backgroundColor: Colors.teal,
                                                                 duration: Duration(milliseconds: 1000),
                                                               ))
                                                             } else {
@@ -274,6 +274,15 @@ class _HomeState2 extends State<Home2> {
     }
   }
 
+  Future<bool> deleteSubscribe(int teamId) async {
+    Map<String, String> requestHeader = baseHeader;
+    requestHeader['Content-Type'] = 'application/json';
+    final response = await http.delete(Uri.parse('$baseUrl/api/subscribe'),
+        body: jsonEncode(SubscribeRequest(type: SubscribeType.TEAM.name, apiId: teamId).toJson()),
+        headers: requestHeader);
+    return response.statusCode == 200;
+  }
+
   Future<void> getSchedule() async {
     final response = await http.get(Uri.parse('$baseUrl/api/fixture/subscribe'),
         headers: baseHeader);
@@ -293,9 +302,74 @@ class _HomeState2 extends State<Home2> {
     List<Column> images = subscribes.map((subscribe) {
       return Column(
         children: [
-          Image.network(subscribe.team!.logo),
+          IconButton(
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: const Text('팀 구독 취소하기', style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.indigo),),
+                      contentTextStyle: const TextStyle(color: Colors.indigo),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text('${subscribe.team!.name} 팀의 구독을 취소하시겠습니까?'),
+                        ],
+                      ),
+                      actions: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  deleteSubscribe(subscribe.team!.apiId).then((flag) => {
+                                    if (flag) {
+                                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                        content: Text('팀 구독이 취소 되었습니다!',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                        backgroundColor: Colors.teal,
+                                        duration: Duration(milliseconds: 1000),
+                                      ))
+                                    } else {
+                                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                        content: Text('구독 취소 실패! 다시 시도해 주세요.',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                        backgroundColor: Colors.redAccent,
+                                        duration: Duration(milliseconds: 1000),
+                                      ))
+                                    }
+                                  });
+                                  Navigator.of(context).pop();
+                                  setState(() {});
+                                },
+                                child: const Text('예'),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('아니오'),
+                              ),
+                            )
+                          ],
+                        )
+                      ],
+                    );
+              });
+            },
+            icon: Image.network(subscribe.team!.logo)
+          ),
           Padding(
-            padding: const EdgeInsets.only(top: 20.0),
+            padding: const EdgeInsets.only(top: 5.0),
             child: Text(subscribe.team!.name,
                 style: const TextStyle(
                     color: Colors.indigo,

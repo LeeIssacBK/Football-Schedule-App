@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:geolpo/global.dart';
-import 'package:geolpo/home.dart';
 import 'package:geolpo/mypage.dart';
 import 'package:geolpo/search.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'alarm.dart';
-import 'home2.dart';
+import 'home.dart';
 
 class Navibar extends StatefulWidget {
   @override
@@ -19,7 +18,7 @@ class _NavibarState extends State<Navibar> {
   int _selectedIndex = 0;
 
   final List<Widget> _widgetOptions = [
-    Home2(), Search(), Alarm(), MyPage()
+    Home(), Search(), Alarm(), MyPage()
   ];
 
   void _onItemTapped(int index) {

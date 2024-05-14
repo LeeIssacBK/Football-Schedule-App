@@ -15,6 +15,7 @@ class Fixture {
   final int? homeGoal;
   final int? awayGoal;
   final String matchResult;
+  final bool isAlert;
 
   Fixture(
       {
@@ -28,7 +29,9 @@ class Fixture {
       required this.away,
       required this.homeGoal,
       required this.awayGoal,
-      required this.matchResult});
+      required this.matchResult,
+      required this.isAlert
+      });
 
   factory Fixture.fromJson(Map<dynamic, dynamic> json) {
     return Fixture(
@@ -43,6 +46,7 @@ class Fixture {
       homeGoal: json['homeGoal'],
       awayGoal: json['awayGoal'],
       matchResult: json['matchResult'],
+      isAlert: json['alert'],
     );
   }
 

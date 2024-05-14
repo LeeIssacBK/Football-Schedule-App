@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:core';
 import 'dart:convert';
 
@@ -22,7 +23,9 @@ class _HomeState2 extends State<Home2> {
 
   @override
   void initState() {
-    getSubscribes().then((_) => getSchedule().then((_) => setState(() {})));
+    getSubscribes().then((_) =>
+        getSchedule().then((_) =>
+            setState(() {})));
     super.initState();
   }
 
@@ -326,27 +329,32 @@ class _HomeState2 extends State<Home2> {
                                 onPressed: () {
                                   deleteSubscribe(subscribe.team!.apiId).then((flag) => {
                                     if (flag) {
-                                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                                        content: Text('팀 구독이 취소 되었습니다!',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                        backgroundColor: Colors.teal,
-                                        duration: Duration(milliseconds: 1000),
-                                      ))
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                          const SnackBar(
+                                            content: Text('팀 구독이 취소 되었습니다!',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(color: Colors.white),
+                                            ),
+                                            backgroundColor: Colors.teal,
+                                            duration: Duration(milliseconds: 1000),
+                                          )
+                                      )
                                     } else {
-                                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                                        content: Text('구독 취소 실패! 다시 시도해 주세요.',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                        backgroundColor: Colors.redAccent,
-                                        duration: Duration(milliseconds: 1000),
-                                      ))
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                          const SnackBar(
+                                            content: Text('구독 취소 실패! 다시 시도해 주세요.',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(color: Colors.white),
+                                            ),
+                                            backgroundColor: Colors.redAccent,
+                                            duration: Duration(milliseconds: 1000),
+                                          )
+                                      )
                                     }
+                                  }).then((_){
+                                    Navigator.of(context).pop();
+                                    _refresh();
                                   });
-                                  Navigator.of(context).pop();
-                                  setState(() {});
                                 },
                                 child: const Text('예'),
                               ),
@@ -383,13 +391,15 @@ class _HomeState2 extends State<Home2> {
         items: images,
         options: CarouselOptions(
             height: height,
-            autoPlay: true,
+            autoPlay: false,
             viewportFraction: 1,
             enlargeCenterPage: false,
             initialPage: sliderIndex,
             onPageChanged: (index, reason) => setState(() {
-                  sliderIndex = index;
-                })));
+              sliderIndex = index;
+            })
+        )
+    );
   }
 
   Widget indicator(List<Subscribe>? subscribes) => Container(
@@ -405,5 +415,11 @@ class _HomeState2 extends State<Home2> {
             dotColor: Colors.grey.withOpacity(0.6)),
       )
   );
+
+  void _refresh() {
+    getSchedule().then((_) =>
+        getSubscribes().then((_) =>
+            setState((){})));
+  }
 
 }

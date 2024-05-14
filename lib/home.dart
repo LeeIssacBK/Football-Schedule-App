@@ -137,7 +137,7 @@ class _HomeState2 extends State<Home> {
                                         style: const TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),
                                       ),
                                       Text(
-                                        DateFormat('y. M. d, ${getKoreanWeekDay(fixture.date)} HH:mm')
+                                        DateFormat('y. M. d ${getKoreanWeekDay(fixture.date)} HH:mm')
                                             .format(fixture.date),
                                         style: const TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),
                                       ),
@@ -152,15 +152,16 @@ class _HomeState2 extends State<Home> {
                                 SizedBox(
                                   width: screenWidth * 0.44,
                                   child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Padding(
                                         padding: const EdgeInsets.all(5.0),
-                                        child: Image.network(fixture.home!.logo, height: 60,),
+                                        child: Image.network(fixture.home!.logo, height: 50,),
                                       ),
                                       const Text('vs'),
                                       Padding(
                                         padding: const EdgeInsets.all(5.0),
-                                        child: Image.network(fixture.away!.logo, height: 60,),
+                                        child: Image.network(fixture.away!.logo, height: 50,),
                                       )
                                     ],
                                   ),

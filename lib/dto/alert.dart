@@ -5,8 +5,8 @@ import 'fixture.dart';
 @JsonSerializable()
 class Alert {
 
-  final String alertType;
-  final bool isSend;
+  final String? alertType;
+  final bool? isSend;
   final Fixture fixture;
 
   Alert({

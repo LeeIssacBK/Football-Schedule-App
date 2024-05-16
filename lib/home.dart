@@ -132,20 +132,24 @@ class _HomeState2 extends State<Home> {
                                         fixture.league!.name,
                                         style: const TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),
                                       ),
+                                      // Text(
+                                      //   getKoreanRound(fixture.round),
+                                      //   style: const TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),
+                                      // ),
                                       Text(
-                                        getKoreanRound(fixture.round),
-                                        style: const TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),
+                                        '${fixture.home!.name} vs ${fixture.away!.name}',
+                                        style: const TextStyle(fontSize: 10.0, fontWeight: FontWeight.bold),
                                       ),
                                       Text(
                                         DateFormat('y. M. d ${getKoreanWeekDay(fixture.date)} HH:mm')
                                             .format(fixture.date),
-                                        style: const TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),
+                                        style: const TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold, color: Colors.indigo),
                                       ),
-                                      Text(
-                                        fixture.home!.stadium,
-                                        style: const TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),
-                                        overflow: TextOverflow.ellipsis
-                                      ),
+                                      // Text(
+                                      //   fixture.home!.stadium,
+                                      //   style: const TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),
+                                      //   overflow: TextOverflow.ellipsis
+                                      // ),
                                     ],
                                   ),
                                 ),

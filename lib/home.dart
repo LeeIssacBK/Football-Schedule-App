@@ -52,8 +52,8 @@ class _HomeState extends State<Home> {
                   height: 40.0,
                   child: Row(
                     children: [
-                      const Text('내 팀',
-                          style: TextStyle(
+                      Text(myTeamFlag ? '구독 팀 수정' : '내 구독 팀',
+                          style: const TextStyle(
                               color: Colors.white,
                               fontSize: 17.0,
                               fontWeight: FontWeight.bold)),
@@ -444,7 +444,7 @@ class _HomeState extends State<Home> {
         items: images,
         options: CarouselOptions(
             height: height,
-            autoPlay: false,
+            autoPlay: images.length > 1,
             viewportFraction: 1,
             enlargeCenterPage: false,
             initialPage: sliderIndex,

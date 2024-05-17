@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:geolpo/search.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'dto/fixture.dart';
 import 'dto/subscribe.dart';
@@ -11,15 +12,20 @@ import 'global.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
+import 'navibar.dart';
+
 class Home extends StatefulWidget {
   @override
-  State<Home> createState() => _HomeState2();
+  State<Home> createState() => _HomeState();
 }
 
-class _HomeState2 extends State<Home> {
+class _HomeState extends State<Home> {
+  bool myTeamFlag = false;
   int sliderIndex = 0;
   List<Subscribe> subscribes = List.empty();
   List<Fixture> schedules = List.empty();
+  double screenHeight = 0;
+  double screenWidth = 0;
 
   @override
   void initState() {
@@ -31,8 +37,8 @@ class _HomeState2 extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    double screenHeight = MediaQuery.of(context).size.height;
-    double screenWidth = MediaQuery.of(context).size.width;
+    screenHeight = MediaQuery.of(context).size.height;
+    screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       body: SingleChildScrollView(
         child: Center(
@@ -44,46 +50,26 @@ class _HomeState2 extends State<Home> {
                   width: double.infinity,
                   padding: const EdgeInsets.all(5.0),
                   height: 40.0,
-                  child: const Row(
+                  child: Row(
                     children: [
-                      Text('내 팀',
+                      const Text('내 팀',
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 17.0,
                               fontWeight: FontWeight.bold)),
+                      const Expanded(child: SizedBox()),
+                      IconButton(
+                        icon: const Icon(Icons.more_horiz, color: Colors.white),
+                        padding: EdgeInsets.zero,
+                        onPressed: () {
+                          myTeamFlag = !myTeamFlag;
+                          setState(() {});
+                        }
+                      ),
                     ],
-                  )),
-              subscribes.isEmpty
-                  ? Container(
-                      padding: const EdgeInsets.all(50.0),
-                      child: const Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            '구독된 팀이 없습니다.',
-                            style: TextStyle(
-                              color: Colors.indigo,
-                              fontSize: 17.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  : Container(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Stack(
-                        children: [
-                          slider(screenHeight / 3.8),
-                          Positioned.fill(
-                            child: Align(
-                              alignment: Alignment.center,
-                              child: indicator(subscribes),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                  )
+              ),
+              myTeam(),
               Container(
                   color: Colors.indigo,
                   width: double.infinity,
@@ -132,10 +118,6 @@ class _HomeState2 extends State<Home> {
                                         fixture.league!.name,
                                         style: const TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),
                                       ),
-                                      // Text(
-                                      //   getKoreanRound(fixture.round),
-                                      //   style: const TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),
-                                      // ),
                                       Text(
                                         '${fixture.home!.name} vs ${fixture.away!.name}',
                                         style: const TextStyle(fontSize: 10.0, fontWeight: FontWeight.bold),
@@ -145,11 +127,6 @@ class _HomeState2 extends State<Home> {
                                             .format(fixture.date),
                                         style: const TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold, color: Colors.indigo),
                                       ),
-                                      // Text(
-                                      //   fixture.home!.stadium,
-                                      //   style: const TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),
-                                      //   overflow: TextOverflow.ellipsis
-                                      // ),
                                     ],
                                   ),
                                 ),
@@ -305,6 +282,61 @@ class _HomeState2 extends State<Home> {
     final response = await http.post(Uri.parse('$baseUrl/api/alert?fixtureId=$apiId'),
         headers: baseHeader);
     return response.statusCode == 200;
+  }
+
+  Widget myTeam() {
+    if (myTeamFlag) {
+      return Container(
+        padding: const EdgeInsets.all(5.0),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: Row(children:
+                [IconButton(onPressed: (){
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => Search()));
+                }, icon: const Icon(Icons.add)), const Text('팀 추가', style: TextStyle(color: Colors.indigo, fontWeight: FontWeight.bold),)]
+              ),
+            )
+          ]
+        ),
+      );
+    }
+    if (subscribes.isEmpty) {
+      return Container(
+        padding: const EdgeInsets.all(50.0),
+        child: const Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              '구독된 팀이 없습니다.',
+              style: TextStyle(
+                color: Colors.indigo,
+                fontSize: 17.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+    if (subscribes.isNotEmpty) {
+      return Container(
+        padding: const EdgeInsets.all(10.0),
+        child: Stack(
+          children: [
+            slider(screenHeight / 3.8),
+            Positioned.fill(
+              child: Align(
+                alignment: Alignment.center,
+                child: indicator(subscribes),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+    throw Exception('undefined container');
   }
 
   Widget slider(height) {

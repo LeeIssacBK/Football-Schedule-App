@@ -24,7 +24,7 @@ class Login extends StatelessWidget {
               IconButton(
                 onPressed: () {
                   kakaoLogin().then((_) => Navigator.pushReplacement(
-                      context, MaterialPageRoute(builder: (_) => Navibar())));
+                      context, MaterialPageRoute(builder: (_) => Navibar(selectedIndex: 0,))));
                 },
                 icon: const Image(
                     image: AssetImage('image/kakao_login_medium_narrow.png')),

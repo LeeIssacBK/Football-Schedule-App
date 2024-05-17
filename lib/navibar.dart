@@ -9,13 +9,20 @@ import 'alarm.dart';
 import 'home.dart';
 
 class Navibar extends StatefulWidget {
+
+  Navibar({required this.selectedIndex});
+
+  late int selectedIndex;
+
   @override
-  State<Navibar> createState() => _NavibarState();
+  State<Navibar> createState() => _NavibarState(selectedIndex: selectedIndex);
 }
 
 class _NavibarState extends State<Navibar> {
 
-  int _selectedIndex = 0;
+  _NavibarState({required this.selectedIndex});
+
+  int selectedIndex = 0;
 
   final List<Widget> _widgetOptions = [
     Home(), Search(), Alarm(), MyPage()
@@ -23,7 +30,7 @@ class _NavibarState extends State<Navibar> {
 
   void _onItemTapped(int index) {
     setState(() {
-      _selectedIndex = index;
+      selectedIndex = index;
     });
   }
 
@@ -33,7 +40,7 @@ class _NavibarState extends State<Navibar> {
     hasSubscribe().then((flag) {
       if (!flag) {
         setState(() {
-          _selectedIndex = 1;
+          selectedIndex = 1;
           showDialog(
             context: context,
             builder: (BuildContext context) {
@@ -51,7 +58,7 @@ class _NavibarState extends State<Navibar> {
     return Scaffold(
       body: PopScope(
         child: SafeArea(
-          child: _widgetOptions.elementAt(_selectedIndex),
+          child: _widgetOptions.elementAt(selectedIndex),
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -77,7 +84,7 @@ class _NavibarState extends State<Navibar> {
         unselectedItemColor: Colors.white70,
         backgroundColor: Colors.indigo,
         type: BottomNavigationBarType.fixed,
-        currentIndex: _selectedIndex,
+        currentIndex: selectedIndex,
         onTap: _onItemTapped,
       ),
     );

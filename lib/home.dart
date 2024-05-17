@@ -294,7 +294,7 @@ class _HomeState extends State<Home> {
               padding: const EdgeInsets.all(5.0),
               child: Row(children:
                 [IconButton(onPressed: (){
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => Search()));
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => Navibar(selectedIndex: 1,)));
                 }, icon: const Icon(Icons.add)), const Text('팀 추가', style: TextStyle(color: Colors.indigo, fontWeight: FontWeight.bold),)]
               ),
             )

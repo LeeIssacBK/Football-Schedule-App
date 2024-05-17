@@ -16,13 +16,14 @@ class Navibar extends StatefulWidget {
 
   @override
   State<Navibar> createState() => _NavibarState(selectedIndex: selectedIndex);
+
 }
 
 class _NavibarState extends State<Navibar> {
 
   _NavibarState({required this.selectedIndex});
 
-  int selectedIndex = 0;
+  late int selectedIndex;
 
   final List<Widget> _widgetOptions = [
     Home(), Search(), Alarm(), MyPage()

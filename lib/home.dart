@@ -59,7 +59,7 @@ class _HomeState extends State<Home> {
                               fontWeight: FontWeight.bold)),
                       const Expanded(child: SizedBox()),
                       IconButton(
-                        icon: const Icon(Icons.more_horiz, color: Colors.white),
+                        icon: myTeamFlag ? const Icon(Icons.exit_to_app, color: Colors.white) : const Icon(Icons.edit, color: Colors.white),
                         padding: EdgeInsets.zero,
                         onPressed: () {
                           myTeamFlag = !myTeamFlag;
@@ -286,19 +286,99 @@ class _HomeState extends State<Home> {
 
   Widget myTeam() {
     if (myTeamFlag) {
+      List<Widget> teams = [];
+      teams.add(TextButton(
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (_) => Navibar(selectedIndex: 1,)));
+        },
+        child: Row(children: [
+          SizedBox(width: screenWidth * 0.5, child: const Text('팀 추가', style: TextStyle(color: Colors.indigo, fontWeight: FontWeight.bold))),
+          const Expanded(child: SizedBox()),
+          SizedBox(width: screenWidth * 0.1, child: const Icon(Icons.add))
+        ]),
+      ));
+      teams.addAll(subscribes.map((subscribe) {
+        return TextButton(
+          onPressed: () {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text('팀 구독 취소하기', style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.indigo),),
+                    contentTextStyle: const TextStyle(color: Colors.indigo),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text('${subscribe.team!.name} 팀의 구독을 취소하시겠습니까?'),
+                      ],
+                    ),
+                    actions: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(5.0),
+                            child: ElevatedButton(
+                              onPressed: () {
+                                deleteSubscribe(subscribe.team!.apiId).then((flag) => {
+                                  if (flag) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                          content: Text('팀 구독이 취소 되었습니다!',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(color: Colors.white),
+                                          ),
+                                          backgroundColor: Colors.teal,
+                                          duration: Duration(milliseconds: 1000),
+                                        )
+                                    )
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                          content: Text('구독 취소 실패! 다시 시도해 주세요.',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(color: Colors.white),
+                                          ),
+                                          backgroundColor: Colors.redAccent,
+                                          duration: Duration(milliseconds: 1000),
+                                        )
+                                    )
+                                  }
+                                }).then((_){
+                                  Navigator.of(context).pop();
+                                  _refresh();
+                                });
+                              },
+                              child: const Text('예'),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(5.0),
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text('아니오'),
+                            ),
+                          )
+                        ],
+                      )
+                    ],
+                  );
+                });
+          },
+          child: Row(children: [
+            SizedBox(width: screenWidth * 0.1, child: Padding(padding: const EdgeInsets.all(5.0), child: Image.network(subscribe.team!.logo),)),
+            SizedBox(width: screenWidth * 0.4, child: Text(subscribe.team!.name, style: const TextStyle(color: Colors.indigo, fontWeight: FontWeight.bold))),
+            const Expanded(child: SizedBox()),
+            SizedBox(width: screenWidth * 0.1, child: const Icon(Icons.remove))
+          ],),
+        );
+      }).toList());
       return Container(
         padding: const EdgeInsets.all(5.0),
         child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: Row(children:
-                [IconButton(onPressed: (){
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => Navibar(selectedIndex: 1,)));
-                }, icon: const Icon(Icons.add)), const Text('팀 추가', style: TextStyle(color: Colors.indigo, fontWeight: FontWeight.bold),)]
-              ),
-            )
-          ]
+          children: teams
         ),
       );
     }
@@ -345,72 +425,7 @@ class _HomeState extends State<Home> {
         children: [
           IconButton(
             onPressed: () {
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: const Text('팀 구독 취소하기', style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.indigo),),
-                      contentTextStyle: const TextStyle(color: Colors.indigo),
-                      content: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text('${subscribe.team!.name} 팀의 구독을 취소하시겠습니까?'),
-                        ],
-                      ),
-                      actions: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(5.0),
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  deleteSubscribe(subscribe.team!.apiId).then((flag) => {
-                                    if (flag) {
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                          const SnackBar(
-                                            content: Text('팀 구독이 취소 되었습니다!',
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(color: Colors.white),
-                                            ),
-                                            backgroundColor: Colors.teal,
-                                            duration: Duration(milliseconds: 1000),
-                                          )
-                                      )
-                                    } else {
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                          const SnackBar(
-                                            content: Text('구독 취소 실패! 다시 시도해 주세요.',
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(color: Colors.white),
-                                            ),
-                                            backgroundColor: Colors.redAccent,
-                                            duration: Duration(milliseconds: 1000),
-                                          )
-                                      )
-                                    }
-                                  }).then((_){
-                                    Navigator.of(context).pop();
-                                    _refresh();
-                                  });
-                                },
-                                child: const Text('예'),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(5.0),
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('아니오'),
-                              ),
-                            )
-                          ],
-                        )
-                      ],
-                    );
-              });
+
             },
             icon: Image.network(subscribe.team!.logo)
           ),

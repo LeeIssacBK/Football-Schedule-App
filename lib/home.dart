@@ -52,7 +52,7 @@ class _HomeState extends State<Home> {
                   height: 40.0,
                   child: Row(
                     children: [
-                      Text(myTeamFlag ? '구독 팀 수정' : '내 구독 팀',
+                      Text(myTeamFlag ? '구독 수정' : '내 구독 팀',
                           style: const TextStyle(
                               color: Colors.white,
                               fontSize: 17.0,
@@ -309,7 +309,8 @@ class _HomeState extends State<Home> {
                     content: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text('${subscribe.team!.name} 팀의 구독을 취소하시겠습니까?'),
+                        Text('이미 추가된 경기 알람은 취소되지 않습니다.\n'
+                             '${subscribe.team!.name} 의 구독을 취소하시겠습니까?'),
                       ],
                     ),
                     actions: [
@@ -425,7 +426,21 @@ class _HomeState extends State<Home> {
         children: [
           IconButton(
             onPressed: () {
-
+              //팀 상세 정보
+              //감독, 선수, 최근 5경기 스텟
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                        title: const Text('팀 상세', style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.indigo),),
+                        content: Column(
+                          children: [
+                            Text('ㄹㄹㄹ')
+                          ],
+                        ),
+                    );
+                  }
+              );
             },
             icon: Image.network(subscribe.team!.logo)
           ),

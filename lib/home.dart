@@ -1,17 +1,15 @@
-import 'dart:async';
-import 'dart:core';
 import 'dart:convert';
+import 'dart:core';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:geolpo/search.dart';
+import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+
 import 'dto/fixture.dart';
 import 'dto/subscribe.dart';
 import 'global.dart';
-import 'package:http/http.dart' as http;
-import 'package:intl/intl.dart';
-
 import 'navibar.dart';
 
 class Home extends StatefulWidget {
@@ -26,6 +24,8 @@ class _HomeState extends State<Home> {
   List<Fixture> schedules = List.empty();
   double screenHeight = 0;
   double screenWidth = 0;
+  String? selectedValue;
+  final List<String> selectBoxItems = ['BEFORE_30MINUTES', 'BEFORE_1HOURS', 'BEFORE_3HOURS', 'BEFORE_6HOURS', 'BEFORE_1DAYS'];
 
   @override
   void initState() {
@@ -149,16 +149,34 @@ class _HomeState extends State<Home> {
                                 ),
                                 SizedBox(
                                   width: screenWidth * 0.1,
-                                  child: IconButton(
+                                  child: fixture.isAlert ? IconButton(
+                                    icon: const Icon(Icons.alarm_on, color: Colors.teal),
+                                    onPressed: () {
+                                      Duration difference = fixture.date.difference(DateTime.timestamp().toLocal());
+                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                        content: Text(
+                                          '경기까지 '
+                                          '${difference.inDays}일 '
+                                          '${difference.inHours % 24}시간 '
+                                          '${difference.inMinutes % 60}분 남았습니다.',
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(color: Colors.white),
+                                        ),
+                                        backgroundColor: Colors.teal,
+                                        duration: const Duration(milliseconds: 3000),
+                                      ));
+                                    },
+                                  ) :
+                                  IconButton(
                                     onPressed: (){
                                       showDialog(
                                           context: context,
                                           builder: (BuildContext context) {
                                             return AlertDialog(
                                               title: const Text('알람 추가',
-                                                style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold, color: Colors.indigo),
+                                                style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.indigo),
                                               ),
-                                              contentTextStyle: const TextStyle(color: Colors.indigo, fontWeight: FontWeight.bold, fontSize: 15.0),
+                                              contentTextStyle: const TextStyle(color: Colors.indigo, fontSize: 15.0),
                                               content: Container(
                                                 padding: const EdgeInsets.all(10.0),
                                                 child: Column(
@@ -178,7 +196,19 @@ class _HomeState extends State<Home> {
                                                         )
                                                       ],
                                                     ),
-                                                    Text('${fixture.home!.name} vs ${fixture.away!.name} 경기를 알람 설정 하시겠습니까?'),
+                                                    Text('${fixture.home!.name} vs ${fixture.away!.name} 경기를 알람 설정 하시겠습니까?'), 
+                                                    DropdownButton(items:
+                                                    selectBoxItems.map<DropdownMenuItem<String>>((String value) {
+                                                      return DropdownMenuItem<String>(
+                                                        value: value,
+                                                        child: Text(value),
+                                                      );
+                                                    }).toList()
+                                                        , onChanged: (String? newValue) {
+                                                      setState(() {
+                                                        selectedValue = newValue;
+                                                      });
+                                                        })
                                                   ],
                                                 ),
                                               ),
@@ -230,8 +260,7 @@ class _HomeState extends State<Home> {
                                               ],
                                             );
                                           });
-                                    }, icon: fixture.isAlert ?
-                                        const Icon(Icons.alarm_on, color: Colors.teal,) : const Icon(Icons.add_alarm)
+                                    }, icon: const Icon(Icons.add_alarm)
                                   ),
                                 )
                               ],
@@ -305,7 +334,7 @@ class _HomeState extends State<Home> {
                 builder: (BuildContext context) {
                   return AlertDialog(
                     title: const Text('팀 구독 취소하기', style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.indigo),),
-                    contentTextStyle: const TextStyle(color: Colors.indigo),
+                    contentTextStyle: const TextStyle(color: Colors.indigo, fontSize: 15.0),
                     content: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -426,18 +455,71 @@ class _HomeState extends State<Home> {
         children: [
           IconButton(
             onPressed: () {
-              //팀 상세 정보
-              //감독, 선수, 최근 5경기 스텟
               showDialog(
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
                         title: const Text('팀 상세', style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.indigo),),
+                        contentTextStyle: const TextStyle(fontSize: 15.0, color: Colors.indigo),
                         content: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('ㄹㄹㄹ')
+                            Row(
+                              children: [
+                                Text('리그\n'),
+                                Text(subscribe.league?.name != null ? subscribe.league!.name : 'null'),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text('팀명\n'),
+                                Text(subscribe.team!.name),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text('연고\n'),
+                                Text(subscribe.team!.city),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text('홈 구장\n'),
+                                Text(subscribe.team!.stadium),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text('최근 5경기\n'),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text('감독\n'),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text('선수 명단\n'),
+                              ],
+                            ),
                           ],
                         ),
+                      actions: [
+                        Center(
+                          child: Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('확인'),
+                              )
+                          ),
+                        )
+                      ],
                     );
                   }
               );

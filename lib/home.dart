@@ -196,19 +196,26 @@ class _HomeState extends State<Home> {
                                                         )
                                                       ],
                                                     ),
-                                                    Text('${fixture.home!.name} vs ${fixture.away!.name} 경기를 알람 설정 하시겠습니까?'), 
-                                                    DropdownButton(items:
-                                                    selectBoxItems.map<DropdownMenuItem<String>>((String value) {
-                                                      return DropdownMenuItem<String>(
-                                                        value: value,
-                                                        child: Text(value),
-                                                      );
-                                                    }).toList()
-                                                        , onChanged: (String? newValue) {
-                                                      setState(() {
-                                                        selectedValue = newValue;
-                                                      });
-                                                        })
+                                                    Text('${fixture.home!.name} vs ${fixture.away!.name} 경기를 알람 설정 하시겠습니까?'),
+                                                    DropdownButton(
+                                                        isExpanded: true,
+                                                        hint: const Text('알람 시간 설정', style: TextStyle(color: Colors.indigo)),
+                                                        style: const TextStyle(color: Colors.indigo),
+                                                        underline: Container(
+                                                          height: 2,
+                                                          color: Colors.indigoAccent,
+                                                        ),
+                                                        value: selectedValue,
+                                                        items: selectBoxItems.map<DropdownMenuItem<String>>((String value) {
+                                                          return DropdownMenuItem<String>(
+                                                            value: value,
+                                                            child: Text(value),
+                                                          );}).toList(),
+                                                        onChanged: (String? newValue) {
+                                                          setState(() {
+                                                            selectedValue = newValue;
+                                                          });
+                                                        }),
                                                   ],
                                                 ),
                                               ),

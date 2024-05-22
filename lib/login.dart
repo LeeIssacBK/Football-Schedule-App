@@ -5,8 +5,8 @@ import 'package:geolpo/navibar.dart';
 import 'package:http/http.dart' as http;
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 
-import 'api/apiUser.dart';
-import 'api/auth.dart';
+import 'dto/apiUser.dart';
+import 'dto/auth.dart';
 import 'global.dart';
 
 class Login extends StatelessWidget {

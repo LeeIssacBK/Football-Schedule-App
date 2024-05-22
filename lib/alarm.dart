@@ -1,13 +1,12 @@
-import 'dart:core';
 import 'dart:convert';
+import 'dart:core';
 
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
 import 'dto/alert.dart';
-import 'dto/fixture.dart';
+import 'dto/subscribe.dart';
 import 'global.dart';
 
 class Alarm extends StatefulWidget {
@@ -18,11 +17,15 @@ class Alarm extends StatefulWidget {
 class _AlarmState extends State<Alarm> {
 
   List<Alert> alerts = List.empty();
+  List<Subscribe> subscribes = List.empty();
+  List<int> myTeamIds = List.empty();
+  final List<AlertType> alertTypes = getAlertType();
 
   @override
   void initState() {
-    getAlerts()
-        .then((_) => setState(() {}));
+    getAlerts().then((_) => {
+      getSubscribes()}).then((_) =>
+        setState(() {}));
     super.initState();
   }
 
@@ -78,99 +81,158 @@ class _AlarmState extends State<Alarm> {
     }
     return ListView.builder(
         shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
         itemCount: alerts.length,
         itemBuilder: (context, index) {
           final item = alerts[index];
-          return Container(
-            width: screenWidth * 0.1,
-            child: Dismissible(
-              key: Key(item.fixture.apiId.toString()),
-              // Dismissible의 배경색 설정
-              background: Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text('삭제', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                  ],
-                ), color: Colors.redAccent),
-              // Dismissible이 Swipe될 때 호출. Swipe된 방향을 아규먼트로 수신
-              direction: DismissDirection.endToStart,
-              onDismissed: (direction) {
-                // 해당 index의 item을 리스트에서 삭제
-                setState(() {
-                  alerts.removeAt(index);
-                });
-                // 삭제한 아이템을 스낵바로 출력
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(SnackBar(content: Text("${item.fixture.apiId} dismissed")));
+          return Dismissible(
+            key: Key(item.fixture.apiId.toString()),
+            // Dismissible의 배경색 설정
+            background: Container(
+              color: Colors.redAccent,
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(right: 10.0),
+                    child: Text('삭제', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                  ),
+                ],
+              )),
+            direction: DismissDirection.endToStart,
+            // Dismissible이 Swipe될 때 호출. Swipe된 방향을 아규먼트로 수신
+            onDismissed: (direction) {
+              // 해당 index의 item을 리스트에서 삭제
+              setState(() {
+                alerts.removeAt(index);
+              });
+              // 삭제한 아이템을 스낵바로 출력
+              ScaffoldMessenger.of(context)
+                  .showSnackBar(SnackBar(content: Text('${item.fixture.home!.name} vs ${item.fixture.away!.name} 경기 알람이 삭제되었습니다.'),
+                  backgroundColor: Colors.teal,
+                  duration: const Duration(milliseconds: 1000)
+              ));
+            },
+            // Dismissible의 자식으로 리스트타일을 생성. 리스튜뷰에 타일로 등록
+            child: ListTile(
+              leading: myTeamIds.contains(item.fixture.home!.apiId) ? Image.network(item.fixture.home!.logo) : Image.network(item.fixture.away!.logo),
+              title: Column(
+                children: [
+                  Text(item.fixture.league!.name, style: const TextStyle(fontWeight: FontWeight.bold),),
+                  Text('${item.fixture.home!.name} vs ${item.fixture.away!.name}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 10.0)),
+                ],
+              ),
+              subtitle: Column(
+                children: [
+                  Text(DateFormat('y. M. d ${getKoreanWeekDay(item.fixture.date)} HH:mm').format(item.fixture.date),
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15.0, color: Colors.indigo))
+                ],
+              ),
+              onTap: () {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      AlertType? selectedValue;
+                      return StatefulBuilder(
+                          builder: (BuildContext context, StateSetter setState) {
+                            return AlertDialog(
+                              title: const Text('알람 수정', style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.indigo),),
+                              contentTextStyle: const TextStyle(color: Colors.indigo, fontSize: 15.0),
+                              content: Container(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(5.0),
+                                          child: Image.network(
+                                            item.fixture.league!.logo,
+                                            height: 30,),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(5.0),
+                                          child: Text(
+                                              '${item.fixture.league!.name} ${getKoreanRound(item.fixture.round)}'),
+                                        )
+                                      ],
+                                    ),
+                                    Text('${item.fixture.home!.name} vs ${item.fixture.away!.name} 경기 알람 시간을 수정하시겠습니까?'),
+                                    DropdownButton(
+                                        isExpanded: true,
+                                        hint: const Text('알람 시간 설정', style: TextStyle(color: Colors.indigo)),
+                                        style: const TextStyle(color: Colors.indigo),
+                                        underline: Container(
+                                          height: 2,
+                                          color: Colors.indigoAccent,
+                                        ),
+                                        value: selectedValue,
+                                        items: alertTypes.map<DropdownMenuItem<AlertType>>((AlertType value) {
+                                          return DropdownMenuItem<AlertType>(
+                                            value: value,
+                                            child: Text(value.name),
+                                          );
+                                        }).toList(),
+                                        onChanged: (AlertType? newValue) {
+                                          setState(() {
+                                            selectedValue = newValue;
+                                          });
+                                        }),
+                                  ],
+                                ),
+                              ),
+                              actions: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Padding(
+                                        padding: const EdgeInsets.all(5.0),
+                                        child: ElevatedButton(
+                                          onPressed: () {
+                                            try {
+                                              saveAlert(item.fixture.apiId, selectedValue).then((_) => {
+                                                ScaffoldMessenger.of(context).showSnackBar(
+                                                    const SnackBar(
+                                                      content: Text('알람 등록이 완료되었습니다!', textAlign: TextAlign.center, style: TextStyle(color: Colors.white),),
+                                                      backgroundColor: Colors.teal,
+                                                      duration: Duration(milliseconds: 1000),))
+                                              });
+                                            } catch(e) {
+                                              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                                content: Text('알람 등록이 실패하였습니다. 다시 시도해주세요.', textAlign: TextAlign.center,
+                                                  style: TextStyle(color: Colors.white),),
+                                                backgroundColor: Colors.redAccent,
+                                                duration: Duration(milliseconds: 1000),));
+                                            }
+                                            Navigator.of(context).pop();
+                                            _refresh();
+                                          },
+                                          child: const Text('예'),
+                                        )
+                                    ),
+                                    Padding(
+                                        padding: const EdgeInsets.all(5.0),
+                                        child: ElevatedButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: const Text('아니오'),
+                                        )
+                                    )
+                                  ],
+                                )
+                              ],
+                            );
+                          }
+                      );
+                    });
               },
-              // Dismissible의 자식으로 리스트타일을 생성. 리스튜뷰에 타일로 등록
-              child: ListTile(title: Text(item.fixture.home!.name)),
             ),
           );
         },
     );
-
-        // return Column(
-        //   children: alerts.map((alert) {
-        //     Fixture fixture = alert.fixture;
-        //       return Container(
-        //         padding: const EdgeInsets.all(5.0),
-        //         child: Row(
-        //           children: [
-        //             SizedBox(
-        //               width: screenWidth * 0.4,
-        //               child: Column(
-        //                 crossAxisAlignment: CrossAxisAlignment.start,
-        //                 children: [
-        //                   Text(
-        //                     fixture.league!.name,
-        //                     style: const TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),
-        //                   ),
-        //                   Text(
-        //                     getKoreanRound(fixture.round),
-        //                     style: const TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),
-        //                   ),
-        //                   Text(
-        //                     DateFormat('y. M. d ${getKoreanWeekDay(fixture.date)} HH:mm')
-        //                         .format(fixture.date),
-        //                     style: const TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),
-        //                   ),
-        //                   Text(
-        //                       fixture.home!.stadium,
-        //                       style: const TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),
-        //                       overflow: TextOverflow.ellipsis
-        //                   ),
-        //                 ],
-        //               ),
-        //             ),
-        //             SizedBox(
-        //               width: screenWidth * 0.44,
-        //               child: Row(
-        //                 mainAxisAlignment: MainAxisAlignment.center,
-        //                 children: [
-        //                   Padding(
-        //                     padding: const EdgeInsets.all(5.0),
-        //                     child: Image.network(fixture.home!.logo, height: 50,),
-        //                   ),
-        //                   const Text('vs'),
-        //                   Padding(
-        //                     padding: const EdgeInsets.all(5.0),
-        //                     child: Image.network(fixture.away!.logo, height: 50,),
-        //                   )
-        //                 ],
-        //               ),
-        //             ),
-        //             // SizedBox(
-        //             //   width: screenWidth * 0.1,
-        //             //   child: null
-        //             // )
-        //           ],
-        //         ),
-        //       );
-        //     }).toList()
-        // );
   }
 
   Future<void> getAlerts() async {
@@ -180,6 +242,37 @@ class _AlarmState extends State<Alarm> {
           .decode(utf8.decode(response.bodyBytes))
           .map((_) => Alert.fromJson(_)));
     }
+  }
+
+  Future<void> getSubscribes() async {
+    final response = await http.get(
+        Uri.parse('$baseUrl/api/subscribe/?type=TEAM'),
+        headers: baseHeader);
+    if (response.statusCode == 200) {
+      dynamic body = jsonDecode(response.body);
+      if (body is List && body.isNotEmpty) {
+        subscribes = List<Subscribe>.from(
+            json.decode(response.body).map((_) => Subscribe.fromJson(_)));
+        myTeamIds = subscribes.map((value) => value.team!.apiId).toList();
+      }
+    }
+  }
+
+  Future<void> saveAlert(int apiId, AlertType? alertType) async {
+    Map<String, String> requestHeader = baseHeader;
+    requestHeader['Content-Type'] = 'application/json';
+    alertType = alertType ?? alertTypes.first;
+    final response = await http.post(Uri.parse('$baseUrl/api/alert'),
+        body: jsonEncode(AlertRequest(fixtureId: apiId, alertType: alertType.type)),
+        headers: baseHeader);
+    if (response.statusCode != 200) {
+      throw Exception('$response.statusCode error');
+    }
+  }
+
+  void _refresh() {
+    getSubscribes().then((_) =>
+        setState((){}));
   }
 
 }

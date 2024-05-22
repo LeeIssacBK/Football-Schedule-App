@@ -29,13 +29,6 @@ class SubscribeRequest {
 
   SubscribeRequest({required this.type, required this.apiId});
 
-  Map<String, dynamic> toJson() {
-    return {
-      'type': type,
-      'apiId': apiId,
-    };
-  }
-
 }
 
 class League {

@@ -302,7 +302,7 @@ class _HomeState extends State<Home> {
     Map<String, String> requestHeader = baseHeader;
     requestHeader['Content-Type'] = 'application/json';
     final response = await http.delete(Uri.parse('$baseUrl/api/subscribe'),
-        body: jsonEncode(SubscribeRequest(type: SubscribeType.TEAM.name, apiId: teamId).toJson()),
+        body: jsonEncode(SubscribeRequest(type: SubscribeType.TEAM.name, apiId: teamId)),
         headers: requestHeader);
     return response.statusCode == 200;
   }
@@ -317,7 +317,11 @@ class _HomeState extends State<Home> {
   }
 
   Future<bool> saveAlert(int apiId, AlertType? alertType) async {
-    final response = await http.post(Uri.parse('$baseUrl/api/alert?fixtureId=$apiId'),
+    Map<String, String> requestHeader = baseHeader;
+    requestHeader['Content-Type'] = 'application/json';
+    alertType = alertType ?? alertTypes.first;
+    final response = await http.post(Uri.parse('$baseUrl/api/alert'),
+        body: jsonEncode(AlertRequest(fixtureId: apiId, alertType: alertType.type)),
         headers: baseHeader);
     return response.statusCode == 200;
   }

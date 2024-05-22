@@ -25,6 +25,20 @@ class Alert {
 
 }
 
+class AlertRequest {
+  final int fixtureId;
+  final String alertType;
+
+  AlertRequest({required this.alertType, required this.fixtureId});
+
+  Map<String, dynamic> toJson() {
+    return {
+      'fixtureId': fixtureId,
+      'alertType': alertType,
+    };
+  }
+}
+
 class AlertType {
   final String name;
   final String type;

@@ -17,8 +17,12 @@ class Alarm extends StatefulWidget {
 
 class _AlarmState extends State<Alarm> {
 
+  List<Alert> alerts = List.empty();
+
   @override
   void initState() {
+    getAlerts()
+        .then((_) => setState(() {}));
     super.initState();
   }
 
@@ -55,58 +59,58 @@ class _AlarmState extends State<Alarm> {
   }
 
   Widget getList(double screenWidth) {
-    return FutureBuilder<List<Alert>>(
-      future: getAlerts(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator();
-        }
-        if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
-        }
-        List<Alert> alerts = snapshot.data!;
-        if (alerts.isEmpty) {
+    if (alerts.isEmpty) {
+      return Container(
+        padding: const EdgeInsets.fromLTRB(0, 100.0, 0, 100.0),
+        child: const Column(
+          children: [
+            Text(
+              '등록된 알람이 없습니다.',
+              style: TextStyle(
+                color: Colors.indigo,
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+    return ListView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: alerts.length,
+        itemBuilder: (context, index) {
+          final item = alerts[index];
           return Container(
-            padding: const EdgeInsets.fromLTRB(0, 100.0, 0, 100.0),
-            child: const Column(
-              children: [
-                Text(
-                  '등록된 알람이 없습니다.',
-                  style: TextStyle(
-                    color: Colors.indigo,
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
+            width: screenWidth * 0.1,
+            child: Dismissible(
+              key: Key(item.fixture.apiId.toString()),
+              // Dismissible의 배경색 설정
+              background: Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text('삭제', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                  ],
+                ), color: Colors.redAccent),
+              // Dismissible이 Swipe될 때 호출. Swipe된 방향을 아규먼트로 수신
+              direction: DismissDirection.endToStart,
+              onDismissed: (direction) {
+                // 해당 index의 item을 리스트에서 삭제
+                setState(() {
+                  alerts.removeAt(index);
+                });
+                // 삭제한 아이템을 스낵바로 출력
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(SnackBar(content: Text("${item.fixture.apiId} dismissed")));
+              },
+              // Dismissible의 자식으로 리스트타일을 생성. 리스튜뷰에 타일로 등록
+              child: ListTile(title: Text(item.fixture.home!.name)),
             ),
           );
-        }
-        return ListView.builder(
-            shrinkWrap: true,
-            itemCount: alerts.length,
-            itemBuilder: (context, index) {
-              final item = alerts[index];
-              return Dismissible(
-                key: Key(item.fixture.apiId.toString()),
-                // Dismissible의 배경색 설정
-                background: Container(color: Colors.redAccent),
-                dragStartBehavior: DragStartBehavior.down,
-                // Dismissible이 Swipe될 때 호출. Swipe된 방향을 아규먼트로 수신
-                onDismissed: (direction) {
-                  // 해당 index의 item을 리스트에서 삭제
-                  setState(() {
-                    alerts.removeAt(index);
-                  });
-                  // 삭제한 아이템을 스낵바로 출력
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(SnackBar(content: Text("${item.fixture.apiId} dismissed")));
-                },
-                // Dismissible의 자식으로 리스트타일을 생성. 리스튜뷰에 타일로 등록
-                child: ListTile(title: Text(item.fixture.home!.name)),
-              );
-            },
-        );
+        },
+    );
 
         // return Column(
         //   children: alerts.map((alert) {
@@ -167,19 +171,15 @@ class _AlarmState extends State<Alarm> {
         //       );
         //     }).toList()
         // );
-
-      }
-    );
   }
 
-  Future<List<Alert>> getAlerts() async {
+  Future<void> getAlerts() async {
     final response = await http.get(Uri.parse('$baseUrl/api/alert'), headers: baseHeader);
     if (response.statusCode == 200) {
-      return List<Alert>.from(json
+      alerts = List<Alert>.from(json
           .decode(utf8.decode(response.bodyBytes))
           .map((_) => Alert.fromJson(_)));
     }
-    return List.empty();
   }
 
 }

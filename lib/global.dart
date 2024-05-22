@@ -3,6 +3,8 @@ import 'api/auth.dart';
 import 'api/apiUser.dart';
 import 'package:http/http.dart' as http;
 
+import 'dto/alert.dart';
+
 const String baseUrl = 'http://192.168.45.25:8090'; //집
 // const String baseUrl = 'http://192.168.219.140:8090';  //원장커피
 // const String baseUrl = 'http://192.168.0.18:8090';  //bake29
@@ -43,4 +45,14 @@ String getKoreanWeekDay(DateTime date) {
       return '일';
   }
   throw Exception('not found weekday : ${date.weekday}');
+}
+
+List<AlertType> getAlertType() {
+  return [
+    AlertType(name: '30분 전', type: 'BEFORE_30MINUTES'),
+    AlertType(name: '1시간 전', type: 'BEFORE_1HOURS'),
+    AlertType(name: '3시간 전', type: 'BEFORE_3HOURS'),
+    AlertType(name: '6시간 전', type: 'BEFORE_6HOURS'),
+    AlertType(name: '하루 전', type: 'BEFORE_1DAYS'),
+  ];
 }

@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
+import 'dto/alert.dart';
 import 'dto/fixture.dart';
 import 'dto/subscribe.dart';
 import 'global.dart';
@@ -24,8 +25,7 @@ class _HomeState extends State<Home> {
   List<Fixture> schedules = List.empty();
   double screenHeight = 0;
   double screenWidth = 0;
-  String? selectedValue;
-  final List<String> selectBoxItems = ['BEFORE_30MINUTES', 'BEFORE_1HOURS', 'BEFORE_3HOURS', 'BEFORE_6HOURS', 'BEFORE_1DAYS'];
+  final List<AlertType> alertTypes = getAlertType();
 
   @override
   void initState() {
@@ -172,99 +172,101 @@ class _HomeState extends State<Home> {
                                       showDialog(
                                           context: context,
                                           builder: (BuildContext context) {
-                                            return AlertDialog(
-                                              title: const Text('알람 추가',
-                                                style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.indigo),
-                                              ),
-                                              contentTextStyle: const TextStyle(color: Colors.indigo, fontSize: 15.0),
-                                              content: Container(
-                                                padding: const EdgeInsets.all(10.0),
-                                                child: Column(
-                                                  mainAxisAlignment: MainAxisAlignment.start,
-                                                  mainAxisSize: MainAxisSize.min,
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [
-                                                    Row(
+                                            AlertType? selectedValue;
+                                            return StatefulBuilder(
+                                              builder: (BuildContext context, StateSetter setState) {
+                                                return AlertDialog(
+                                                  title: const Text('알람 추가', style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.indigo),),
+                                                  contentTextStyle: const TextStyle(color: Colors.indigo, fontSize: 15.0),
+                                                  content: Container(
+                                                    padding: const EdgeInsets.all(10.0),
+                                                    child: Column(
+                                                      mainAxisAlignment: MainAxisAlignment.start,
+                                                      mainAxisSize: MainAxisSize.min,
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
                                                       children: [
-                                                        Padding(
-                                                          padding: const EdgeInsets.all(5.0),
-                                                          child: Image.network(fixture.league!.logo, height: 30,),
+                                                        Row(
+                                                          children: [
+                                                            Padding(
+                                                              padding: const EdgeInsets.all(5.0),
+                                                              child: Image.network(
+                                                                fixture.league!.logo,
+                                                                height: 30,),
+                                                            ),
+                                                            Padding(
+                                                              padding: const EdgeInsets.all(5.0),
+                                                              child: Text(
+                                                                  '${fixture.league!.name} ${getKoreanRound(fixture.round)}'),
+                                                            )
+                                                          ],
                                                         ),
-                                                        Padding(
-                                                          padding: const EdgeInsets.all(5.0),
-                                                          child: Text('${fixture.league!.name} ${getKoreanRound(fixture.round)}'),
-                                                        )
+                                                        Text('${fixture.home!.name} vs ${fixture.away!.name} 경기를 알람 설정 하시겠습니까?'),
+                                                        DropdownButton(
+                                                            isExpanded: true,
+                                                            hint: const Text('알람 시간 설정', style: TextStyle(color: Colors.indigo)),
+                                                            style: const TextStyle(color: Colors.indigo),
+                                                            underline: Container(
+                                                              height: 2,
+                                                              color: Colors.indigoAccent,
+                                                            ),
+                                                            value: selectedValue,
+                                                            items: alertTypes.map<DropdownMenuItem<AlertType>>((AlertType value) {
+                                                              return DropdownMenuItem<AlertType>(
+                                                                value: value,
+                                                                child: Text(value.name),
+                                                              );
+                                                            }).toList(),
+                                                            onChanged: (AlertType? newValue) {
+                                                              setState(() {
+                                                                selectedValue = newValue;
+                                                              });
+                                                            }),
                                                       ],
                                                     ),
-                                                    Text('${fixture.home!.name} vs ${fixture.away!.name} 경기를 알람 설정 하시겠습니까?'),
-                                                    DropdownButton(
-                                                        isExpanded: true,
-                                                        hint: const Text('알람 시간 설정', style: TextStyle(color: Colors.indigo)),
-                                                        style: const TextStyle(color: Colors.indigo),
-                                                        underline: Container(
-                                                          height: 2,
-                                                          color: Colors.indigoAccent,
+                                                  ),
+                                                  actions: [
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      children: [
+                                                        Padding(
+                                                            padding: const EdgeInsets.all(5.0),
+                                                            child: ElevatedButton(
+                                                              onPressed: () {
+                                                                Navigator.of(context).pop();
+                                                                saveAlert(fixture.apiId, selectedValue).then((flag) => {
+                                                                  if (flag) {
+                                                                    ScaffoldMessenger.of(context).showSnackBar(
+                                                                        const SnackBar(
+                                                                          content: Text('알람 등록이 완료되었습니다!', textAlign: TextAlign.center, style: TextStyle(color: Colors.white),
+                                                                          ),
+                                                                          backgroundColor: Colors.teal,
+                                                                          duration: Duration(milliseconds: 1000),))
+                                                                  } else {
+                                                                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                                                      content: Text('알람 등록이 실패하였습니다. 다시 시도해주세요.', textAlign: TextAlign.center,
+                                                                        style: TextStyle(color: Colors.white),),
+                                                                      backgroundColor: Colors.redAccent,
+                                                                      duration: Duration(milliseconds: 1000),))
+                                                                    }
+                                                                });
+                                                              },
+                                                              child: const Text('예'),
+                                                            )
                                                         ),
-                                                        value: selectedValue,
-                                                        items: selectBoxItems.map<DropdownMenuItem<String>>((String value) {
-                                                          return DropdownMenuItem<String>(
-                                                            value: value,
-                                                            child: Text(value),
-                                                          );}).toList(),
-                                                        onChanged: (String? newValue) {
-                                                          setState(() {
-                                                            selectedValue = newValue;
-                                                          });
-                                                        }),
-                                                  ],
-                                                ),
-                                              ),
-                                              actions: [
-                                                Row(
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  children: [
-                                                    Padding(
-                                                      padding: const EdgeInsets.all(5.0),
-                                                      child: ElevatedButton(
-                                                        onPressed: () {
-                                                          Navigator.of(context).pop();
-                                                          saveAlert(fixture.apiId).then((flag) => {
-                                                            if (flag) {
-                                                              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                                                                content: Text('알람 등록이 완료되었습니다!',
-                                                                  textAlign: TextAlign.center,
-                                                                  style: TextStyle(color: Colors.white),
-                                                                ),
-                                                                backgroundColor: Colors.teal,
-                                                                duration: Duration(milliseconds: 1000),
-                                                              ))
-                                                            } else {
-                                                              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                                                                content: Text('알람 등록이 실패하였습니다. 다시 시도해주세요.',
-                                                                  textAlign: TextAlign.center,
-                                                                  style: TextStyle(color: Colors.white),
-                                                                ),
-                                                                backgroundColor: Colors.redAccent,
-                                                                duration: Duration(milliseconds: 1000),
-                                                              ))
-                                                            }
-                                                          });
-                                                        },
-                                                        child: const Text('예'),
-                                                      )
-                                                    ),
-                                                    Padding(
-                                                      padding: const EdgeInsets.all(5.0),
-                                                      child: ElevatedButton(
-                                                        onPressed: () {
-                                                          Navigator.of(context).pop();
-                                                        },
-                                                        child: const Text('아니오'),
-                                                      )
+                                                        Padding(
+                                                            padding: const EdgeInsets.all(5.0),
+                                                            child: ElevatedButton(
+                                                              onPressed: () {
+                                                                Navigator.of(context).pop();
+                                                              },
+                                                              child: const Text('아니오'),
+                                                            )
+                                                        )
+                                                      ],
                                                     )
                                                   ],
-                                                )
-                                              ],
+                                                );
+                                              }
                                             );
                                           });
                                     }, icon: const Icon(Icons.add_alarm)
@@ -314,7 +316,7 @@ class _HomeState extends State<Home> {
     }
   }
 
-  Future<bool> saveAlert(int apiId) async {
+  Future<bool> saveAlert(int apiId, AlertType? alertType) async {
     final response = await http.post(Uri.parse('$baseUrl/api/alert?fixtureId=$apiId'),
         headers: baseHeader);
     return response.statusCode == 200;

@@ -25,10 +25,9 @@ class Alert {
 
 }
 
-enum AlertType {
-  BEFORE_30MINUTES,
-  BEFORE_1HOURS,
-  BEFORE_3HOURS,
-  BEFORE_6HOURS,
-  BEFORE_1DAYS
+class AlertType {
+  final String name;
+  final String type;
+
+  AlertType({required this.name, required this.type});
 }

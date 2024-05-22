@@ -141,9 +141,8 @@ class _SearchState extends State<Search> {
   Future<void> subscribeTeam(int teamId) async {
     Map<String, String> requestHeader = baseHeader;
     requestHeader['Content-Type'] = 'application/json';
-    print(requestHeader);
     final response = await http.post(Uri.parse('$baseUrl/api/subscribe/'),
-        body: jsonEncode(SubscribeRequest(type: SubscribeType.TEAM.name, apiId: teamId).toJson()), headers: requestHeader);
+        body: jsonEncode(SubscribeRequest(type: SubscribeType.TEAM.name, apiId: teamId)), headers: requestHeader);
     if (response.statusCode == 200) {
       print(response.body);
     } else {

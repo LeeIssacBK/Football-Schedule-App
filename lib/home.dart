@@ -232,23 +232,23 @@ class _HomeState extends State<Home> {
                                                             padding: const EdgeInsets.all(5.0),
                                                             child: ElevatedButton(
                                                               onPressed: () {
-                                                                Navigator.of(context).pop();
-                                                                saveAlert(fixture.apiId, selectedValue).then((flag) => {
-                                                                  if (flag) {
+                                                                try {
+                                                                  saveAlert(fixture.apiId, selectedValue).then((_) => {
                                                                     ScaffoldMessenger.of(context).showSnackBar(
                                                                         const SnackBar(
-                                                                          content: Text('알람 등록이 완료되었습니다!', textAlign: TextAlign.center, style: TextStyle(color: Colors.white),
-                                                                          ),
+                                                                          content: Text('알람 등록이 완료되었습니다!', textAlign: TextAlign.center, style: TextStyle(color: Colors.white),),
                                                                           backgroundColor: Colors.teal,
                                                                           duration: Duration(milliseconds: 1000),))
-                                                                  } else {
-                                                                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                                                                      content: Text('알람 등록이 실패하였습니다. 다시 시도해주세요.', textAlign: TextAlign.center,
-                                                                        style: TextStyle(color: Colors.white),),
-                                                                      backgroundColor: Colors.redAccent,
-                                                                      duration: Duration(milliseconds: 1000),))
-                                                                    }
-                                                                });
+                                                                  });
+                                                                } catch(e) {
+                                                                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                                                    content: Text('알람 등록이 실패하였습니다. 다시 시도해주세요.', textAlign: TextAlign.center,
+                                                                      style: TextStyle(color: Colors.white),),
+                                                                    backgroundColor: Colors.redAccent,
+                                                                    duration: Duration(milliseconds: 1000),));
+                                                                }
+                                                                Navigator.of(context).pop();
+                                                                _refresh();
                                                               },
                                                               child: const Text('예'),
                                                             )
@@ -316,14 +316,16 @@ class _HomeState extends State<Home> {
     }
   }
 
-  Future<bool> saveAlert(int apiId, AlertType? alertType) async {
+  Future<void> saveAlert(int apiId, AlertType? alertType) async {
     Map<String, String> requestHeader = baseHeader;
     requestHeader['Content-Type'] = 'application/json';
     alertType = alertType ?? alertTypes.first;
     final response = await http.post(Uri.parse('$baseUrl/api/alert'),
         body: jsonEncode(AlertRequest(fixtureId: apiId, alertType: alertType.type)),
         headers: baseHeader);
-    return response.statusCode == 200;
+    if (response.statusCode != 200) {
+      throw Exception('$response.statusCode error');
+    }
   }
 
   Widget myTeam() {

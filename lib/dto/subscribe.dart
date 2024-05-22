@@ -1,5 +1,8 @@
 import 'dart:convert';
 
+import 'package:json_annotation/json_annotation.dart';
+
+@JsonSerializable()
 class Subscribe {
   final String type;
   final League? league;
@@ -28,6 +31,13 @@ class SubscribeRequest {
   final int apiId;
 
   SubscribeRequest({required this.type, required this.apiId});
+
+  Map<String, dynamic> toJson() {
+    return {
+      'type': type,
+      'apiId': apiId,
+    };
+  }
 
 }
 

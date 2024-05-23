@@ -102,6 +102,7 @@ class _AlarmState extends State<Alarm> {
             // Dismissible이 Swipe될 때 호출. Swipe된 방향을 아규먼트로 수신
             onDismissed: (direction) {
               // 해당 index의 item을 리스트에서 삭제
+              deleteAlert(item.fixture.apiId);
               setState(() {
                 alerts.removeAt(index);
               });
@@ -198,6 +199,8 @@ class _AlarmState extends State<Alarm> {
                                                       content: Text('알람이 수정되었습니다.', textAlign: TextAlign.center, style: TextStyle(color: Colors.white),),
                                                       backgroundColor: Colors.teal,
                                                       duration: Duration(milliseconds: 1000),))
+                                              }).then((_) {
+                                                _refresh();
                                               });
                                             } catch(e) {
                                               ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -207,7 +210,6 @@ class _AlarmState extends State<Alarm> {
                                                 duration: Duration(milliseconds: 1000),));
                                             }
                                             Navigator.of(context).pop();
-                                            _refresh();
                                           },
                                           child: const Text('예'),
                                         )
@@ -293,8 +295,9 @@ class _AlarmState extends State<Alarm> {
   }
 
   void _refresh() {
-    getSubscribes().then((_) =>
-        setState((){}));
+    getAlerts().then((_) => {
+      getSubscribes()}).then((_) =>
+        setState(() {}));
   }
 
 }

@@ -236,9 +236,11 @@ class _HomeState extends State<Home> {
                                                                   saveAlert(fixture.apiId, selectedValue).then((_) => {
                                                                     ScaffoldMessenger.of(context).showSnackBar(
                                                                         const SnackBar(
-                                                                          content: Text('알람 등록이 완료되었습니다!', textAlign: TextAlign.center, style: TextStyle(color: Colors.white),),
+                                                                          content: Text('알람이 등록되었습니다.', textAlign: TextAlign.center, style: TextStyle(color: Colors.white),),
                                                                           backgroundColor: Colors.teal,
                                                                           duration: Duration(milliseconds: 1000),))
+                                                                  }).then((_) {
+                                                                    _refresh();
                                                                   });
                                                                 } catch(e) {
                                                                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -248,7 +250,6 @@ class _HomeState extends State<Home> {
                                                                     duration: Duration(milliseconds: 1000),));
                                                                 }
                                                                 Navigator.of(context).pop();
-                                                                _refresh();
                                                               },
                                                               child: const Text('예'),
                                                             )

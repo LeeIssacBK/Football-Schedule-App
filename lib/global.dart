@@ -46,13 +46,3 @@ String getKoreanWeekDay(DateTime date) {
   }
   throw Exception('not found weekday : ${date.weekday}');
 }
-
-List<AlertType> getAlertType() {
-  return [
-    AlertType(name: '30분 전', type: 'BEFORE_30MINUTES'),
-    AlertType(name: '1시간 전', type: 'BEFORE_1HOURS'),
-    AlertType(name: '3시간 전', type: 'BEFORE_3HOURS'),
-    AlertType(name: '6시간 전', type: 'BEFORE_6HOURS'),
-    AlertType(name: '하루 전', type: 'BEFORE_1DAYS'),
-  ];
-}

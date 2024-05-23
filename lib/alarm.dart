@@ -131,7 +131,7 @@ class _AlarmState extends State<Alarm> {
                 showDialog(
                     context: context,
                     builder: (BuildContext context) {
-                      AlertType? selectedValue;
+                      AlertType? selectedValue = getStrToType(item.alertType);
                       return StatefulBuilder(
                           builder: (BuildContext context, StateSetter setState) {
                             return AlertDialog(
@@ -192,16 +192,16 @@ class _AlarmState extends State<Alarm> {
                                         child: ElevatedButton(
                                           onPressed: () {
                                             try {
-                                              saveAlert(item.fixture.apiId, selectedValue).then((_) => {
+                                              updateAlert(item.fixture.apiId, selectedValue).then((_) => {
                                                 ScaffoldMessenger.of(context).showSnackBar(
                                                     const SnackBar(
-                                                      content: Text('알람 등록이 완료되었습니다!', textAlign: TextAlign.center, style: TextStyle(color: Colors.white),),
+                                                      content: Text('알람이 수정되었습니다.', textAlign: TextAlign.center, style: TextStyle(color: Colors.white),),
                                                       backgroundColor: Colors.teal,
                                                       duration: Duration(milliseconds: 1000),))
                                               });
                                             } catch(e) {
                                               ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                                                content: Text('알람 등록이 실패하였습니다. 다시 시도해주세요.', textAlign: TextAlign.center,
+                                                content: Text('알람 수정에 실패하였습니다. 다시 시도해주세요.', textAlign: TextAlign.center,
                                                   style: TextStyle(color: Colors.white),),
                                                 backgroundColor: Colors.redAccent,
                                                 duration: Duration(milliseconds: 1000),));
@@ -264,6 +264,28 @@ class _AlarmState extends State<Alarm> {
     alertType = alertType ?? alertTypes.first;
     final response = await http.post(Uri.parse('$baseUrl/api/alert'),
         body: jsonEncode(AlertRequest(fixtureId: apiId, alertType: alertType.type)),
+        headers: baseHeader);
+    if (response.statusCode != 200) {
+      throw Exception('$response.statusCode error');
+    }
+  }
+
+  Future<void> updateAlert(int apiId, AlertType? alertType) async {
+    Map<String, String> requestHeader = baseHeader;
+    requestHeader['Content-Type'] = 'application/json';
+    final response = await http.put(Uri.parse('$baseUrl/api/alert'),
+        body: jsonEncode(AlertRequest(fixtureId: apiId, alertType: alertType?.type)),
+        headers: baseHeader);
+    if (response.statusCode != 200) {
+      throw Exception('$response.statusCode error');
+    }
+  }
+
+  Future<void> deleteAlert(int apiId) async {
+    Map<String, String> requestHeader = baseHeader;
+    requestHeader['Content-Type'] = 'application/json';
+    final response = await http.delete(Uri.parse('$baseUrl/api/alert'),
+        body: jsonEncode(AlertRequest(fixtureId: apiId, alertType: null)),
         headers: baseHeader);
     if (response.statusCode != 200) {
       throw Exception('$response.statusCode error');

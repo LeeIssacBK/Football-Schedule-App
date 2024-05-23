@@ -27,7 +27,7 @@ class Alert {
 
 class AlertRequest {
   final int fixtureId;
-  final String alertType;
+  final String? alertType;
 
   AlertRequest({required this.alertType, required this.fixtureId});
 
@@ -44,4 +44,30 @@ class AlertType {
   final String type;
 
   AlertType({required this.name, required this.type});
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) || other is AlertType && runtimeType == other.runtimeType && type == other.type;
+
+  @override
+  int get hashCode => type.hashCode;
+}
+
+List<AlertType> getAlertType() {
+  return [
+    AlertType(name: '30분 전', type: 'BEFORE_30MINUTES'),
+    AlertType(name: '1시간 전', type: 'BEFORE_1HOURS'),
+    AlertType(name: '3시간 전', type: 'BEFORE_3HOURS'),
+    AlertType(name: '6시간 전', type: 'BEFORE_6HOURS'),
+    AlertType(name: '하루 전', type: 'BEFORE_1DAYS'),
+  ];
+}
+
+AlertType getStrToType(String? str) {
+  for (AlertType alertType in getAlertType()) {
+    if (alertType.type == str) {
+      return alertType;
+    }
+  }
+  throw Exception('AlertType with type $str not found');
 }

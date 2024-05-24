@@ -18,7 +18,6 @@ class _AlarmState extends State<Alarm> {
 
   List<Alert> alerts = List.empty();
   List<Subscribe> subscribes = List.empty();
-  List<int> myTeamIds = List.empty();
   final List<AlertType> alertTypes = getAlertTypes();
 
   @override
@@ -117,7 +116,7 @@ class _AlarmState extends State<Alarm> {
             child: ListTile(
               leading: Padding(
                 padding: const EdgeInsets.all(3.0),
-                child: Image.network(item.fixture.league!.logo),
+                child: Image.network(item.fixture.league!.logo, width: 50,),
               ),
               title: Column(
                 children: [
@@ -128,8 +127,8 @@ class _AlarmState extends State<Alarm> {
                         width: screenWidth * 0.3,
                         child: Column(
                           children: [
-                            Image.network(item.fixture.home!.logo, height: 40),
-                            Text(item.fixture.home!.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 10.0)),
+                            Image.network(item.fixture.home!.logo, width: 40),
+                            Text(item.fixture.home!.krName!, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 10.0)),
                           ],
                         ),
                       ),
@@ -140,8 +139,8 @@ class _AlarmState extends State<Alarm> {
                         width: screenWidth * 0.3,
                         child: Column(
                           children: [
-                            Image.network(item.fixture.away!.logo, height: 40),
-                            Text(item.fixture.away!.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 10.0, overflow: TextOverflow.fade,)),
+                            Image.network(item.fixture.away!.logo, width: 40),
+                            Text(item.fixture.away!.krName!, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 10.0, overflow: TextOverflow.fade,)),
                           ],
                         ),
                       )
@@ -187,7 +186,7 @@ class _AlarmState extends State<Alarm> {
                                         )
                                       ],
                                     ),
-                                    Text('${item.fixture.home!.name} vs ${item.fixture.away!.name} 경기 알람 시간을 수정하시겠습니까?'),
+                                    Text('${item.fixture.home!.krName} vs ${item.fixture.away!.krName} 경기 알람 시간을 수정하시겠습니까?'),
                                     DropdownButton(
                                         isExpanded: true,
                                         hint: const Text('알람 시간 설정', style: TextStyle(color: Colors.indigo)),
@@ -282,7 +281,6 @@ class _AlarmState extends State<Alarm> {
       if (body is List && body.isNotEmpty) {
         subscribes = List<Subscribe>.from(
             json.decode(response.body).map((_) => Subscribe.fromJson(_)));
-        myTeamIds = subscribes.map((_) => _.team!.apiId).toList();
       }
     }
   }

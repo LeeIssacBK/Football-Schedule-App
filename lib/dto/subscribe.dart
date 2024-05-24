@@ -65,6 +65,7 @@ class League {
 class Team {
   final int apiId;
   final String name;
+  final String? krName;
   final String? code;
   final int founded;
   final bool national;
@@ -78,6 +79,7 @@ class Team {
   Team({
     required this.apiId,
     required this.name,
+    required this.krName,
     required this.code,
     required this.founded,
     required this.national,
@@ -93,6 +95,7 @@ class Team {
     return Team(
       apiId: json['apiId'],
       name: json['name'],
+      krName: json['krName'],
       code: json['code'],
       founded: json['founded'],
       national: json['national'],

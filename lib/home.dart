@@ -119,7 +119,7 @@ class _HomeState extends State<Home> {
                                         style: const TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),
                                       ),
                                       Text(
-                                        '${fixture.home!.name} vs ${fixture.away!.name}',
+                                        '${fixture.home!.krName} vs ${fixture.away!.krName}',
                                         style: const TextStyle(fontSize: 10.0, fontWeight: FontWeight.bold),
                                       ),
                                       Text(
@@ -200,7 +200,7 @@ class _HomeState extends State<Home> {
                                                             )
                                                           ],
                                                         ),
-                                                        Text('${fixture.home!.name} vs ${fixture.away!.name} 경기를 알람 설정 하시겠습니까?'),
+                                                        Text('${fixture.home!.krName} vs ${fixture.away!.krName} 경기를 알람 설정 하시겠습니까?'),
                                                         DropdownButton(
                                                             isExpanded: true,
                                                             hint: const Text('알람 시간 설정', style: TextStyle(color: Colors.indigo)),
@@ -291,7 +291,7 @@ class _HomeState extends State<Home> {
         Uri.parse('$baseUrl/api/subscribe/?type=TEAM'),
         headers: baseHeader);
     if (response.statusCode == 200) {
-      dynamic body = jsonDecode(response.body);
+      dynamic body = jsonDecode(utf8.decode(response.bodyBytes));
       if (body is List && body.isNotEmpty) {
         subscribes = List<Subscribe>.from(
             json.decode(response.body).map((_) => Subscribe.fromJson(_)));
@@ -355,7 +355,7 @@ class _HomeState extends State<Home> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text('이미 추가된 경기 알람은 취소되지 않습니다.\n'
-                             '${subscribe.team!.name} 의 구독을 취소하시겠습니까?'),
+                             '${subscribe.team!.krName} 의 구독을 취소하시겠습니까?'),
                       ],
                     ),
                     actions: [
@@ -415,7 +415,7 @@ class _HomeState extends State<Home> {
           },
           child: Row(children: [
             SizedBox(width: screenWidth * 0.1, child: Padding(padding: const EdgeInsets.all(5.0), child: Image.network(subscribe.team!.logo),)),
-            SizedBox(width: screenWidth * 0.4, child: Text(subscribe.team!.name, style: const TextStyle(color: Colors.indigo, fontWeight: FontWeight.bold))),
+            SizedBox(width: screenWidth * 0.4, child: Text(subscribe.team!.krName!, style: const TextStyle(color: Colors.indigo, fontWeight: FontWeight.bold))),
             const Expanded(child: SizedBox()),
             SizedBox(width: screenWidth * 0.1, child: const Icon(Icons.remove))
           ],),
@@ -491,7 +491,7 @@ class _HomeState extends State<Home> {
                             Row(
                               children: [
                                 Text('팀명\n'),
-                                Text(subscribe.team!.name),
+                                Text(subscribe.team!.krName!),
                               ],
                             ),
                             Row(
@@ -544,7 +544,7 @@ class _HomeState extends State<Home> {
           ),
           Padding(
             padding: const EdgeInsets.only(top: 5.0),
-            child: Text(subscribe.team!.name,
+            child: Text(subscribe.team!.krName!,
                 style: const TextStyle(
                     color: Colors.indigo,
                     fontSize: 20.0,

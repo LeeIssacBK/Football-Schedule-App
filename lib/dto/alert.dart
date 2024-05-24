@@ -53,7 +53,7 @@ class AlertType {
   int get hashCode => type.hashCode;
 }
 
-List<AlertType> getAlertType() {
+List<AlertType> getAlertTypes() {
   return [
     AlertType(name: '30분 전', type: 'BEFORE_30MINUTES'),
     AlertType(name: '1시간 전', type: 'BEFORE_1HOURS'),
@@ -64,7 +64,7 @@ List<AlertType> getAlertType() {
 }
 
 AlertType getStrToType(String? str) {
-  for (AlertType alertType in getAlertType()) {
+  for (AlertType alertType in getAlertTypes()) {
     if (alertType.type == str) {
       return alertType;
     }

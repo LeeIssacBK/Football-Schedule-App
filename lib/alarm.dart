@@ -19,7 +19,7 @@ class _AlarmState extends State<Alarm> {
   List<Alert> alerts = List.empty();
   List<Subscribe> subscribes = List.empty();
   List<int> myTeamIds = List.empty();
-  final List<AlertType> alertTypes = getAlertType();
+  final List<AlertType> alertTypes = getAlertTypes();
 
   @override
   void initState() {
@@ -115,11 +115,38 @@ class _AlarmState extends State<Alarm> {
             },
             // Dismissible의 자식으로 리스트타일을 생성. 리스튜뷰에 타일로 등록
             child: ListTile(
-              leading: myTeamIds.contains(item.fixture.home!.apiId) ? Image.network(item.fixture.home!.logo) : Image.network(item.fixture.away!.logo),
+              leading: Padding(
+                padding: const EdgeInsets.all(3.0),
+                child: Image.network(item.fixture.league!.logo),
+              ),
               title: Column(
                 children: [
-                  Text(item.fixture.league!.name, style: const TextStyle(fontWeight: FontWeight.bold),),
-                  Text('${item.fixture.home!.name} vs ${item.fixture.away!.name}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 10.0)),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        width: screenWidth * 0.3,
+                        child: Column(
+                          children: [
+                            Image.network(item.fixture.home!.logo, height: 40),
+                            Text(item.fixture.home!.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 10.0)),
+                          ],
+                        ),
+                      ),
+                      const Expanded(child: SizedBox()),
+                      const Text('vs'),
+                      const Expanded(child: SizedBox()),
+                      SizedBox(
+                        width: screenWidth * 0.3,
+                        child: Column(
+                          children: [
+                            Image.network(item.fixture.away!.logo, height: 40),
+                            Text(item.fixture.away!.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 10.0, overflow: TextOverflow.fade,)),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ],
               ),
               subtitle: Column(
@@ -255,7 +282,7 @@ class _AlarmState extends State<Alarm> {
       if (body is List && body.isNotEmpty) {
         subscribes = List<Subscribe>.from(
             json.decode(response.body).map((_) => Subscribe.fromJson(_)));
-        myTeamIds = subscribes.map((value) => value.team!.apiId).toList();
+        myTeamIds = subscribes.map((_) => _.team!.apiId).toList();
       }
     }
   }

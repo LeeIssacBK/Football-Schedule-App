@@ -25,7 +25,7 @@ class _HomeState extends State<Home> {
   List<Fixture> schedules = List.empty();
   double screenHeight = 0;
   double screenWidth = 0;
-  final List<AlertType> alertTypes = getAlertType();
+  final List<AlertType> alertTypes = getAlertTypes();
 
   @override
   void initState() {
@@ -155,7 +155,7 @@ class _HomeState extends State<Home> {
                                       Duration difference = fixture.date.difference(DateTime.timestamp().toLocal());
                                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                         content: Text(
-                                          '경기까지 '
+                                          '경기시작까지 '
                                           '${difference.inDays}일 '
                                           '${difference.inHours % 24}시간 '
                                           '${difference.inMinutes % 60}분 남았습니다.',

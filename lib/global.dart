@@ -1,9 +1,12 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
+
 import 'dto/auth.dart';
 import 'dto/apiUser.dart';
 import 'package:http/http.dart' as http;
 
 import 'dto/alert.dart';
+import 'dto/subscribe.dart';
 
 const String baseUrl = 'http://192.168.45.244:8090'; //집
 // const String baseUrl = 'http://192.168.219.140:8090';  //원장커피
@@ -45,4 +48,16 @@ String getKoreanWeekDay(DateTime date) {
       return '일';
   }
   throw Exception('not found weekday : ${date.weekday}');
+}
+
+Widget getLeagueTile(League? league) {
+  return FilledButton(onPressed: () {},
+      style: FilledButton.styleFrom(
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        backgroundColor: league!.type == 'LEAGUE' ? Colors.deepOrangeAccent : Colors.blue,
+        minimumSize: const Size(10, 20),
+        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 0.0)
+      ),
+      child: Text(league.name, style: const TextStyle(color: Colors.white, fontSize: 10))
+  );
 }

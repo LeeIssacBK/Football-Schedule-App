@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'dart:core';
+import 'dart:developer';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -114,10 +116,7 @@ class _HomeState extends State<Home> {
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        fixture.league!.name,
-                                        style: const TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),
-                                      ),
+                                      getLeagueTile(fixture.league),
                                       Text(
                                         '${fixture.home!.krName ?? fixture.home!.name} vs ${fixture.away!.krName ?? fixture.away!.name}',
                                         style: const TextStyle(fontSize: 10.0, fontWeight: FontWeight.bold),
@@ -354,7 +353,7 @@ class _HomeState extends State<Home> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text('이미 추가된 경기 알람은 취소되지 않습니다.\n'
-                             '${subscribe.team!.krName} 의 구독을 취소하시겠습니까?'),
+                             '${subscribe.team!.krName ?? subscribe.team!.name} 의 구독을 취소하시겠습니까?'),
                       ],
                     ),
                     actions: [

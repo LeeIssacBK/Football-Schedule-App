@@ -70,11 +70,11 @@ class Team {
   final int founded;
   final bool national;
   final String logo;
-  final String stadium;
+  final String? stadium;
   final String? address;
-  final String city;
+  final String? city;
   final int capacity;
-  final String stadiumImage;
+  final String? stadiumImage;
 
   Team({
     required this.apiId,

@@ -93,26 +93,22 @@ class _AlarmState extends State<Alarm> {
                 children: [
                   Padding(
                     padding: EdgeInsets.only(right: 10.0),
-                    child: Text('삭제', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                    child: Icon(Icons.delete_forever, color: Colors.white)
                   ),
                 ],
               )),
             direction: DismissDirection.endToStart,
-            // Dismissible이 Swipe될 때 호출. Swipe된 방향을 아규먼트로 수신
             onDismissed: (direction) {
-              // 해당 index의 item을 리스트에서 삭제
               deleteAlert(item.fixture.apiId);
               setState(() {
                 alerts.removeAt(index);
               });
-              // 삭제한 아이템을 스낵바로 출력
               ScaffoldMessenger.of(context)
                   .showSnackBar(SnackBar(content: Text('${item.fixture.home!.name} vs ${item.fixture.away!.name} 경기 알람이 삭제되었습니다.'),
                   backgroundColor: Colors.teal,
-                  duration: const Duration(milliseconds: 1000)
+                  duration: const Duration(milliseconds: 3000)
               ));
             },
-            // Dismissible의 자식으로 리스트타일을 생성. 리스튜뷰에 타일로 등록
             child: ListTile(
               leading: Padding(
                 padding: const EdgeInsets.all(3.0),
@@ -128,7 +124,7 @@ class _AlarmState extends State<Alarm> {
                         child: Column(
                           children: [
                             Image.network(item.fixture.home!.logo, width: 40),
-                            Text(item.fixture.home!.krName!, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 10.0)),
+                            Text(item.fixture.home!.krName ?? item.fixture.home!.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 10.0)),
                           ],
                         ),
                       ),
@@ -140,7 +136,7 @@ class _AlarmState extends State<Alarm> {
                         child: Column(
                           children: [
                             Image.network(item.fixture.away!.logo, width: 40),
-                            Text(item.fixture.away!.krName!, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 10.0, overflow: TextOverflow.fade,)),
+                            Text(item.fixture.away!.krName ?? item.fixture.away!.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 10.0, overflow: TextOverflow.fade,)),
                           ],
                         ),
                       )
@@ -224,7 +220,7 @@ class _AlarmState extends State<Alarm> {
                                                     const SnackBar(
                                                       content: Text('알람이 수정되었습니다.', textAlign: TextAlign.center, style: TextStyle(color: Colors.white),),
                                                       backgroundColor: Colors.teal,
-                                                      duration: Duration(milliseconds: 1000),))
+                                                      duration: Duration(milliseconds: 3000),))
                                               }).then((_) {
                                                 _refresh();
                                               });
@@ -233,7 +229,7 @@ class _AlarmState extends State<Alarm> {
                                                 content: Text('알람 수정에 실패하였습니다. 다시 시도해주세요.', textAlign: TextAlign.center,
                                                   style: TextStyle(color: Colors.white),),
                                                 backgroundColor: Colors.redAccent,
-                                                duration: Duration(milliseconds: 1000),));
+                                                duration: Duration(milliseconds: 3000),));
                                             }
                                             Navigator.of(context).pop();
                                           },

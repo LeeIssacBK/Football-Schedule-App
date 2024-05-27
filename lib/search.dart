@@ -120,9 +120,8 @@ class _SearchState extends State<Search> {
       return List<League>.from(json
           .decode(utf8.decode(response.bodyBytes))
           .map((_) => League.fromJson(_)));
-    } else {
-      return List.empty();
     }
+    return List.empty();
   }
 
   Future<List<Team>> getTeams() async {
@@ -130,24 +129,19 @@ class _SearchState extends State<Search> {
         Uri.parse('$baseUrl/api/team?leagueId=$leagueId'),
         headers: baseHeader);
     if (response.statusCode == 200) {
-      return List<Team>.from(json
-          .decode(utf8.decode(response.bodyBytes))
-          .map((_) => Team.fromJson(_)));
-    } else {
-      return List.empty();
+      dynamic data = json.decode(utf8.decode(response.bodyBytes));
+      return List<Team>.from(
+          data.map((_) => Team.fromJson(_)));
     }
+    return List.empty();
   }
 
-  Future<void> subscribeTeam(int teamId) async {
+  Future<bool> subscribeTeam(int teamId) async {
     Map<String, String> requestHeader = baseHeader;
     requestHeader['Content-Type'] = 'application/json';
     final response = await http.post(Uri.parse('$baseUrl/api/subscribe/'),
         body: jsonEncode(SubscribeRequest(type: SubscribeType.TEAM.name, apiId: teamId)), headers: requestHeader);
-    if (response.statusCode == 200) {
-      print(response.body);
-    } else {
-      print(response.body);
-    }
+    return response.statusCode == 200;
   }
 
   Widget getStep(Step handle) {
@@ -196,66 +190,66 @@ class _SearchState extends State<Search> {
                     fontWeight: FontWeight.bold),
               )),
         ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: TextButton(
-              onPressed: () {
-                continent = Continent.southAmerica;
-                movePage(Step.second);
-              },
-              child: const Text(
-                '남미',
-                style: TextStyle(
-                    color: Colors.indigo,
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold),
-              )),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: TextButton(
-              onPressed: () {
-                continent = Continent.northAmerica;
-                movePage(Step.second);
-              },
-              child: const Text(
-                '북미',
-                style: TextStyle(
-                    color: Colors.indigo,
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold),
-              )),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: TextButton(
-              onPressed: () {
-                continent = Continent.oceania;
-                movePage(Step.second);
-              },
-              child: const Text(
-                '오세아니아',
-                style: TextStyle(
-                    color: Colors.indigo,
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold),
-              )),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: TextButton(
-              onPressed: () {
-                continent = Continent.africa;
-                movePage(Step.second);
-              },
-              child: const Text(
-                '아프리카',
-                style: TextStyle(
-                    color: Colors.indigo,
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold),
-              )),
-        ),
+        // Padding(
+        //   padding: const EdgeInsets.all(8.0),
+        //   child: TextButton(
+        //       onPressed: () {
+        //         continent = Continent.southAmerica;
+        //         movePage(Step.second);
+        //       },
+        //       child: const Text(
+        //         '남미',
+        //         style: TextStyle(
+        //             color: Colors.indigo,
+        //             fontSize: 20.0,
+        //             fontWeight: FontWeight.bold),
+        //       )),
+        // ),
+        // Padding(
+        //   padding: const EdgeInsets.all(8.0),
+        //   child: TextButton(
+        //       onPressed: () {
+        //         continent = Continent.northAmerica;
+        //         movePage(Step.second);
+        //       },
+        //       child: const Text(
+        //         '북미',
+        //         style: TextStyle(
+        //             color: Colors.indigo,
+        //             fontSize: 20.0,
+        //             fontWeight: FontWeight.bold),
+        //       )),
+        // ),
+        // Padding(
+        //   padding: const EdgeInsets.all(8.0),
+        //   child: TextButton(
+        //       onPressed: () {
+        //         continent = Continent.oceania;
+        //         movePage(Step.second);
+        //       },
+        //       child: const Text(
+        //         '오세아니아',
+        //         style: TextStyle(
+        //             color: Colors.indigo,
+        //             fontSize: 20.0,
+        //             fontWeight: FontWeight.bold),
+        //       )),
+        // ),
+        // Padding(
+        //   padding: const EdgeInsets.all(8.0),
+        //   child: TextButton(
+        //       onPressed: () {
+        //         continent = Continent.africa;
+        //         movePage(Step.second);
+        //       },
+        //       child: const Text(
+        //         '아프리카',
+        //         style: TextStyle(
+        //             color: Colors.indigo,
+        //             fontSize: 20.0,
+        //             fontWeight: FontWeight.bold),
+        //       )),
+        // ),
       ],
     );
   }
@@ -366,7 +360,7 @@ class _SearchState extends State<Search> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const CircularProgressIndicator();
         } else if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
+          return Text('Error: ${snapshot.error} \n ${snapshot.stackTrace}');
         } else {
           List<Team> teams = snapshot.data!;
           if (teams.isEmpty) {
@@ -397,12 +391,12 @@ class _SearchState extends State<Search> {
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
-                              title: Text(team.name, style: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.indigo),),
+                              title: Text(team.krName ?? team.name, style: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.indigo),),
                               content: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Container(padding: const EdgeInsets.all(30.0), child: Image.network(team.logo)),
-                                  Container(padding: const EdgeInsets.all(5.0), child: Text('${team.name} 을 구독하시겠습니까?')),
+                                  Container(padding: const EdgeInsets.all(5.0), child: Text('${team.krName ?? team.name} 을 구독하시겠습니까?')),
                                 ],
                               ),
                               contentTextStyle: const TextStyle(color: Colors.indigo),
@@ -422,7 +416,7 @@ class _SearchState extends State<Search> {
                                                   style: TextStyle(color: Colors.white),
                                                 ),
                                                 backgroundColor: Colors.teal,
-                                                duration: Duration(milliseconds: 1000),
+                                                duration: Duration(milliseconds: 3000),
                                               ));
                                             }, child: const Text('예')),
                                       ),
@@ -442,8 +436,7 @@ class _SearchState extends State<Search> {
                     style: const ButtonStyle(
                       alignment: Alignment.centerLeft,
                     ),
-                    child: Text(
-                      team.name,
+                    child: Text(team.krName ?? team.name,
                       style: const TextStyle(
                         color: Colors.indigo,
                         fontSize: 20.0,

@@ -119,7 +119,7 @@ class _HomeState extends State<Home> {
                                         style: const TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),
                                       ),
                                       Text(
-                                        '${fixture.home!.krName} vs ${fixture.away!.krName}',
+                                        '${fixture.home!.krName ?? fixture.home!.name} vs ${fixture.away!.krName ?? fixture.away!.name}',
                                         style: const TextStyle(fontSize: 10.0, fontWeight: FontWeight.bold),
                                       ),
                                       Text(
@@ -200,7 +200,7 @@ class _HomeState extends State<Home> {
                                                             )
                                                           ],
                                                         ),
-                                                        Text('${fixture.home!.krName} vs ${fixture.away!.krName} 경기를 알람 설정 하시겠습니까?'),
+                                                        Text('${fixture.home!.krName ?? fixture.home!.name} vs ${fixture.away!.krName ?? fixture.away!.name} 경기를 알람 설정 하시겠습니까?'),
                                                         DropdownButton(
                                                             isExpanded: true,
                                                             hint: const Text('알람 시간 설정', style: TextStyle(color: Colors.indigo)),
@@ -238,7 +238,7 @@ class _HomeState extends State<Home> {
                                                                         const SnackBar(
                                                                           content: Text('알람이 등록되었습니다.', textAlign: TextAlign.center, style: TextStyle(color: Colors.white),),
                                                                           backgroundColor: Colors.teal,
-                                                                          duration: Duration(milliseconds: 1000),))
+                                                                          duration: Duration(milliseconds: 3000),))
                                                                   }).then((_) {
                                                                     _refresh();
                                                                   });
@@ -247,7 +247,7 @@ class _HomeState extends State<Home> {
                                                                     content: Text('알람 등록이 실패하였습니다. 다시 시도해주세요.', textAlign: TextAlign.center,
                                                                       style: TextStyle(color: Colors.white),),
                                                                     backgroundColor: Colors.redAccent,
-                                                                    duration: Duration(milliseconds: 1000),));
+                                                                    duration: Duration(milliseconds: 3000),));
                                                                 }
                                                                 Navigator.of(context).pop();
                                                               },
@@ -374,7 +374,7 @@ class _HomeState extends State<Home> {
                                             style: TextStyle(color: Colors.white),
                                           ),
                                           backgroundColor: Colors.teal,
-                                          duration: Duration(milliseconds: 1000),
+                                          duration: Duration(milliseconds: 3000),
                                         )
                                     )
                                   } else {
@@ -414,7 +414,7 @@ class _HomeState extends State<Home> {
           },
           child: Row(children: [
             SizedBox(width: screenWidth * 0.1, child: Padding(padding: const EdgeInsets.all(5.0), child: Image.network(subscribe.team!.logo),)),
-            SizedBox(width: screenWidth * 0.4, child: Text(subscribe.team!.krName!, style: const TextStyle(color: Colors.indigo, fontWeight: FontWeight.bold))),
+            SizedBox(width: screenWidth * 0.4, child: Text(subscribe.team!.krName ?? subscribe.team!.name, style: const TextStyle(color: Colors.indigo, fontWeight: FontWeight.bold))),
             const Expanded(child: SizedBox()),
             SizedBox(width: screenWidth * 0.1, child: const Icon(Icons.remove))
           ],),
@@ -484,25 +484,25 @@ class _HomeState extends State<Home> {
                             Row(
                               children: [
                                 Text('리그\n'),
-                                Text(subscribe.league?.name != null ? subscribe.league!.name : 'null'),
+                                Text(subscribe.league != null ? subscribe.league!.name : ''),
                               ],
                             ),
                             Row(
                               children: [
                                 Text('팀명\n'),
-                                Text(subscribe.team!.krName!),
+                                Text(subscribe.team!.krName ?? subscribe.team!.name),
                               ],
                             ),
                             Row(
                               children: [
                                 Text('연고\n'),
-                                Text(subscribe.team!.city),
+                                Text(subscribe.team!.city ?? ''),
                               ],
                             ),
                             Row(
                               children: [
                                 Text('홈 구장\n'),
-                                Text(subscribe.team!.stadium),
+                                Text(subscribe.team!.stadium ?? ''),
                               ],
                             ),
                             Row(
@@ -543,7 +543,7 @@ class _HomeState extends State<Home> {
           ),
           Padding(
             padding: const EdgeInsets.only(top: 5.0),
-            child: Text(subscribe.team!.krName!,
+            child: Text(subscribe.team!.krName ?? subscribe.team!.name,
                 style: const TextStyle(
                     color: Colors.indigo,
                     fontSize: 20.0,

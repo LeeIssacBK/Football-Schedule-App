@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import 'global.dart';
 
@@ -60,7 +61,7 @@ class _SearchState extends State<MyPage> {
               color: Colors.grey,
               width: double.infinity,
               padding: const EdgeInsets.all(5.0),
-              child: Center(child: Text('회원가입일 : ${user.userId}', style: const TextStyle(color: Colors.white))),
+              child: Center(child: Text('회원가입일 : ${DateFormat('yyyy-MM-dd').format(user.createdAt)}', style: const TextStyle(color: Colors.white))),
             ),
           ],
         ),

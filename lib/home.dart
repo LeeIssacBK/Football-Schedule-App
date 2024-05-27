@@ -293,8 +293,7 @@ class _HomeState extends State<Home> {
     if (response.statusCode == 200) {
       dynamic body = jsonDecode(utf8.decode(response.bodyBytes));
       if (body is List && body.isNotEmpty) {
-        subscribes = List<Subscribe>.from(
-            json.decode(response.body).map((_) => Subscribe.fromJson(_)));
+        subscribes = List<Subscribe>.from(body.map((_) => Subscribe.fromJson(_)));
       }
     }
   }
@@ -313,7 +312,7 @@ class _HomeState extends State<Home> {
         headers: baseHeader);
     if (response.statusCode == 200) {
       schedules = List<Fixture>.from(
-          json.decode(response.body).map((_) => Fixture.fromJson(_)));
+          json.decode(utf8.decode(response.bodyBytes)).map((_) => Fixture.fromJson(_)));
     }
   }
 

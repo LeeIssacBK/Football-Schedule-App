@@ -117,9 +117,12 @@ class _HomeState extends State<Home> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       getLeagueTile(fixture.league),
-                                      Text(
-                                        '${fixture.home!.krName ?? fixture.home!.name} vs ${fixture.away!.krName ?? fixture.away!.name}',
-                                        style: const TextStyle(fontSize: 10.0, fontWeight: FontWeight.bold),
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 5.0),
+                                        child: Text(
+                                          '${fixture.home!.krName ?? fixture.home!.name} vs ${fixture.away!.krName ?? fixture.away!.name}',
+                                          style: const TextStyle(fontSize: 12.0),
+                                        ),
                                       ),
                                       Text(
                                         DateFormat('y. M. d ${getKoreanWeekDay(fixture.date)} HH:mm')

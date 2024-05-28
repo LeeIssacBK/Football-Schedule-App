@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'alarm.dart';
+import 'calendar.dart';
 import 'home.dart';
 
 class Navibar extends StatefulWidget {
@@ -26,7 +27,7 @@ class _NavibarState extends State<Navibar> {
   late int selectedIndex;
 
   final List<Widget> _widgetOptions = [
-    Home(), Search(), Alarm(), MyPage()
+    Home(), Search(), Alarm(), Calendar(), MyPage()
   ];
 
   void _onItemTapped(int index) {
@@ -75,6 +76,10 @@ class _NavibarState extends State<Navibar> {
           BottomNavigationBarItem(
             icon: Icon(Icons.alarm),
             label: '알람 목록',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_month),
+            label: '달력',
           ),
           BottomNavigationBarItem(
               icon: Icon(Icons.people),

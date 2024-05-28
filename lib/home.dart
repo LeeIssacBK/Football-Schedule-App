@@ -202,7 +202,7 @@ class _HomeState extends State<Home> {
                                                             )
                                                           ],
                                                         ),
-                                                        Text('${fixture.home!.krName ?? fixture.home!.name} vs ${fixture.away!.krName ?? fixture.away!.name} 경기를 알람 설정 하시겠습니까?'),
+                                                        Text('${fixture.home!.krName ?? fixture.home!.name} vs ${fixture.away!.krName ?? fixture.away!.name}\n경기를 알람 설정 하시겠습니까?'),
                                                         DropdownButton(
                                                             isExpanded: true,
                                                             hint: const Text('알람 시간 설정', style: TextStyle(color: Colors.indigo)),

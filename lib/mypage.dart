@@ -50,7 +50,11 @@ class _SearchState extends State<MyPage> {
             ),
             Container(
               child: TextButton(onPressed: () {  },
-                child: const Text('오류제보', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0, color: Colors.indigo))),
+                  child: const Text('Q & A', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0, color: Colors.indigo))),
+            ),
+            Container(
+              child: TextButton(onPressed: () {  },
+                  child: const Text('오류 제보', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0, color: Colors.indigo))),
             ),
             Container(
               child: TextButton(onPressed: () {  },

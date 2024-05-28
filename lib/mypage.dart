@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import 'global.dart';
+import 'login.dart';
 
 class MyPage extends StatefulWidget {
   @override
@@ -29,13 +30,13 @@ class _SearchState extends State<MyPage> {
               child: Column(
                 children: [
                   CircleAvatar(
-                    backgroundImage: Image.network(user.profileImage ?? '').image,
+                    backgroundImage: Image.network(user!.profileImage ?? '').image,
                     backgroundColor: Colors.white,
                     radius: 60.0,
                   ),
                   Container(
                     padding: const EdgeInsets.all(10.0),
-                    child: Text(user.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15.0),)
+                    child: Text(user!.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15.0),)
                   )
                 ],
               ),
@@ -57,7 +58,7 @@ class _SearchState extends State<MyPage> {
                   child: const Text('오류 제보', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0, color: Colors.indigo))),
             ),
             Container(
-              child: TextButton(onPressed: () {  },
+              child: TextButton(onPressed: () => logout(),
                 child: const Text('로그아웃', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0, color: Colors.indigo))),
             ),
             const Expanded(child: SizedBox()),
@@ -65,12 +66,19 @@ class _SearchState extends State<MyPage> {
               color: Colors.grey,
               width: double.infinity,
               padding: const EdgeInsets.all(5.0),
-              child: Center(child: Text('회원가입일 : ${DateFormat('yyyy-MM-dd').format(user.createdAt)}', style: const TextStyle(color: Colors.white))),
+              child: Center(child: Text('회원가입일 : ${DateFormat('yyyy-MM-dd').format(user!.createdAt)}', style: const TextStyle(color: Colors.white))),
             ),
           ],
         ),
       )
     );
+  }
+
+  void logout() {
+
+    auth = null;
+    user = null;
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Login()));
   }
 
 }

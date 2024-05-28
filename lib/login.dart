@@ -58,7 +58,7 @@ class Login extends StatelessWidget {
         auth = Auth.fromJson(json.decode(authResponse.body));
       }
       // print(auth.accessToken);
-      baseHeader['Authorization'] = 'Bearer ${auth.accessToken}';
+      baseHeader['Authorization'] = 'Bearer ${auth!.accessToken}';
       final userInfoResponse = await http.get(Uri.parse('$baseUrl/oauth/me'), headers: baseHeader);
       user = ApiUser.fromJson(json.decode(utf8.decode(userInfoResponse.bodyBytes)));
     } catch (e) {

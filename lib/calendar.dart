@@ -1,5 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
+import 'package:http/http.dart' as http;
+
+import 'dto/fixture.dart';
+import 'global.dart';
 
 
 class Calendar extends StatefulWidget {
@@ -8,13 +14,33 @@ class Calendar extends StatefulWidget {
 }
 
 class _CalendarState extends State<Calendar> {
+
+  List<Fixture> schedules = List.empty();
+
+  @override
+  void initState() {
+    getSchedule().then((_) => setState(() {}));
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SfCalendar(
         view: CalendarView.month,
-        dataSource: MeetingDataSource(_getDataSource()),
-        monthViewSettings: MonthViewSettings(
+        headerDateFormat: 'y년 M월',
+        headerStyle: const CalendarHeaderStyle(
+            backgroundColor: Colors.indigo,
+            textStyle: TextStyle(color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 17.0)),
+        todayHighlightColor: Colors.indigo,
+        selectionDecoration: BoxDecoration(border: Border.all(color: Colors.indigo)),
+        showNavigationArrow: true,
+        showTodayButton: true,
+        showDatePickerButton: true,
+        dataSource: FixtureDataSource(_getDataSource()),
+        monthViewSettings: const MonthViewSettings(
             showAgenda: true,
             appointmentDisplayMode: MonthAppointmentDisplayMode.appointment
         )
@@ -22,20 +48,34 @@ class _CalendarState extends State<Calendar> {
     );
   }
 
-  List<Meeting> _getDataSource() {
-    final List<Meeting> meetings = <Meeting>[];
-    final DateTime today = DateTime.now();
-    final DateTime startTime = DateTime(today.year, today.month, today.day, 9, 0, 0);
-    final DateTime endTime = startTime.add(const Duration(hours: 2));
-    meetings.add(
-        Meeting('Conference', startTime, endTime, Colors.teal, false));
-    return meetings;
+  List<Source> _getDataSource() {
+    final List<Source> sources  = <Source>[];
+    for (var fixture in schedules) {
+      sources.add(
+        Source('${fixture.league!.name} '
+                '${fixture.home!.krName ?? fixture.home!.name} vs ${fixture.away!.krName ?? fixture.away!.name}' ,
+                fixture.date,
+                fixture.date.add(const Duration(hours: 2)),
+                fixture.league!.type == 'LEAGUE' ? Colors.deepOrangeAccent : Colors.blue,
+                false)
+      );
+    }
+    return sources;
+  }
+
+  Future<void> getSchedule() async {
+    final response = await http.get(Uri.parse('$baseUrl/api/fixture/subscribe'),
+        headers: baseHeader);
+    if (response.statusCode == 200) {
+      schedules = List<Fixture>.from(
+          json.decode(utf8.decode(response.bodyBytes)).map((_) => Fixture.fromJson(_)));
+    }
   }
 
 }
 
-class MeetingDataSource extends CalendarDataSource {
-  MeetingDataSource(List<Meeting> source){
+class FixtureDataSource extends CalendarDataSource {
+  FixtureDataSource(List<Source> source){
     appointments = source;
   }
 
@@ -65,8 +105,8 @@ class MeetingDataSource extends CalendarDataSource {
   }
 }
 
-class Meeting {
-  Meeting(this.eventName, this.from, this.to, this.background, this.isAllDay);
+class Source {
+  Source(this.eventName, this.from, this.to, this.background, this.isAllDay);
 
   String eventName;
   DateTime from;

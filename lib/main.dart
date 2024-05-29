@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:syncfusion_localizations/syncfusion_localizations.dart';
 import 'dart:async';
 import 'login.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
@@ -12,6 +14,16 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        SfGlobalLocalizations.delegate
+      ],
+      supportedLocales: const [
+        Locale('ko', ''),
+      ],
+      locale: const Locale('ko', ''),
       debugShowCheckedModeBanner: false,
       home: SplashScreen(),
       theme: ThemeData(fontFamily: ''),

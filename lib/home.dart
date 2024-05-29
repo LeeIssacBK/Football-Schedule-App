@@ -333,7 +333,7 @@ class _HomeState extends State<Home> {
       List<Widget> teams = [];
       teams.add(TextButton(
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (_) => Navibar(selectedIndex: 1,)));
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => Navibar(selectedIndex: 1,)));
         },
         child: Row(children: [
           SizedBox(width: screenWidth * 0.5, child: const Text('팀 추가', style: TextStyle(color: Colors.indigo, fontWeight: FontWeight.bold))),

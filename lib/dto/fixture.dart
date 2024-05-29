@@ -6,6 +6,8 @@ import 'subscribe.dart';
 class Fixture {
   final int apiId;
   final String round;
+  ///Not Started : NS, TBD
+  ///Finished : FT, AET, PEN
   final String status;
   final String? referee;
   final DateTime date;

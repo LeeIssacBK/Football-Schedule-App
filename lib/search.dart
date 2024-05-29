@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'dto/country.dart';
 import 'dto/subscribe.dart';
 import 'global.dart';
+import 'navibar.dart';
 
 class Search extends StatefulWidget {
   @override
@@ -408,7 +409,10 @@ class _SearchState extends State<Search> {
                                         padding: const EdgeInsets.all(5.0),
                                         child: ElevatedButton(
                                             onPressed: () {
-                                              subscribeTeam(team.apiId).then((_) => Navigator.of(context).pop());
+                                              subscribeTeam(team.apiId).then((_) =>
+                                                  Navigator.of(context).pop()).then((_) =>
+                                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => Navibar(selectedIndex: 0,)))
+                                              );
                                               ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                                                 content: Text(
                                                   '팀 구독이 완료되었습니다.',

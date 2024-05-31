@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import 'global.dart';
+import 'api/auth_api.dart';
 import 'login.dart';
 
 class MyPage extends StatefulWidget {

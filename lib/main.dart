@@ -5,6 +5,8 @@ import 'dart:async';
 import 'login.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 void main() {
   KakaoSdk.init(nativeAppKey: '6ef65107292ada731123dac02c2d72bc');
   runApp(App());
@@ -14,6 +16,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: navigatorKey,
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,

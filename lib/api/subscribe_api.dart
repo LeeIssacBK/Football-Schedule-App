@@ -1,23 +1,18 @@
-
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
 import '../dto/subscribe_dto.dart';
 import '../enums/subscribe_type.dart';
-import '../global.dart';
+import 'api_filter.dart';
+import 'auth_api.dart';
 
 Future<List<Subscribe>> getSubscribes() async {
-  final response = await http.get(
+  final response = processResponse(await http.get(
       Uri.parse('$baseUrl/api/subscribe/?type=TEAM'),
-      headers: baseHeader);
-  if (response.statusCode == 200) {
-    dynamic body = jsonDecode(utf8.decode(response.bodyBytes));
-    if (body is List && body.isNotEmpty) {
-      return List<Subscribe>.from(body.map((_) => Subscribe.fromJson(_)));
-    }
-  }
-  return List.empty();
+      headers: baseHeader));
+  dynamic body = jsonDecode(utf8.decode(response.bodyBytes));
+  return List<Subscribe>.from(body.map((_) => Subscribe.fromJson(_)));
 }
 
 Future<bool> deleteSubscribe(int teamId) async {

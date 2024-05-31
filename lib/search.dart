@@ -10,7 +10,7 @@ import 'dto/team_dto.dart';
 import 'enums/step_type.dart';
 import 'enums/continent_type.dart';
 import 'enums/subscribe_type.dart';
-import 'global.dart';
+import 'api/auth_api.dart';
 import 'navibar.dart';
 
 class Search extends StatefulWidget {

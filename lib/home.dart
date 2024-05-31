@@ -3,6 +3,7 @@ import 'dart:core';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:geolpo/team.dart';
+import 'package:geolpo/utils/parser.dart';
 import 'package:intl/intl.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -12,8 +13,8 @@ import 'api/subscribe_api.dart';
 import 'dto/alert_dto.dart';
 import 'dto/fixture_dto.dart';
 import 'dto/subscribe_dto.dart';
-import 'global.dart';
 import 'navibar.dart';
+import 'widgets/league_widget.dart';
 
 class Home extends StatefulWidget {
   @override

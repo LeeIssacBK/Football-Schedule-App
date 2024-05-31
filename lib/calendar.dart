@@ -1,12 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:geolpo/utils/parser.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:http/http.dart' as http;
 
 import 'dto/fixture_dto.dart';
-import 'global.dart';
+import 'api/auth_api.dart';
 
 
 class Calendar extends StatefulWidget {

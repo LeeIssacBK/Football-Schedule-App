@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:geolpo/global.dart';
+import 'package:geolpo/api/auth_api.dart';
 import 'package:geolpo/mypage.dart';
 import 'package:geolpo/search.dart';
 import 'package:http/http.dart' as http;

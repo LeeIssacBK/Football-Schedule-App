@@ -1,13 +1,7 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:geolpo/navibar.dart';
-import 'package:http/http.dart' as http;
-import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 
-import 'dto/api_user_dto.dart';
-import 'dto/auth_dto.dart';
-import 'global.dart';
+import 'api/auth_api.dart';
 
 class Login extends StatelessWidget {
 
@@ -45,24 +39,6 @@ class Login extends StatelessWidget {
         ),
       );
     });
-  }
-
-  Future<void> kakaoLogin() async {
-    try {
-      bool isInstalled = await isKakaoTalkInstalled();
-      OAuthToken kakaoOauth = isInstalled
-          ? await UserApi.instance.loginWithKakaoTalk()
-          : await UserApi.instance.loginWithKakaoAccount();
-      final authResponse = await http.get(Uri.parse('$baseUrl/oauth/kakao?token=${kakaoOauth.accessToken}'));
-      if (authResponse.statusCode == 200) {
-        auth = Auth.fromJson(json.decode(authResponse.body));
-      }
-      baseHeader['Authorization'] = 'Bearer ${auth!.accessToken}';
-      final userInfoResponse = await http.get(Uri.parse('$baseUrl/oauth/me'), headers: baseHeader);
-      user = ApiUser.fromJson(json.decode(utf8.decode(userInfoResponse.bodyBytes)));
-    } catch (e) {
-      rethrow;
-    }
   }
 
 }

@@ -2,13 +2,16 @@ import 'dart:convert';
 import 'dart:core';
 
 import 'package:flutter/material.dart';
-import 'package:geolpo/dto/fixture_dto.dart';
+import 'package:geolpo/utils/parser.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
+import 'api/alert_api.dart';
+import 'api/auth_api.dart';
+import 'api/subscribe_api.dart';
 import 'dto/alert_dto.dart';
 import 'dto/subscribe_dto.dart';
-import 'global.dart';
+import 'widgets/league_widget.dart';
 
 class Alarm extends StatefulWidget {
   @override
@@ -23,10 +26,16 @@ class _AlarmState extends State<Alarm> {
 
   @override
   void initState() {
-    getAlerts().then((_) => {
-      getSubscribes()}).then((_) =>
-        setState(() {}));
+    _flush();
     super.initState();
+  }
+
+  void _flush() {
+    getAlerts()
+        .then((_) => alerts = _)
+        .then((_) => getSubscribes())
+        .then((_) => subscribes = _)
+        .then((_) => setState(() {}));
   }
 
   @override
@@ -80,68 +89,6 @@ class _AlarmState extends State<Alarm> {
       );
     }
     return getAlarm(screenWidth);
-  }
-
-  Future<void> getAlerts() async {
-    final response = await http.get(Uri.parse('$baseUrl/api/alert'), headers: baseHeader);
-    if (response.statusCode == 200) {
-      alerts = List<Alert>.from(json
-          .decode(utf8.decode(response.bodyBytes))
-          .map((_) => Alert.fromJson(_)));
-    }
-  }
-
-  Future<void> getSubscribes() async {
-    final response = await http.get(
-        Uri.parse('$baseUrl/api/subscribe/?type=TEAM'),
-        headers: baseHeader);
-    if (response.statusCode == 200) {
-      dynamic body = jsonDecode(response.body);
-      if (body is List && body.isNotEmpty) {
-        subscribes = List<Subscribe>.from(
-            json.decode(response.body).map((_) => Subscribe.fromJson(_)));
-      }
-    }
-  }
-
-  Future<void> saveAlert(int apiId, AlertType? alertType) async {
-    Map<String, String> requestHeader = baseHeader;
-    requestHeader['Content-Type'] = 'application/json';
-    alertType = alertType ?? alertTypes.first;
-    final response = await http.post(Uri.parse('$baseUrl/api/alert'),
-        body: jsonEncode(AlertRequest(fixtureId: apiId, alertType: alertType.type)),
-        headers: baseHeader);
-    if (response.statusCode != 200) {
-      throw Exception('$response.statusCode error');
-    }
-  }
-
-  Future<void> updateAlert(int apiId, AlertType? alertType) async {
-    Map<String, String> requestHeader = baseHeader;
-    requestHeader['Content-Type'] = 'application/json';
-    final response = await http.put(Uri.parse('$baseUrl/api/alert'),
-        body: jsonEncode(AlertRequest(fixtureId: apiId, alertType: alertType?.type)),
-        headers: baseHeader);
-    if (response.statusCode != 200) {
-      throw Exception('$response.statusCode error');
-    }
-  }
-
-  Future<void> deleteAlert(int apiId) async {
-    Map<String, String> requestHeader = baseHeader;
-    requestHeader['Content-Type'] = 'application/json';
-    final response = await http.delete(Uri.parse('$baseUrl/api/alert'),
-        body: jsonEncode(AlertRequest(fixtureId: apiId, alertType: null)),
-        headers: baseHeader);
-    if (response.statusCode != 200) {
-      throw Exception('$response.statusCode error');
-    }
-  }
-
-  void _refresh() {
-    getAlerts().then((_) => {
-      getSubscribes()}).then((_) =>
-        setState(() {}));
   }
 
   Widget getAlarm(double screenWidth) {
@@ -285,7 +232,7 @@ class _AlarmState extends State<Alarm> {
                                         color: Colors.indigoAccent,
                                       ),
                                       value: selectedValue,
-                                      items: alertTypes.map<DropdownMenuItem<AlertType>>((AlertType value) {
+                                      items: getAlertTypes().map<DropdownMenuItem<AlertType>>((AlertType value) {
                                         return DropdownMenuItem<AlertType>(
                                           value: value,
                                           child: Text(value.name),
@@ -315,7 +262,7 @@ class _AlarmState extends State<Alarm> {
                                                     backgroundColor: Colors.teal,
                                                     duration: Duration(milliseconds: 3000),))
                                             }).then((_) {
-                                              _refresh();
+                                              _flush();
                                             });
                                           } catch(e) {
                                             ScaffoldMessenger.of(context).showSnackBar(const SnackBar(

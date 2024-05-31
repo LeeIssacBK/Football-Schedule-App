@@ -2,12 +2,12 @@ import 'dart:convert';
 import 'dart:core';
 
 import 'package:flutter/material.dart';
-import 'package:geolpo/dto/fixture.dart';
+import 'package:geolpo/dto/fixture_dto.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
-import 'dto/alert.dart';
-import 'dto/subscribe.dart';
+import 'dto/alert_dto.dart';
+import 'dto/subscribe_dto.dart';
 import 'global.dart';
 
 class Alarm extends StatefulWidget {

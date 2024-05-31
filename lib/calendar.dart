@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:http/http.dart' as http;
 
-import 'dto/fixture.dart';
+import 'dto/fixture_dto.dart';
 import 'global.dart';
 
 

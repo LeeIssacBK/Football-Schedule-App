@@ -5,8 +5,8 @@ import 'package:geolpo/navibar.dart';
 import 'package:http/http.dart' as http;
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 
-import 'dto/apiUser.dart';
-import 'dto/auth.dart';
+import 'dto/api_user_dto.dart';
+import 'dto/auth_dto.dart';
 import 'global.dart';
 
 class Login extends StatelessWidget {
@@ -57,7 +57,6 @@ class Login extends StatelessWidget {
       if (authResponse.statusCode == 200) {
         auth = Auth.fromJson(json.decode(authResponse.body));
       }
-      // print(auth.accessToken);
       baseHeader['Authorization'] = 'Bearer ${auth!.accessToken}';
       final userInfoResponse = await http.get(Uri.parse('$baseUrl/oauth/me'), headers: baseHeader);
       user = ApiUser.fromJson(json.decode(utf8.decode(userInfoResponse.bodyBytes)));

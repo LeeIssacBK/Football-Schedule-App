@@ -3,8 +3,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import 'dto/country.dart';
-import 'dto/subscribe.dart';
+import 'dto/country_dto.dart';
+import 'dto/league_dto.dart';
+import 'dto/subscribe_dto.dart';
+import 'dto/team_dto.dart';
+import 'enums/step_type.dart';
+import 'enums/continent_type.dart';
+import 'enums/subscribe_type.dart';
 import 'global.dart';
 import 'navibar.dart';
 
@@ -14,7 +19,7 @@ class Search extends StatefulWidget {
 }
 
 class _SearchState extends State<Search> {
-  Step stepHandle = Step.first;
+  Step_ stepHandle = Step_.first;
   String stepDescription = '대륙';
   late List<Country> countries;
   late Continent continent;
@@ -26,37 +31,37 @@ class _SearchState extends State<Search> {
     super.initState();
   }
 
-  void movePage(Step step) {
+  void movePage(Step_ step) {
     setState(() {
-      if (Step.first == step) {
+      if (Step_.first == step) {
         stepDescription = '대륙';
       }
-      if (Step.second == step) {
+      if (Step_.second == step) {
         stepDescription = '국가';
       }
-      if (Step.third == step) {
+      if (Step_.third == step) {
         stepDescription = '리그';
       }
-      if (Step.fourth == step) {
+      if (Step_.fourth == step) {
         stepDescription = '팀';
       }
       stepHandle = step;
     });
   }
 
-  void backPage(Step step) {
+  void backPage(Step_ step) {
     setState(() {
-      if (Step.second == step) {
+      if (Step_.second == step) {
         stepDescription = '대륙';
-        stepHandle = Step.first;
+        stepHandle = Step_.first;
       }
-      if (Step.third == step) {
+      if (Step_.third == step) {
         stepDescription = '국가';
-        stepHandle = Step.second;
+        stepHandle = Step_.second;
       }
-      if (Step.fourth == step) {
+      if (Step_.fourth == step) {
         stepDescription = '리그';
-        stepHandle = Step.third;
+        stepHandle = Step_.third;
       }
     });
   }
@@ -71,13 +76,13 @@ class _SearchState extends State<Search> {
             children: [
               Container(
                 padding:
-                    stepHandle == Step.first ? const EdgeInsets.all(5.0) : null,
+                    stepHandle == Step_.first ? const EdgeInsets.all(5.0) : null,
                 height: 40.0,
                 width: double.infinity,
                 color: Colors.indigo,
                 child: Row(
                   children: [
-                    if (stepHandle != Step.first)
+                    if (stepHandle != Step_.first)
                       IconButton(
                           onPressed: () {
                             backPage(stepHandle);
@@ -145,15 +150,15 @@ class _SearchState extends State<Search> {
     return response.statusCode == 200;
   }
 
-  Widget getStep(Step handle) {
+  Widget getStep(Step_ handle) {
     switch (handle) {
-      case Step.first:
+      case Step_.first:
         return getStep1();
-      case Step.second:
+      case Step_.second:
         return getStep2();
-      case Step.third:
+      case Step_.third:
         return getStep3();
-      case Step.fourth:
+      case Step_.fourth:
         return getStep4();
     }
   }
@@ -166,7 +171,7 @@ class _SearchState extends State<Search> {
           child: TextButton(
               onPressed: () {
                 continent = Continent.europe;
-                movePage(Step.second);
+                movePage(Step_.second);
               },
               child: const Text(
                 '유럽',
@@ -181,7 +186,7 @@ class _SearchState extends State<Search> {
           child: TextButton(
               onPressed: () {
                 continent = Continent.asia;
-                movePage(Step.second);
+                movePage(Step_.second);
               },
               child: const Text(
                 '아시아',
@@ -196,7 +201,7 @@ class _SearchState extends State<Search> {
         //   child: TextButton(
         //       onPressed: () {
         //         continent = Continent.southAmerica;
-        //         movePage(Step.second);
+        //         movePage(Step_.second);
         //       },
         //       child: const Text(
         //         '남미',
@@ -211,7 +216,7 @@ class _SearchState extends State<Search> {
         //   child: TextButton(
         //       onPressed: () {
         //         continent = Continent.northAmerica;
-        //         movePage(Step.second);
+        //         movePage(Step_.second);
         //       },
         //       child: const Text(
         //         '북미',
@@ -226,7 +231,7 @@ class _SearchState extends State<Search> {
         //   child: TextButton(
         //       onPressed: () {
         //         continent = Continent.oceania;
-        //         movePage(Step.second);
+        //         movePage(Step_.second);
         //       },
         //       child: const Text(
         //         '오세아니아',
@@ -241,7 +246,7 @@ class _SearchState extends State<Search> {
         //   child: TextButton(
         //       onPressed: () {
         //         continent = Continent.africa;
-        //         movePage(Step.second);
+        //         movePage(Step_.second);
         //       },
         //       child: const Text(
         //         '아프리카',
@@ -291,7 +296,7 @@ class _SearchState extends State<Search> {
                   TextButton(
                     onPressed: () {
                       countryCode = country.code!;
-                      movePage(Step.third);
+                      movePage(Step_.third);
                     },
                     style: const ButtonStyle(
                       alignment: Alignment.centerLeft,
@@ -331,7 +336,7 @@ class _SearchState extends State<Search> {
                   TextButton(
                     onPressed: () {
                       leagueId = league.apiId;
-                      movePage(Step.fourth);
+                      movePage(Step_.fourth);
                     },
                     style: const ButtonStyle(
                       alignment: Alignment.centerLeft,
@@ -456,11 +461,4 @@ class _SearchState extends State<Search> {
       },
     );
   }
-}
-
-enum Step {
-  first,
-  second,
-  third,
-  fourth;
 }

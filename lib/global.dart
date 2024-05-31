@@ -1,12 +1,13 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 
-import 'dto/auth.dart';
-import 'dto/apiUser.dart';
+import 'dto/auth_dto.dart';
+import 'dto/api_user_dto.dart';
 import 'package:http/http.dart' as http;
 
-import 'dto/alert.dart';
-import 'dto/subscribe.dart';
+import 'dto/alert_dto.dart';
+import 'dto/league_dto.dart';
+import 'dto/subscribe_dto.dart';
 
 const String baseUrl = 'http://192.168.45.236:8090'; //집
 // const String baseUrl = 'http://192.168.219.140:8090';  //원장커피

@@ -6,10 +6,10 @@ import 'login.dart';
 
 class MyPage extends StatefulWidget {
   @override
-  State<MyPage> createState() => _SearchState();
+  State<MyPage> createState() => _MyPageState();
 }
 
-class _SearchState extends State<MyPage> {
+class _MyPageState extends State<MyPage> {
 
   @override
   Widget build(BuildContext context) {
@@ -68,6 +68,7 @@ class _SearchState extends State<MyPage> {
   void logout() {
     auth = null;
     user = null;
+    baseHeader = {};
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Login()));
   }
 

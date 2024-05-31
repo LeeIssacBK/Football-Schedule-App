@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'fixture.dart';
+import 'fixture_dto.dart';
 
 @JsonSerializable()
 class Alert {
@@ -22,7 +22,6 @@ class Alert {
       fixture: Fixture.fromJson(json['fixture'])
     );
   }
-
 }
 
 class AlertRequest {

@@ -1,6 +1,8 @@
+import 'package:geolpo/dto/team_dto.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-import 'subscribe.dart';
+import 'league_dto.dart';
+import 'subscribe_dto.dart';
 
 @JsonSerializable()
 class Fixture {
@@ -51,5 +53,4 @@ class Fixture {
       isAlert: json['alert'],
     );
   }
-
 }

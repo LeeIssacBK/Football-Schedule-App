@@ -1,15 +1,17 @@
-import 'dart:convert';
 import 'dart:core';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:geolpo/team.dart';
 import 'package:intl/intl.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-import 'dto/alert.dart';
-import 'dto/fixture.dart';
-import 'dto/subscribe.dart';
+import 'api/alert_api.dart';
+import 'api/schedule_api.dart';
+import 'api/subscribe_api.dart';
+import 'dto/alert_dto.dart';
+import 'dto/fixture_dto.dart';
+import 'dto/subscribe_dto.dart';
 import 'global.dart';
 import 'navibar.dart';
 
@@ -23,22 +25,17 @@ class _HomeState extends State<Home> {
   int sliderIndex = 0;
   List<Subscribe> subscribes = List.empty();
   List<Fixture> schedules = List.empty();
-  double screenHeight = 0;
-  double screenWidth = 0;
-  final List<AlertType> alertTypes = getAlertTypes();
 
   @override
   void initState() {
-    getSubscribes().then((_) =>
-        getSchedule().then((_) =>
-            setState(() {})));
+    _flush();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    screenHeight = MediaQuery.of(context).size.height;
-    screenWidth = MediaQuery.of(context).size.width;
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       body: SingleChildScrollView(
         child: Center(
@@ -69,7 +66,7 @@ class _HomeState extends State<Home> {
                     ],
                   )
               ),
-              myTeam(),
+              myTeam(screenWidth, screenHeight),
               Container(
                   color: Colors.indigo,
                   width: double.infinity,
@@ -83,7 +80,8 @@ class _HomeState extends State<Home> {
                               fontSize: 17.0,
                               fontWeight: FontWeight.bold)),
                     ],
-                  )),
+                  )
+              ),
               schedules.isEmpty
                   ? Container(
                       padding: const EdgeInsets.all(50.0),
@@ -210,7 +208,7 @@ class _HomeState extends State<Home> {
                                                               color: Colors.indigoAccent,
                                                             ),
                                                             value: selectedValue,
-                                                            items: alertTypes.map<DropdownMenuItem<AlertType>>((AlertType value) {
+                                                            items: getAlertTypes().map<DropdownMenuItem<AlertType>>((AlertType value) {
                                                               return DropdownMenuItem<AlertType>(
                                                                 value: value,
                                                                 child: Text(value.name),
@@ -240,7 +238,7 @@ class _HomeState extends State<Home> {
                                                                           backgroundColor: Colors.teal,
                                                                           duration: Duration(milliseconds: 3000),))
                                                                   }).then((_) {
-                                                                    _refresh();
+                                                                    _flush();
                                                                   });
                                                                 } catch(e) {
                                                                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -286,49 +284,7 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Future<void> getSubscribes() async {
-    final response = await http.get(
-        Uri.parse('$baseUrl/api/subscribe/?type=TEAM'),
-        headers: baseHeader);
-    if (response.statusCode == 200) {
-      dynamic body = jsonDecode(utf8.decode(response.bodyBytes));
-      if (body is List && body.isNotEmpty) {
-        subscribes = List<Subscribe>.from(body.map((_) => Subscribe.fromJson(_)));
-      }
-    }
-  }
-
-  Future<bool> deleteSubscribe(int teamId) async {
-    Map<String, String> requestHeader = baseHeader;
-    requestHeader['Content-Type'] = 'application/json';
-    final response = await http.delete(Uri.parse('$baseUrl/api/subscribe'),
-        body: jsonEncode(SubscribeRequest(type: SubscribeType.TEAM.name, apiId: teamId)),
-        headers: requestHeader);
-    return response.statusCode == 200;
-  }
-
-  Future<void> getSchedule() async {
-    final response = await http.get(Uri.parse('$baseUrl/api/fixture/subscribe'),
-        headers: baseHeader);
-    if (response.statusCode == 200) {
-      schedules = List<Fixture>.from(
-          json.decode(utf8.decode(response.bodyBytes)).map((_) => Fixture.fromJson(_)));
-    }
-  }
-
-  Future<void> saveAlert(int apiId, AlertType? alertType) async {
-    Map<String, String> requestHeader = baseHeader;
-    requestHeader['Content-Type'] = 'application/json';
-    alertType = alertType ?? alertTypes.first;
-    final response = await http.post(Uri.parse('$baseUrl/api/alert'),
-        body: jsonEncode(AlertRequest(fixtureId: apiId, alertType: alertType.type)),
-        headers: baseHeader);
-    if (response.statusCode != 200) {
-      throw Exception('$response.statusCode error');
-    }
-  }
-
-  Widget myTeam() {
+  Widget myTeam(double screenWidth, double screenHeight) {
     if (myTeamFlag) {
       List<Widget> teams = [];
       teams.add(TextButton(
@@ -389,9 +345,9 @@ class _HomeState extends State<Home> {
                                         )
                                     )
                                   }
-                                }).then((_){
+                                }).then((_) {
                                   Navigator.of(context).pop();
-                                  _refresh();
+                                  _flush();
                                 });
                               },
                               child: const Text('예'),
@@ -470,74 +426,7 @@ class _HomeState extends State<Home> {
         children: [
           IconButton(
             onPressed: () {
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                        title: const Text('팀 상세', style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.indigo),),
-                        contentTextStyle: const TextStyle(fontSize: 15.0, color: Colors.indigo),
-                        content: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Text('리그\n'),
-                                Text(subscribe.league != null ? subscribe.league!.name : ''),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Text('팀명\n'),
-                                Text(subscribe.team!.krName ?? subscribe.team!.name),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Text('연고\n'),
-                                Text(subscribe.team!.city ?? ''),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Text('홈 구장\n'),
-                                Text(subscribe.team!.stadium ?? ''),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Text('최근 5경기\n'),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Text('감독\n'),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Text('선수 명단\n'),
-                              ],
-                            ),
-                          ],
-                        ),
-                      actions: [
-                        Center(
-                          child: Padding(
-                              padding: const EdgeInsets.all(5.0),
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('확인'),
-                              )
-                          ),
-                        )
-                      ],
-                    );
-                  }
-              );
+              Navigator.push(context, MaterialPageRoute(builder: (context) => TeamInfo()));
             },
             icon: Image.network(subscribe.team!.logo)
           ),
@@ -581,10 +470,12 @@ class _HomeState extends State<Home> {
       )
   );
 
-  void _refresh() {
-    getSchedule().then((_) =>
-        getSubscribes().then((_) =>
-            setState((){})));
+  void _flush() {
+    getSubscribes()
+        .then((_) => subscribes = _)
+        .then((_) => getSchedule()
+        .then((_) => schedules = _)
+        .then((_) => setState(() {})));
   }
 
 }

@@ -4,11 +4,25 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class TeamInfo extends StatefulWidget {
+
+  final int teamId;
+  const TeamInfo({super.key, required this.teamId});
+
   @override
   State<StatefulWidget> createState() => _TeamState();
 }
 
 class _TeamState extends State<TeamInfo> {
+
+  late int teamId;
+
+  @override
+  void initState() {
+    super.initState();
+    teamId = widget.teamId;
+    print('team id : ${teamId}');
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -27,7 +41,7 @@ class _TeamState extends State<TeamInfo> {
                     height: 40.0,
                     child: const Row(
                       children: [
-                        Text('ㅎㅎ',
+                        Text('',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 17.0,

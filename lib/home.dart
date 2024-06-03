@@ -51,11 +51,7 @@ class _HomeState extends State<Home> {
                   height: 40.0,
                   child: Row(
                     children: [
-                      Text(myTeamFlag ? '구독 수정' : '내 구독 팀',
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 17.0,
-                              fontWeight: FontWeight.bold)),
+                      Text(myTeamFlag ? '구독 수정' : '내 구독 팀', style: getMainFont()),
                       const Expanded(child: SizedBox()),
                       IconButton(
                         icon: myTeamFlag ? const Icon(Icons.exit_to_app, color: Colors.white) : const Icon(Icons.edit, color: Colors.white),
@@ -74,30 +70,19 @@ class _HomeState extends State<Home> {
                   width: double.infinity,
                   padding: const EdgeInsets.all(5.0),
                   height: 40.0,
-                  child: const Row(
+                  child: Row(
                     children: [
-                      Text('경기 일정',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 17.0,
-                              fontWeight: FontWeight.bold)),
+                      Text('경기 일정', style: getMainFont()),
                     ],
                   )
               ),
               schedules.isEmpty
                   ? Container(
                       padding: const EdgeInsets.all(50.0),
-                      child: const Column(
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text(
-                            '경기 정보를 찾을 수 없습니다.',
-                            style: TextStyle(
-                              color: Colors.indigo,
-                              fontSize: 17.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                          Text('경기 정보를 찾을 수 없습니다.', style: getMainFont(),),
                         ],
                       ),
                     )
@@ -428,7 +413,7 @@ class _HomeState extends State<Home> {
         children: [
           IconButton(
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => TeamInfo()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => TeamInfo(teamId: subscribe.team!.apiId)));
             },
             icon: Image.network(subscribe.team!.logo)
           ),

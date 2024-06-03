@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:core';
 
 import 'package:flutter/material.dart';
+import 'package:geolpo/styles/text_styles.dart';
 import 'package:geolpo/utils/parser.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
@@ -198,8 +199,8 @@ class _AlarmState extends State<Alarm> {
                     return StatefulBuilder(
                         builder: (BuildContext context, StateSetter setState) {
                           return AlertDialog(
-                            title: const Text('알람 수정', style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.indigo),),
-                            contentTextStyle: const TextStyle(color: Colors.indigo, fontSize: 15.0),
+                            title: Text('알람 수정', style: getAlertDialogTitleStyle()),
+                            contentTextStyle: getAlertDialogContentStyle(),
                             content: Container(
                               padding: const EdgeInsets.all(10.0),
                               child: Column(

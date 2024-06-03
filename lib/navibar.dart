@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:geolpo/api/auth_api.dart';
 import 'package:geolpo/mypage.dart';
 import 'package:geolpo/search.dart';
+import 'package:geolpo/styles/text_styles.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -109,7 +110,7 @@ class _NavibarState extends State<Navibar> {
 
   Widget getTeamSearchAlert() {
     return AlertDialog(
-      title: const Text('알림', style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.indigo)),
+      title: Text('알림', style: getAlertDialogTitleStyle()),
       content: const Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -117,7 +118,7 @@ class _NavibarState extends State<Navibar> {
           Text('원하는 팀을 구독하고 알림을 받아보세요.'),
         ],
       ),
-      contentTextStyle: const TextStyle(color: Colors.indigo),
+      contentTextStyle: getAlertDialogContentStyle(),
       actions: [
         Center(
           child: Padding(

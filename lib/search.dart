@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:geolpo/styles/text_styles.dart';
 import 'package:http/http.dart' as http;
 
 import 'dto/country_dto.dart';
@@ -397,7 +398,7 @@ class _SearchState extends State<Search> {
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
-                              title: Text(team.krName ?? team.name, style: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.indigo),),
+                              title: Text(team.krName ?? team.name, style: getAlertDialogTitleStyle()),
                               content: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
@@ -405,7 +406,7 @@ class _SearchState extends State<Search> {
                                   Container(padding: const EdgeInsets.all(5.0), child: Text('${team.krName ?? team.name} 을 구독하시겠습니까?')),
                                 ],
                               ),
-                              contentTextStyle: const TextStyle(color: Colors.indigo),
+                              contentTextStyle: getAlertDialogContentStyle(),
                               actions: [
                                 Row(
                                     mainAxisAlignment: MainAxisAlignment.center,

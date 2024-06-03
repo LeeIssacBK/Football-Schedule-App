@@ -2,6 +2,7 @@ import 'dart:core';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:geolpo/styles/text_styles.dart';
 import 'package:geolpo/team.dart';
 import 'package:geolpo/utils/parser.dart';
 import 'package:intl/intl.dart';
@@ -175,8 +176,8 @@ class _HomeState extends State<Home> {
                                             return StatefulBuilder(
                                               builder: (BuildContext context, StateSetter setState) {
                                                 return AlertDialog(
-                                                  title: const Text('알람 추가', style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.indigo),),
-                                                  contentTextStyle: const TextStyle(color: Colors.indigo, fontSize: 15.0),
+                                                  title: Text('알람 추가', style: getAlertDialogTitleStyle()),
+                                                  contentTextStyle: getAlertDialogContentStyle(),
                                                   content: Container(
                                                     padding: const EdgeInsets.all(10.0),
                                                     child: Column(
@@ -305,8 +306,8 @@ class _HomeState extends State<Home> {
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    title: const Text('팀 구독 취소하기', style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.indigo),),
-                    contentTextStyle: const TextStyle(color: Colors.indigo, fontSize: 15.0),
+                    title: Text('팀 구독 취소하기', style: getAlertDialogTitleStyle()),
+                    contentTextStyle: getAlertDialogContentStyle(),
                     content: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [

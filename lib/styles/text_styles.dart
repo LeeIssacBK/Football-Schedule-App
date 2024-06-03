@@ -13,3 +13,7 @@ TextStyle getAlertDialogContentStyle() {
 TextStyle getMainFont() {
   return const TextStyle(color: Colors.white, fontSize: 17.0, fontWeight: FontWeight.bold);
 }
+
+TextStyle getDetailFont() {
+  return const TextStyle(color: Colors.black, fontSize: 15.0);
+}

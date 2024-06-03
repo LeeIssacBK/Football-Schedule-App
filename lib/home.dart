@@ -413,7 +413,7 @@ class _HomeState extends State<Home> {
         children: [
           IconButton(
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => TeamInfo(teamId: subscribe.team!.apiId)));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => TeamInfo(subscribe: subscribe)));
             },
             icon: Image.network(subscribe.team!.logo)
           ),

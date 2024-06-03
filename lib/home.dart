@@ -30,8 +30,8 @@ class _HomeState extends State<Home> {
 
   @override
   void initState() {
-    _flush();
     super.initState();
+    _flush();
   }
 
   @override

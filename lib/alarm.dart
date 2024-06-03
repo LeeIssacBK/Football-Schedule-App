@@ -27,8 +27,8 @@ class _AlarmState extends State<Alarm> {
 
   @override
   void initState() {
-    _flush();
     super.initState();
+    _flush();
   }
 
   void _flush() {

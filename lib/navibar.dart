@@ -40,6 +40,7 @@ class _NavibarState extends State<Navibar> {
 
   @override
   void initState() {
+    super.initState();
     hasSubscribe().then((flag) {
       if (!flag) {
         setState(() {
@@ -53,7 +54,6 @@ class _NavibarState extends State<Navibar> {
         });
       }
     });
-    super.initState();
   }
 
   @override

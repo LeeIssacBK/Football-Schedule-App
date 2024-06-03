@@ -20,7 +20,6 @@ class _TeamState extends State<TeamInfo> {
   void initState() {
     super.initState();
     teamId = widget.teamId;
-    print('team id : ${teamId}');
   }
 
   @override

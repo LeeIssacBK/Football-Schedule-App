@@ -103,7 +103,6 @@ class _TeamState extends State<TeamInfo> {
                 Container(
                   padding: const EdgeInsets.all(10.0),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Image.network(subscribe.team!.stadiumImage!),
                       Text(subscribe.team!.stadium ?? '정보없음', style: getDetailFont()),

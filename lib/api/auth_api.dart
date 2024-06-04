@@ -8,6 +8,7 @@ import '../dto/api_user_dto.dart';
 import '../dto/auth_dto.dart';
 
 const String baseUrl = 'http://192.168.45.236:8090'; //집
+// const String baseUrl = 'http://172.30.1.76:8090'; //집
 late Auth? auth;
 late ApiUser? user;
 Map<String, String> baseHeader = {};

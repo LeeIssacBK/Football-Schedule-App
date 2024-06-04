@@ -1,18 +1,15 @@
-import 'dart:convert';
 import 'dart:core';
 
 import 'package:flutter/material.dart';
 import 'package:geolpo/styles/text_styles.dart';
 import 'package:geolpo/utils/parser.dart';
-import 'package:http/http.dart' as http;
+import 'package:geolpo/widgets/global_widget.dart';
 import 'package:intl/intl.dart';
 
 import 'api/alert_api.dart';
-import 'api/auth_api.dart';
 import 'api/subscribe_api.dart';
 import 'dto/alert_dto.dart';
 import 'dto/subscribe_dto.dart';
-import 'widgets/league_widget.dart';
 
 class Alarm extends StatefulWidget {
   @override
@@ -48,21 +45,7 @@ class _AlarmState extends State<Alarm> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
-                  color: Colors.indigo,
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(5.0),
-                  height: 40.0,
-                  child: const Row(
-                    children: [
-                      Text('내 알람',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 17.0,
-                              fontWeight: FontWeight.bold)),
-                    ],
-                  )
-              ),
+              getGlobalLine('내 알람', getMainFont()),
               getList(screenWidth)
             ],
           ),

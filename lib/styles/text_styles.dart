@@ -14,8 +14,12 @@ TextStyle getMainFont() {
   return const TextStyle(color: Colors.white, fontSize: 17.0, fontWeight: FontWeight.bold);
 }
 
+TextStyle getDetailTitleFont() {
+  return const TextStyle(color: Colors.white, fontSize: 15.0, overflow: TextOverflow.ellipsis);
+}
+
 TextStyle getDetailFont() {
-  return const TextStyle(color: Colors.black, fontSize: 15.0);
+  return const TextStyle(color: Colors.black, fontSize: 20.0, overflow: TextOverflow.ellipsis);
 }
 
 TextStyle getSearchFont() {

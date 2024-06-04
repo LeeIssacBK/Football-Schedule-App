@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:geolpo/styles/text_styles.dart';
 import 'package:geolpo/team.dart';
 import 'package:geolpo/utils/parser.dart';
+import 'package:geolpo/widgets/global_widget.dart';
 import 'package:intl/intl.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -15,7 +16,6 @@ import 'dto/alert_dto.dart';
 import 'dto/fixture_dto.dart';
 import 'dto/subscribe_dto.dart';
 import 'navibar.dart';
-import 'widgets/league_widget.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -65,17 +65,7 @@ class _HomeState extends State<Home> {
                   )
               ),
               myTeam(screenWidth, screenHeight),
-              Container(
-                  color: Colors.indigo,
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(5.0),
-                  height: 40.0,
-                  child: Row(
-                    children: [
-                      Text('경기 일정', style: getMainFont()),
-                    ],
-                  )
-              ),
+              getGlobalLine('경기 일정', getMainFont()),
               schedules.isEmpty
                   ? Container(
                       padding: const EdgeInsets.all(50.0),

@@ -2,6 +2,8 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:geolpo/widgets/global_widget.dart';
 
 import 'dto/subscribe_dto.dart';
 import 'styles/text_styles.dart';
@@ -36,15 +38,7 @@ class _TeamState extends State<TeamInfo> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
-                    color: Colors.indigo,
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(5.0),
-                    height: 40.0,
-                    child: Row(
-                      children: [Text(subscribe.team!.krName ?? subscribe.team!.name, style: getMainFont()),],
-                    )
-                ),
+                getGlobalLine(subscribe.team!.krName ?? subscribe.team!.name, getMainFont()),
                 Container(
                   padding: const EdgeInsets.all(5.0),
                   child: Image.network(subscribe.team!.logo),
@@ -53,7 +47,7 @@ class _TeamState extends State<TeamInfo> {
                   padding: const EdgeInsets.all(5.0),
                   child: Row(
                     children: [
-                      Text('소속 리그', style: getDetailFont(),),
+                      getTile(Text('소속 리그', style: getDetailTitleFont()), Colors.indigo)
                     ],
                   ),
                 ),
@@ -61,7 +55,8 @@ class _TeamState extends State<TeamInfo> {
                   padding: const EdgeInsets.all(10.0),
                   child: Row(
                     children: [
-                      Text('${subscribe.league?.name}', style: getDetailFont(),),
+                      Image.network(subscribe.league!.logo, height: 20.0),
+                      Expanded(child: Text(' ${subscribe.league?.name}', style: getDetailFont(),)),
                     ],
                   ),
                 ),
@@ -69,7 +64,7 @@ class _TeamState extends State<TeamInfo> {
                   padding: const EdgeInsets.all(5.0),
                   child: Row(
                     children: [
-                      Text('연고지', style: getDetailFont(),),
+                      getTile(Text('연고지', style: getDetailTitleFont()), Colors.indigo)
                     ],
                   ),
                 ),
@@ -77,7 +72,7 @@ class _TeamState extends State<TeamInfo> {
                   padding: const EdgeInsets.all(10.0),
                   child: Row(
                     children: [
-                      Text('${subscribe.team!.city}', style: getDetailFont(),),
+                      Expanded(child: Text('${subscribe.team!.city}', style: getDetailFont(),)),
                     ],
                   ),
                 ),
@@ -85,7 +80,7 @@ class _TeamState extends State<TeamInfo> {
                   padding: const EdgeInsets.all(5.0),
                   child: Row(
                     children: [
-                      Text('창단', style: getDetailFont(),),
+                      getTile(Text('창단', style: getDetailTitleFont()), Colors.indigo)
                     ],
                   ),
                 ),
@@ -93,7 +88,7 @@ class _TeamState extends State<TeamInfo> {
                   padding: const EdgeInsets.all(10.0),
                   child: Row(
                     children: [
-                      Text('${subscribe.team!.founded}', style: getDetailFont(),),
+                      Expanded(child: Text('${subscribe.team!.founded}', style: getDetailFont(),)),
                     ],
                   ),
                 ),
@@ -101,7 +96,17 @@ class _TeamState extends State<TeamInfo> {
                   padding: const EdgeInsets.all(5.0),
                   child: Row(
                     children: [
-                      Text('선수단', style: getDetailFont(),),
+                      getTile(Text('홈구장', style: getDetailTitleFont()), Colors.indigo)
+                    ],
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Image.network(subscribe.team!.stadiumImage!),
+                      Text(subscribe.team!.stadium ?? '정보없음', style: getDetailFont()),
                     ],
                   ),
                 ),
@@ -109,7 +114,7 @@ class _TeamState extends State<TeamInfo> {
                   padding: const EdgeInsets.all(5.0),
                   child: Row(
                     children: [
-                      Text('리그 순위', style: getDetailFont(),),
+                      getTile(Text('선수단', style: getDetailTitleFont()), Colors.indigo)
                     ],
                   ),
                 ),
@@ -117,7 +122,15 @@ class _TeamState extends State<TeamInfo> {
                   padding: const EdgeInsets.all(5.0),
                   child: Row(
                     children: [
-                      Text('최근 5경기', style: getDetailFont(),),
+                      getTile(Text('리그 순위', style: getDetailTitleFont()), Colors.indigo)
+                    ],
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Row(
+                    children: [
+                      getTile(Text('최근 5경기', style: getDetailTitleFont()), Colors.indigo)
                     ],
                   ),
                 ),

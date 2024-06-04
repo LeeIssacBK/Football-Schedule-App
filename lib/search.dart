@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolpo/styles/text_styles.dart';
 import 'package:http/http.dart' as http;
@@ -70,40 +71,44 @@ class _SearchState extends State<Search> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                padding:
-                    stepHandle == Step_.first ? const EdgeInsets.all(5.0) : null,
-                height: 40.0,
-                width: double.infinity,
-                color: Colors.indigo,
-                child: Row(
+      body: Column(
+        children: [
+          Container(
+            padding:
+            stepHandle == Step_.first ? const EdgeInsets.all(5.0) : null,
+            height: 40.0,
+            width: double.infinity,
+            color: Colors.indigo,
+            child: Row(
+              children: [
+                if (stepHandle != Step_.first)
+                  IconButton(
+                      onPressed: () {
+                        backPage(stepHandle);
+                      },
+                      icon: const Icon(
+                        Icons.arrow_back_ios_new,
+                        color: Colors.white,
+                      )),
+                Text('$stepDescription 선택',
+                    style: getMainFont()),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Center(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    if (stepHandle != Step_.first)
-                      IconButton(
-                          onPressed: () {
-                            backPage(stepHandle);
-                          },
-                          icon: const Icon(
-                            Icons.arrow_back_ios_new,
-                            color: Colors.white,
-                          )),
-                    Text('$stepDescription 선택',
-                        style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 17.0,
-                            fontWeight: FontWeight.bold)),
+                    getStep(stepHandle)
                   ],
                 ),
               ),
-              Container(child: getStep(stepHandle)),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -174,12 +179,7 @@ class _SearchState extends State<Search> {
                 continent = Continent.europe;
                 movePage(Step_.second);
               },
-              child: const Text(
-                '유럽',
-                style: TextStyle(
-                    color: Colors.indigo,
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold),
+              child: Text('유럽', style: getSearchFont(),
               )),
         ),
         Padding(
@@ -189,12 +189,7 @@ class _SearchState extends State<Search> {
                 continent = Continent.asia;
                 movePage(Step_.second);
               },
-              child: const Text(
-                '아시아',
-                style: TextStyle(
-                    color: Colors.indigo,
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold),
+              child: Text('아시아', style: getSearchFont(),
               )),
         ),
         // Padding(
@@ -276,15 +271,9 @@ class _SearchState extends State<Search> {
           if (leagues.isEmpty) {
             return Container(
               padding: const EdgeInsets.fromLTRB(0, 100.0, 0, 100.0),
-              child: const Column(
+              child: Column(
                 children: [
-                  Text(
-                    '준비중 입니다.',
-                    style: TextStyle(
-                      color: Colors.indigo,
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  Text('준비중 입니다.', style: getSearchFont(),
                   ),
                 ],
               ),
@@ -304,11 +293,7 @@ class _SearchState extends State<Search> {
                     ),
                     child: Text(
                       country.krName,
-                      style: const TextStyle(
-                        color: Colors.indigo,
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: getSearchFont(),
                     ),
                   ),
                 ],
@@ -344,11 +329,7 @@ class _SearchState extends State<Search> {
                     ),
                     child: Text(
                       league.name,
-                      style: const TextStyle(
-                        color: Colors.indigo,
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: getSearchFont(),
                     ),
                   ),
                 ],
@@ -371,20 +352,11 @@ class _SearchState extends State<Search> {
         } else {
           List<Team> teams = snapshot.data!;
           if (teams.isEmpty) {
-            return const Column(
+            return Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(
-                  height: 100.0,
-                ),
-                Text(
-                  '팀 정보를 찾을 수 없습니다.',
-                  style: TextStyle(
-                    color: Colors.indigo,
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                const SizedBox(height: 100.0,),
+                Text('팀 정보를 찾을 수 없습니다.', style: getSearchFont(),),
               ],
             );
           }
@@ -446,12 +418,7 @@ class _SearchState extends State<Search> {
                     style: const ButtonStyle(
                       alignment: Alignment.centerLeft,
                     ),
-                    child: Text(team.krName ?? team.name,
-                      style: const TextStyle(
-                        color: Colors.indigo,
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    child: Text(team.krName ?? team.name, style: getSearchFont(),
                     ),
                   ),
                 ],

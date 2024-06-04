@@ -17,3 +17,12 @@ TextStyle getMainFont() {
 TextStyle getDetailFont() {
   return const TextStyle(color: Colors.black, fontSize: 15.0);
 }
+
+TextStyle getSearchFont() {
+  return const TextStyle(
+    color: Colors.indigo,
+    fontSize: 30.0,
+    fontWeight: FontWeight.bold,
+    overflow: TextOverflow.ellipsis
+  );
+}

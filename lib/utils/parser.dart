@@ -24,3 +24,7 @@ String getKoreanWeekDay(DateTime date) {
   }
   throw Exception('not found weekday : ${date.weekday}');
 }
+
+String getKoreanStanding(String eng) {
+  return eng.replaceAll('W', '승 ').replaceAll('L', '패 ').replaceAll('D', '무 ');
+}

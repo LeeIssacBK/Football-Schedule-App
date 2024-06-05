@@ -11,7 +11,7 @@ class Standing {
   String? group;
   String form;
   String status;
-  String description;
+  String? description;
   Game all;
   Game home;
   Game away;

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:geolpo/api/standing_api.dart';
 import 'package:geolpo/dto/standing_dto.dart';
+import 'package:geolpo/utils/parser.dart';
 import 'package:geolpo/widgets/global_widget.dart';
 
 import 'dto/subscribe_dto.dart';
@@ -28,7 +29,7 @@ class _TeamState extends State<TeamInfo> {
   void initState() {
     super.initState();
     subscribe = widget.subscribe;
-    get(subscribe.team!.apiId)
+    getStanding(subscribe.team!.apiId)
         .then((_) => standing = (_))
         .then((_) => setState(() {}));
   }
@@ -132,6 +133,17 @@ class _TeamState extends State<TeamInfo> {
                   ),
                 ),
                 Container(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Row(
+                    children: [
+                      Expanded(child:
+                      Text('${standing?.rank ?? '정보없음'}${standing?.rank != null ? '위' : ''}',
+                        style: getDetailFont(),)
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
                   padding: const EdgeInsets.all(5.0),
                   child: Row(
                     children: [
@@ -143,7 +155,9 @@ class _TeamState extends State<TeamInfo> {
                   padding: const EdgeInsets.all(10.0),
                   child: Row(
                     children: [
-                      Expanded(child: Text(standing?.form ?? '정보없음', style: getDetailFont(),)),
+                      Expanded(
+                          child: Text(standing?.form != null ? getKoreanStanding(standing!.form) : '정보없음',
+                            style: getDetailFont(),)),
                     ],
                   ),
                 ),

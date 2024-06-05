@@ -3,6 +3,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:geolpo/api/standing_api.dart';
+import 'package:geolpo/dto/standing_dto.dart';
 import 'package:geolpo/widgets/global_widget.dart';
 
 import 'dto/subscribe_dto.dart';
@@ -20,11 +22,15 @@ class TeamInfo extends StatefulWidget {
 class _TeamState extends State<TeamInfo> {
 
   late Subscribe subscribe;
+  Standing? standing;
 
   @override
   void initState() {
     super.initState();
     subscribe = widget.subscribe;
+    get(subscribe.team!.apiId)
+        .then((_) => standing = (_))
+        .then((_) => setState(() {}));
   }
 
   @override
@@ -133,8 +139,13 @@ class _TeamState extends State<TeamInfo> {
                     ],
                   ),
                 ),
-                Row(
-                  children: [Text('')],
+                Container(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Row(
+                    children: [
+                      Expanded(child: Text(standing?.form ?? '정보없음', style: getDetailFont(),)),
+                    ],
+                  ),
                 ),
               ],
             ),

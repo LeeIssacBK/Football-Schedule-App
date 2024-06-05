@@ -8,7 +8,7 @@ class Standing {
   int rank;
   int points;
   int goalsDiff;
-  String group;
+  String? group;
   String form;
   String status;
   String description;
@@ -34,7 +34,7 @@ class Standing {
       rank: json['_rank'],
       points: json['points'],
       goalsDiff: json['goalsDiff'],
-      group: json['group'],
+      group: json['_group'],
       form: json['form'],
       status: json['_status'],
       description: json['description'],
@@ -68,7 +68,7 @@ class Game {
       win: json['win'],
       draw: json['draw'],
       lose: json['lose'],
-      goals: json['goals'],
+      goals: Goal.fromJson(json['goals']),
     );
   }
 

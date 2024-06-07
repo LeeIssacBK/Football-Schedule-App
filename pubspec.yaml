@@ -49,6 +49,7 @@ dependencies:
   syncfusion_flutter_datepicker: 25.2.4
   syncfusion_flutter_core: 25.2.4
   syncfusion_localizations: 25.2.4
+  firebase_messaging: ^15.0.0
 
 dev_dependencies:
   flutter_test:

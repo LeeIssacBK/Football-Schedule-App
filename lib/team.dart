@@ -120,44 +120,35 @@ class _TeamState extends State<TeamInfo> {
                   padding: const EdgeInsets.all(5.0),
                   child: Row(
                     children: [
-                      getTile(Text('선수단', style: getDetailTitleFont()), Colors.indigo)
-                    ],
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(5.0),
-                  child: Row(
-                    children: [
-                      getTile(Text('리그 순위', style: getDetailTitleFont()), Colors.indigo)
-                    ],
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Row(
-                    children: [
-                      Expanded(child:
-                      Text('${standing?.rank ?? '정보없음'}${standing?.rank != null ? '위' : ''}',
-                        style: getDetailFont(),)
+                      Column(
+                        children: [
+                          getTile(Text('리그 순위', style: getDetailTitleFont()), Colors.indigo),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text('${standing?.rank ?? '정보없음'}${standing?.rank != null ? '위' : ''}', style: getDetailFont(),),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(5.0),
-                  child: Row(
-                    children: [
-                      getTile(Text('최근 5경기', style: getDetailTitleFont()), Colors.indigo)
-                    ],
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                          child: Text(standing?.form != null ? getKoreanStanding(standing!.form) : '정보없음',
-                            style: getDetailFont(),)),
+                      const Expanded(child: SizedBox()),
+                      Column(
+                        children: [
+                          getTile(Text('최근 5경기', style: getDetailTitleFont()), Colors.indigo),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(standing?.form != null ? getKoreanStanding(standing!.form) : '정보없음', style: getDetailFont(),),
+                          ),
+                        ],
+                      ),
+                      const Expanded(child: SizedBox()),
+                      Column(
+                        children: [
+                          getTile(Text('시즌 전적', style: getDetailTitleFont()), Colors.indigo),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text('${standing?.all.win}승 ${standing?.all.draw}무 ${standing?.all.lose}패', style: getDetailFont(),),
+                          ),
+                        ],
+                      )
                     ],
                   ),
                 ),

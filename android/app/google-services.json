@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "586250582515",
+    "project_id": "geolpo-b5512",
+    "storage_bucket": "geolpo-b5512.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:586250582515:android:beee6fbfa4f8589bfa3a86",
+        "android_client_info": {
+          "package_name": "com.geolpo.geolpo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBA2O0mLbEF51nUjBf_KQEC7UwY9TrQjQE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

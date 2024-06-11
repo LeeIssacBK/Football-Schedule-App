@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolpo/api/device_api.dart';
 import 'package:geolpo/navibar.dart';
 
 import 'api/auth_api.dart';
@@ -17,8 +18,10 @@ class Login extends StatelessWidget {
               const Expanded(child: SizedBox()),
               IconButton(
                 onPressed: () {
-                  kakaoLogin().then((_) => Navigator.pushReplacement(
-                      context, MaterialPageRoute(builder: (_) => Navibar(selectedIndex: 0,))));
+                  kakaoLogin()
+                      .then((_) => saveUserDeviceAndFcmToken()
+                      .then((_) => Navigator.pushReplacement(
+                      context, MaterialPageRoute(builder: (_) => Navibar(selectedIndex: 0,)))));
                 },
                 icon: const Image(
                     image: AssetImage('image/kakao_login_medium_narrow.png')),

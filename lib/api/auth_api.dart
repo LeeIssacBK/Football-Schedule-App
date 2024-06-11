@@ -1,21 +1,19 @@
 import 'dart:convert';
-import 'dart:io';
 
-import 'package:device_info_plus/device_info_plus.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:geolpo/api/api_filter.dart';
-import 'package:geolpo/dto/device_dto.dart';
+import 'package:geolpo/dto/api_user_dto.dart';
+import 'package:geolpo/dto/auth_dto.dart';
+import 'package:geolpo/main.dart';
+import 'package:geolpo/styles/text_styles.dart';
 import 'package:http/http.dart' as http;
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 
-import '../dto/api_user_dto.dart';
-import '../dto/auth_dto.dart';
 
 const String baseUrl = 'http://192.168.45.129:8090';
 late Auth? auth;
 late ApiUser? user;
 Map<String, String> baseHeader = {};
-
 
 Future<void> kakaoLogin() async {
   try {
@@ -31,7 +29,23 @@ Future<void> kakaoLogin() async {
     final userInfoResponse = await http.get(Uri.parse('$baseUrl/oauth/me'), headers: baseHeader);
     user = ApiUser.fromJson(json.decode(utf8.decode(userInfoResponse.bodyBytes)));
   } catch (e) {
-    //do nothing
+    showDialog(context: navigatorKey.currentState!.context, builder: (BuildContext context) {
+      return AlertDialog(
+        content: Text('로그인 중 문제가 발생하였습니다.\n다시 시도해 주세요.', style: getAlertDialogContentStyle()),
+        actions: [
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('확인')),
+            ),
+          ),
+        ],
+      );
+    });
   }
 }
 
@@ -46,29 +60,3 @@ Future<void> deleteToken() async {
   processResponse(await http.delete(Uri.parse('$baseUrl/oauth/logout'), headers: baseHeader));
 }
 
-Future<void> generateUserDeviceAndFcmToken() async {
-  final device = await getUserDevice();
-  baseHeader['Authorization'] = 'Bearer ${auth!.accessToken}';
-  processResponse(await http.post(Uri.parse('$baseUrl/device'), headers: baseHeader,
-      body: jsonEncode(device.toJson())));
-}
-
-Future<Device> getUserDevice() async {
-  String? platform;
-  String? uuid;
-  String? fcmToken = await FirebaseMessaging.instance.getToken();
-  DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
-  if (Platform.isAndroid) {
-    AndroidDeviceInfo androidInfo = await deviceInfoPlugin.androidInfo;
-    platform = 'Android';
-    uuid = androidInfo.id;
-  }
-  if (Platform.isIOS) {
-    platform = 'IOS';
-    IosDeviceInfo iosInfo = await deviceInfoPlugin.iosInfo;
-    uuid = iosInfo.identifierForVendor;
-  }
-  return Device(platform: platform!,
-      uuid: uuid!,
-      fcmToken: fcmToken!);
-}

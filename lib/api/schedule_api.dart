@@ -1,7 +1,8 @@
 import 'dart:convert';
+
+import 'package:geolpo/dto/fixture_dto.dart';
 import 'package:http/http.dart' as http;
 
-import '../dto/fixture_dto.dart';
 import 'api_filter.dart';
 import 'auth_api.dart';
 

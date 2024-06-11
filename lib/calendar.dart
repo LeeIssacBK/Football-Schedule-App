@@ -74,7 +74,7 @@ class _CalendarState extends State<Calendar> {
                 leadingDatesTextStyle: TextStyle(color: Colors.grey)
             ),
             appointmentDisplayMode: MonthAppointmentDisplayMode.indicator,
-            agendaItemHeight: 64.0
+            agendaItemHeight: 70.0
         )
       ),
     );

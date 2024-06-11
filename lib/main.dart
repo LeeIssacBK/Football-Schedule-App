@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
@@ -11,15 +10,12 @@ import 'firebase_options.dart';
 import 'login.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-String? fcmToken;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  fcmToken = await FirebaseMessaging.instance.getToken();
-  print('fcmToken\n$fcmToken');
   KakaoSdk.init(nativeAppKey: '6ef65107292ada731123dac02c2d72bc');
   runApp(App());
 }

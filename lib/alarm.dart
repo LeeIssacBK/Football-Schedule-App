@@ -206,7 +206,7 @@ class _AlarmState extends State<Alarm> {
                                       )
                                     ],
                                   ),
-                                  Text('${item.fixture.home!.krName} vs ${item.fixture.away!.krName}\n경기 알람 시간을 수정하시겠습니까?'),
+                                  Text('${item.fixture.home!.krName ?? item.fixture.home!.name} vs ${item.fixture.away!.krName ?? item.fixture.away!.name}\n경기 알람 시간을 수정하시겠습니까?'),
                                   DropdownButton(
                                       isExpanded: true,
                                       hint: const Text('알람 시간 설정', style: TextStyle(color: Colors.indigo)),

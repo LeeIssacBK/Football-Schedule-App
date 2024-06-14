@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:geolpo/styles/text_styles.dart';
+import 'package:geolpo/widgets/global_widget.dart';
 import 'package:intl/intl.dart';
 
 import 'api/auth_api.dart';
@@ -17,6 +19,7 @@ class _MyPageState extends State<MyPage> {
       body: Center(
         child: Column(
           children: [
+            getGlobalLine('', getMainFont()),
             Container(
               decoration: const BoxDecoration(
                 border: Border(
@@ -25,32 +28,26 @@ class _MyPageState extends State<MyPage> {
                   )
                 )
               ),
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(30.0),
               margin: const EdgeInsets.all(10.0),
               child: Column(
                 children: [
                   CircleAvatar(
                     backgroundImage: Image.network(user!.profileImage ?? '').image,
                     backgroundColor: Colors.white,
-                    radius: 60.0,
+                    radius: 80.0,
                   ),
-                  Container(
-                    padding: const EdgeInsets.only(top: 10.0),
-                    child: Text(user!.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13.0),)
-                  )
                 ],
               ),
             ),
             TextButton(onPressed: () {  },
-              child: const Text('내 정보', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0, color: Colors.indigo),)),
+              child: Text('내 정보', style: getMyPageFont())), //가입수단(카카오, 네이버), 가입일자, 구독팀 수, 누적 알람 수
             TextButton(onPressed: () {  },
-                child: const Text('알림 설정', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0, color: Colors.indigo))),
+                child: Text('Q & A', style: getMyPageFont())),  //이용방법
             TextButton(onPressed: () {  },
-                child: const Text('Q & A', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0, color: Colors.indigo))),
-            TextButton(onPressed: () {  },
-                child: const Text('오류 제보', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0, color: Colors.indigo))),
+                child: Text('오류 제보', style: getMyPageFont())),  //
             TextButton(onPressed: () => deleteToken().then((_) => logout()),
-              child: const Text('로그아웃', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0, color: Colors.indigo))),
+              child: Text('로그아웃', style: getMyPageFont())),
             const Expanded(child: SizedBox()),
             Container(
               color: Colors.grey,

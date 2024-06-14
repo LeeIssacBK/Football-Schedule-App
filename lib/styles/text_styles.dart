@@ -30,3 +30,12 @@ TextStyle getSearchFont() {
     overflow: TextOverflow.ellipsis
   );
 }
+
+TextStyle getMyPageFont() {
+  return const TextStyle(
+      color: Colors.indigo,
+      fontSize: 30.0,
+      fontWeight: FontWeight.bold,
+      overflow: TextOverflow.ellipsis
+  );
+}

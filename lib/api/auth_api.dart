@@ -10,7 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 
 
-const String baseUrl = 'http://192.168.45.129:8090';
+const String baseUrl = 'http://3.36.31.202:8090';
 late Auth? auth;
 late ApiUser? user;
 Map<String, String> baseHeader = {};

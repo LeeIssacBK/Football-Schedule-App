@@ -10,3 +10,9 @@ Future<MyInfoDto> getMyInfo() async {
       headers: baseHeader));
   return MyInfoDto.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
 }
+
+Future<void> withDrawUser() async {
+  processResponse(await http.delete(
+      Uri.parse('$baseUrl/api/mypage/withdraw'),
+      headers: baseHeader));
+}

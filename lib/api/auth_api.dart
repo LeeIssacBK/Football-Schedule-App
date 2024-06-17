@@ -15,39 +15,23 @@ const String baseUrl = 'http://192.168.45.142:8090';
 late Auth? auth;
 late ApiUser? user;
 Map<String, String> baseHeader = {};
+String exceptionMessage = '로그인 중 문제가 발생하였습니다.\n다시 시도해 주세요.';
 
 Future<void> kakaoLogin() async {
-  try {
-    bool isInstalled = await isKakaoTalkInstalled();
-    OAuthToken kakaoOauth = isInstalled
-        ? await UserApi.instance.loginWithKakaoTalk()
-        : await UserApi.instance.loginWithKakaoAccount();
-    final authResponse = await http.get(Uri.parse('$baseUrl/oauth/kakao?token=${kakaoOauth.accessToken}'));
-    if (authResponse.statusCode == 200) {
-      auth = Auth.fromJson(json.decode(authResponse.body));
-    }
-    baseHeader['Authorization'] = 'Bearer ${auth!.accessToken}';
-    final userInfoResponse = await http.get(Uri.parse('$baseUrl/oauth/me'), headers: baseHeader);
-    user = ApiUser.fromJson(json.decode(utf8.decode(userInfoResponse.bodyBytes)));
-  } catch (e) {
-    showDialog(context: navigatorKey.currentState!.context, builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text('알림', style: getAlertDialogTitleStyle(),),
-        content: Text('로그인 중 문제가 발생하였습니다.\n다시 시도해 주세요.', style: getAlertDialogContentStyle()),
-        actions: [
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('확인', style: getButtonTextColor())),
-            ),
-          ),
-        ],
-      );
-    });
+  bool isInstalled = await isKakaoTalkInstalled();
+  OAuthToken kakaoOauth = isInstalled
+      ? await UserApi.instance.loginWithKakaoTalk()
+      : await UserApi.instance.loginWithKakaoAccount();
+  final authResponse = await http.get(Uri.parse('$baseUrl/oauth/kakao?token=${kakaoOauth.accessToken}'));
+  if (authResponse.statusCode == 200) {
+    auth = Auth.fromJson(json.decode(authResponse.body));
+  }
+  baseHeader['Authorization'] = 'Bearer ${auth!.accessToken}';
+  final userInfoResponse = await http.get(Uri.parse('$baseUrl/oauth/me'), headers: baseHeader);
+  user = ApiUser.fromJson(json.decode(utf8.decode(userInfoResponse.bodyBytes)));
+  if ('ENABLED' != user!.status) {
+    exceptionMessage = '탈퇴 대기 중입니다.\n탈퇴 3일 후 재가입 가능합니다.';
+    throw Exception('user status invalid');
   }
 }
 

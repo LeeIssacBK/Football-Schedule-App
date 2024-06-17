@@ -137,8 +137,8 @@ class _MyInfoState extends State<MyInfo> {
                                           padding: const EdgeInsets.all(5.0),
                                           child: ElevatedButton(
                                               onPressed: () {
-
-                                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Login()));
+                                                withDrawUser()
+                                                    .then((_) => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Login())));
                                               },
                                               child: Text('예', style: getButtonTextColor())),
                                         ),

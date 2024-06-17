@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolpo/support.dart';
 import 'package:geolpo/myinfo.dart';
 import 'package:geolpo/styles/text_styles.dart';
 import 'package:geolpo/widgets/global_widget.dart';
@@ -47,7 +48,9 @@ class _MyPageState extends State<MyPage> {
               child: Text('내 정보', style: getMyPageFont())), //가입수단(카카오, 네이버), 가입일자, 구독팀 수, 누적 알람 수
             TextButton(onPressed: () {},
                 child: Text('Q & A', style: getMyPageFont())),  //이용방법
-            TextButton(onPressed: () {  },
+            TextButton(onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => Support()));
+            },
                 child: Text('오류 제보', style: getMyPageFont())),  //
             TextButton(onPressed: () => deleteToken().then((_) => logout()),
               child: Text('로그아웃', style: getMyPageFont()))

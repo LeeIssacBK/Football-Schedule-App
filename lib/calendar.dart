@@ -35,7 +35,7 @@ class _CalendarState extends State<Calendar> {
             backgroundColor: Colors.indigo,
             textStyle: TextStyle(color: Colors.white,
                 fontWeight: FontWeight.bold,
-                fontSize: 17.0)),
+                fontSize: 20.0)),
         todayHighlightColor: Colors.indigo,
         selectionDecoration: BoxDecoration(border: Border.all(color: Colors.indigo)),
         showNavigationArrow: true,

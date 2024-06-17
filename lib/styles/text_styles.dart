@@ -11,7 +11,7 @@ TextStyle getAlertDialogContentStyle() {
 }
 
 TextStyle getMainFont() {
-  return const TextStyle(color: Colors.white, fontSize: 17.0, fontWeight: FontWeight.bold);
+  return const TextStyle(color: Colors.white, fontSize: 20.0, fontWeight: FontWeight.bold);
 }
 
 TextStyle getDetailTitleFont() {

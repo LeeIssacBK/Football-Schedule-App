@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:geolpo/api/auth_api.dart';
 import 'package:geolpo/api/mypage_api.dart';
 import 'package:geolpo/dto/myinfo_dto.dart';
+import 'package:geolpo/login.dart';
 import 'package:geolpo/styles/text_styles.dart';
 import 'package:geolpo/widgets/global_widget.dart';
 import 'package:intl/intl.dart';
@@ -124,7 +125,36 @@ class _MyInfoState extends State<MyInfo> {
                           Padding(
                             padding: const EdgeInsets.all(10.0),
                             child: ElevatedButton(onPressed: () {
+                              showDialog(context: context, builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text('알림', style: getAlertDialogTitleStyle(),),
+                                  content: Text('탈퇴 후 3일간 재가입 불가하며\n저장된 구독 및 알림 정보는 모두 삭제됩니다.\n회원 탈퇴 하시겠습니까?', style: getAlertDialogContentStyle()),
+                                  actions: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(5.0),
+                                          child: ElevatedButton(
+                                              onPressed: () {
 
+                                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Login()));
+                                              },
+                                              child: Text('예', style: getButtonTextColor())),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(5.0),
+                                          child: ElevatedButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: Text('아니오', style: getButtonTextColor())),
+                                        ),
+                                      ]
+                                    )
+                                  ],
+                                );
+                              });
                               },
                               child: Text('회원 탈퇴', style: getButtonTextColor())
                             ),

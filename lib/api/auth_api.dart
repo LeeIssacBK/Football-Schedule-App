@@ -32,6 +32,7 @@ Future<void> kakaoLogin() async {
   } catch (e) {
     showDialog(context: navigatorKey.currentState!.context, builder: (BuildContext context) {
       return AlertDialog(
+        title: Text('알림', style: getAlertDialogTitleStyle(),),
         content: Text('로그인 중 문제가 발생하였습니다.\n다시 시도해 주세요.', style: getAlertDialogContentStyle()),
         actions: [
           Center(

@@ -321,12 +321,12 @@ class _SearchState extends State<Search> {
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
-                              title: Text(team.krName ?? team.name, style: getAlertDialogTitleStyle()),
+                              title: Text('팀 구독', style: getAlertDialogTitleStyle()),
                               content: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Container(padding: const EdgeInsets.all(30.0), child: Image.network(team.logo)),
-                                  Container(padding: const EdgeInsets.all(5.0), child: Text('${team.krName ?? team.name} 을 구독하시겠습니까?')),
+                                  Container(padding: const EdgeInsets.all(5.0), child: Text('${team.krName ?? team.name}을(를) 구독하시겠습니까?')),
                                 ],
                               ),
                               contentTextStyle: getAlertDialogContentStyle(),

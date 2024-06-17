@@ -39,3 +39,24 @@ TextStyle getMyPageFont() {
       overflow: TextOverflow.ellipsis
   );
 }
+
+TextStyle getMyInfoFont() {
+  return const TextStyle(
+      color: Colors.indigo,
+      fontSize: 20.0,
+      fontWeight: FontWeight.bold,
+      overflow: TextOverflow.ellipsis
+  );
+}
+
+TextStyle getMyInfoFont2() {
+  return const TextStyle(
+      color: Colors.black,
+      fontSize: 20.0,
+      overflow: TextOverflow.ellipsis
+  );
+}
+
+TextStyle getButtonTextColor() {
+  return const TextStyle(color: Colors.indigo);
+}

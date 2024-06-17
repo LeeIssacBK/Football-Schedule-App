@@ -23,7 +23,7 @@ Response processResponse(Response response) {
                   onPressed: () {
                     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Login()));
                   },
-                  child: const Text('확인')),
+                  child: Text('확인', style: getButtonTextColor())),
             ),
           ),
         ],
@@ -42,7 +42,7 @@ Response processResponse(Response response) {
                   onPressed: () {
                     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Navibar(selectedIndex: 0,)));
                   },
-                  child: const Text('확인')),
+                  child: Text('확인', style: getButtonTextColor())),
             ),
           ),
         ],

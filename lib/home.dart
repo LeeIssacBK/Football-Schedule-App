@@ -226,7 +226,7 @@ class _HomeState extends State<Home> {
                                                                 }
                                                                 Navigator.of(context).pop();
                                                               },
-                                                              child: const Text('예'),
+                                                              child: Text('예', style: getButtonTextColor()),
                                                             )
                                                         ),
                                                         Padding(
@@ -235,7 +235,7 @@ class _HomeState extends State<Home> {
                                                               onPressed: () {
                                                                 Navigator.of(context).pop();
                                                               },
-                                                              child: const Text('아니오'),
+                                                              child: Text('아니오', style: getButtonTextColor()),
                                                             )
                                                         )
                                                       ],
@@ -327,7 +327,7 @@ class _HomeState extends State<Home> {
                                   _flush();
                                 });
                               },
-                              child: const Text('예'),
+                              child: Text('예', style: getButtonTextColor()),
                             ),
                           ),
                           Padding(
@@ -336,7 +336,7 @@ class _HomeState extends State<Home> {
                               onPressed: () {
                                 Navigator.of(context).pop();
                               },
-                              child: const Text('아니오'),
+                              child: Text('아니오', style: getButtonTextColor()),
                             ),
                           )
                         ],

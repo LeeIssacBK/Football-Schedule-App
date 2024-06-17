@@ -351,7 +351,7 @@ class _SearchState extends State<Search> {
                                                 backgroundColor: Colors.teal,
                                                 duration: Duration(milliseconds: 3000),
                                               ));
-                                            }, child: const Text('예')),
+                                            }, child: Text('예', style: getButtonTextColor(),)),
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.all(5.0),
@@ -359,7 +359,7 @@ class _SearchState extends State<Search> {
                                             onPressed: () {
                                               Navigator.of(context).pop();
                                             },
-                                            child: const Text('아니오')),
+                                            child: Text('아니오', style: getButtonTextColor(),)),
                                       ),
                                     ]),
                               ],

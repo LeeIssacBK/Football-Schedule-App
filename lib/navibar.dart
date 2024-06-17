@@ -127,7 +127,7 @@ class _NavibarState extends State<Navibar> {
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: const Text('확인')),
+                child: Text('확인', style: getButtonTextColor())),
           ),
         ),
       ],

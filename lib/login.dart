@@ -23,8 +23,19 @@ class Login extends StatelessWidget {
                       .then((_) => Navigator.pushReplacement(
                       context, MaterialPageRoute(builder: (_) => Navibar(selectedIndex: 0,)))));
                 },
-                icon: const Image(
-                    image: AssetImage('image/kakao_login_medium_narrow.png')),
+                icon: ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0),
+                  child: const Image(
+                      image: AssetImage('image/kakao_login_medium_narrow.png'), width: 180,),
+                ),
+              ),
+              IconButton(
+                onPressed: () {},
+                icon: ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0),
+                  child: const Image(
+                      image: AssetImage('image/naver_login_btnG.png'), width: 180),
+                ),
               ),
               const Expanded(child: SizedBox()),
               const Padding(

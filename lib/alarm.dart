@@ -257,7 +257,7 @@ class _AlarmState extends State<Alarm> {
                                           }
                                           Navigator.of(context).pop();
                                         },
-                                        child: const Text('예'),
+                                        child: Text('예', style: getButtonTextColor()),
                                       )
                                   ),
                                   Padding(
@@ -266,7 +266,7 @@ class _AlarmState extends State<Alarm> {
                                         onPressed: () {
                                           Navigator.of(context).pop();
                                         },
-                                        child: const Text('아니오'),
+                                        child: Text('아니오', style: getButtonTextColor()),
                                       )
                                   )
                                 ],

@@ -1,8 +1,7 @@
 
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:geolpo/api/support_api.dart';
+import 'package:geolpo/api/mypage_api.dart';
 import 'package:geolpo/dto/support_dto.dart';
 import 'package:geolpo/styles/text_styles.dart';
 import 'package:geolpo/widgets/global_widget.dart';

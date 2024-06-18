@@ -2,6 +2,8 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:geolpo/api/support_api.dart';
+import 'package:geolpo/dto/support_dto.dart';
 import 'package:geolpo/styles/text_styles.dart';
 import 'package:geolpo/widgets/global_widget.dart';
 
@@ -35,7 +37,7 @@ class _SupportState extends State<Support> {
                       Row(children: [Text('유형', style: getDetailFont())],),
                       DropdownButton(
                           isExpanded: true,
-                          hint: const Text('문의 유형 선택', style: TextStyle(color: Colors.indigo, fontSize: 15)),
+                          hint: const Text('문의 유형 선택', style: TextStyle(color: Colors.indigo, fontSize: 18)),
                           style: const TextStyle(color: Colors.indigo),
                           underline: Container(
                             height: 1,
@@ -108,34 +110,79 @@ class _SupportState extends State<Support> {
                   padding: const EdgeInsets.all(10.0),
                   child: ElevatedButton(
                       onPressed: () {
-                        showDialog(context: context, builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text('알림', style: getAlertDialogTitleStyle(),),
-                            content: Text('문의 하시겠습니까?\n문의는 가입시 등록된 이메일로 답변됩니다.', style: getAlertDialogContentStyle()),
-                            actions: [
-                              Row(
+                        if (selectedType == null || title == null || content == null) {
+                          showDialog(context: context, builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text('알림', style: getAlertDialogTitleStyle(),),
+                              content: Text('문의 내용을 모두 기입해주세요.', style: getAlertDialogContentStyle()),
+                              actions: [
+                                Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Padding(
                                       padding: const EdgeInsets.all(5.0),
                                       child: ElevatedButton(
                                           onPressed: () {
-
-                                          }, child: Text('예', style: getButtonTextColor(),)),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(5.0),
-                                      child: ElevatedButton(
-                                          onPressed: () {
                                             Navigator.of(context).pop();
                                           },
-                                          child: Text('아니오', style: getButtonTextColor(),)),
+                                          child: Text('확인', style: getButtonTextColor(),)),
                                     ),
-                                  ]
-                              ),
-                            ],
-                          );
-                        });
+                                  ],
+                                )
+                              ],
+                            );
+                          });
+                        } else {
+                          showDialog(context: context, builder: (
+                              BuildContext context) {
+                            return AlertDialog(
+                              title: Text('알림', style: getAlertDialogTitleStyle(),),
+                              content: Text('문의 하시겠습니까?\n문의 내용 확인 후 가입시 등록된 이메일로 답변됩니다.',
+                                  style: getAlertDialogContentStyle()),
+                              actions: [
+                                Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(5.0),
+                                        child: ElevatedButton(
+                                            onPressed: () {
+                                              submitSupport(SupportDto(type: selectedType!, title: title!, content: content!))
+                                                  .then((_) => {
+                                                    if ((_)) {
+                                                      ScaffoldMessenger.of(context).showSnackBar(
+                                                          const SnackBar(
+                                                            content: Text('문의를 제출하였습니다.', textAlign: TextAlign.center, style: TextStyle(color: Colors.white),),
+                                                            backgroundColor: Colors.teal,
+                                                            duration: Duration(milliseconds: 3000),))
+                                                    } else {
+                                                      ScaffoldMessenger.of(context).showSnackBar(
+                                                          const SnackBar(
+                                                            content: Text('문제가 발생하였습니다. 잠시후 다시 시도해주세요.', textAlign: TextAlign.center, style: TextStyle(color: Colors.white),),
+                                                            backgroundColor: Colors.redAccent,
+                                                            duration: Duration(milliseconds: 3000),))
+                                                  }
+                                              }).then((_) => Navigator.of(context).pop())
+                                                  .then((_) => Navigator.of(context).pop());
+                                            },
+                                            child: Text('예',
+                                              style: getButtonTextColor(),)),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(5.0),
+                                        child: ElevatedButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: Text('아니오',
+                                              style: getButtonTextColor(),)),
+                                      ),
+                                    ]
+                                ),
+                              ],
+                            );
+                          });
+                        }
                       },
                       child: Text('문의하기', style: getButtonTextColor(),)),
                 ),

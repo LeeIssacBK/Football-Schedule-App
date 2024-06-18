@@ -123,7 +123,7 @@ class _MyInfoState extends State<MyInfo> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.all(10.0),
+                            padding: const EdgeInsets.only(top: 30.0),
                             child: ElevatedButton(onPressed: () {
                               showDialog(context: context, builder: (BuildContext context) {
                                 return AlertDialog(

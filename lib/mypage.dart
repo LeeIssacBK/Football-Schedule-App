@@ -51,7 +51,7 @@ class _MyPageState extends State<MyPage> {
             TextButton(onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) => Support()));
             },
-                child: Text('오류 제보', style: getMyPageFont())),  //
+                child: Text('문의', style: getMyPageFont())),  //
             TextButton(onPressed: () => deleteToken().then((_) => logout()),
               child: Text('로그아웃', style: getMyPageFont()))
           ],

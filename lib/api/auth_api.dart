@@ -9,9 +9,7 @@ import 'package:geolpo/styles/text_styles.dart';
 import 'package:http/http.dart' as http;
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 
-
-const String baseUrl = 'http://192.168.45.142:8090';
-// const String baseUrl = 'http://3.36.31.202:8090';
+const String baseUrl = 'http://3.36.31.202:8090';
 late Auth? auth;
 late ApiUser? user;
 Map<String, String> baseHeader = {};
@@ -30,7 +28,7 @@ Future<void> kakaoLogin() async {
   final userInfoResponse = await http.get(Uri.parse('$baseUrl/oauth/me'), headers: baseHeader);
   user = ApiUser.fromJson(json.decode(utf8.decode(userInfoResponse.bodyBytes)));
   if ('ENABLED' != user!.status) {
-    exceptionMessage = '탈퇴 대기 중입니다.\n탈퇴 3일 후 재가입 가능합니다.';
+    exceptionMessage = '탈퇴 3일 후 재가입 가능합니다.';
     throw Exception('user status invalid');
   }
 }

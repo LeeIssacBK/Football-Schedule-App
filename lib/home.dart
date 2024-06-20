@@ -3,7 +3,7 @@ import 'dart:core';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:geolpo/styles/text_styles.dart';
-import 'package:geolpo/team.dart';
+import 'package:geolpo/team_info.dart';
 import 'package:geolpo/utils/pageRoute.dart';
 import 'package:geolpo/utils/parser.dart';
 import 'package:geolpo/widgets/global_widget.dart';
@@ -16,7 +16,6 @@ import 'api/subscribe_api.dart';
 import 'dto/alert_dto.dart';
 import 'dto/fixture_dto.dart';
 import 'dto/subscribe_dto.dart';
-import 'navibar.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -24,7 +23,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  bool myTeamFlag = false;
   int sliderIndex = 0;
   List<Subscribe> subscribes = List.empty();
   List<Fixture> schedules = List.empty();
@@ -45,26 +43,7 @@ class _HomeState extends State<Home> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
-                  color: Colors.indigo,
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(5.0),
-                  height: 40.0,
-                  child: Row(
-                    children: [
-                      Text(myTeamFlag ? '구독 수정' : '내 구독 팀', style: getMainFont()),
-                      const Expanded(child: SizedBox()),
-                      IconButton(
-                        icon: myTeamFlag ? const Icon(Icons.exit_to_app, color: Colors.white) : const Icon(Icons.edit, color: Colors.white),
-                        padding: EdgeInsets.zero,
-                        onPressed: () {
-                          myTeamFlag = !myTeamFlag;
-                          setState(() {});
-                        }
-                      ),
-                    ],
-                  )
-              ),
+              getGlobalLine('내 구독 팀', getMainFont()),
               myTeam(screenWidth, screenHeight),
               getGlobalLine('경기 일정', getMainFont()),
               schedules.isEmpty
@@ -263,104 +242,6 @@ class _HomeState extends State<Home> {
   }
 
   Widget myTeam(double screenWidth, double screenHeight) {
-    if (myTeamFlag) {
-      List<Widget> teams = [];
-      teams.add(TextButton(
-        onPressed: () {
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => Navibar(selectedIndex: 1,)));
-        },
-        child: Row(children: [
-          SizedBox(width: screenWidth * 0.5, child: const Text('팀 추가', style: TextStyle(color: Colors.indigo, fontWeight: FontWeight.bold))),
-          const Expanded(child: SizedBox()),
-          SizedBox(width: screenWidth * 0.1, child: const Icon(Icons.add))
-        ]),
-      ));
-      teams.addAll(subscribes.map((subscribe) {
-        return TextButton(
-          onPressed: () {
-            showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: Text('팀 구독 취소하기', style: getAlertDialogTitleStyle()),
-                    contentTextStyle: getAlertDialogContentStyle(),
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text('이미 추가된 경기 알람은 취소되지 않습니다.\n'
-                             '${subscribe.team!.krName ?? subscribe.team!.name} 의 구독을 취소하시겠습니까?'),
-                      ],
-                    ),
-                    actions: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(5.0),
-                            child: ElevatedButton(
-                              onPressed: () {
-                                deleteSubscribe(subscribe.team!.apiId).then((flag) => {
-                                  if (flag) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(
-                                          content: Text('팀 구독이 취소 되었습니다!',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(color: Colors.white),
-                                          ),
-                                          backgroundColor: Colors.teal,
-                                          duration: Duration(milliseconds: 3000),
-                                        )
-                                    )
-                                  } else {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(
-                                          content: Text('구독 취소 실패! 다시 시도해 주세요.',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(color: Colors.white),
-                                          ),
-                                          backgroundColor: Colors.redAccent,
-                                          duration: Duration(milliseconds: 1000),
-                                        )
-                                    )
-                                  }
-                                }).then((_) {
-                                  Navigator.of(context).pop();
-                                  _flush();
-                                });
-                              },
-                              child: Text('예', style: getButtonTextColor()),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(5.0),
-                            child: ElevatedButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: Text('아니오', style: getButtonTextColor()),
-                            ),
-                          )
-                        ],
-                      )
-                    ],
-                  );
-                });
-          },
-          child: Row(children: [
-            SizedBox(width: screenWidth * 0.1, child: Padding(padding: const EdgeInsets.all(5.0), child: Image.network(subscribe.team!.logo),)),
-            SizedBox(width: screenWidth * 0.4, child: Text(subscribe.team!.krName ?? subscribe.team!.name, style: const TextStyle(color: Colors.indigo, fontWeight: FontWeight.bold))),
-            const Expanded(child: SizedBox()),
-            SizedBox(width: screenWidth * 0.1, child: const Icon(Icons.remove))
-          ],),
-        );
-      }).toList());
-      return Container(
-        padding: const EdgeInsets.all(5.0),
-        child: Column(
-          children: teams
-        ),
-      );
-    }
     if (subscribes.isEmpty) {
       return Container(
         padding: const EdgeInsets.all(50.0),

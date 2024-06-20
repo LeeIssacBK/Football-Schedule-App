@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:geolpo/qna.dart';
 import 'package:geolpo/support.dart';
-import 'package:geolpo/myinfo.dart';
+import 'package:geolpo/my_info.dart';
 import 'package:geolpo/styles/text_styles.dart';
 import 'package:geolpo/utils/pageRoute.dart';
 import 'package:geolpo/widgets/global_widget.dart';

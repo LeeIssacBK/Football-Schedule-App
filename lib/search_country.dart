@@ -57,16 +57,21 @@ class _SearchCountry extends State<SearchCountry> {
                           children: leagues.map((country) {
                             return Column(
                               children: [
-                                TextButton(
-                                  onPressed: () {
+                                InkWell(
+                                  onTap: () {
                                     Navigator.push(context, globalPageRoute(SearchLeague(countryCode: country.code!)));
                                   },
-                                  style: const ButtonStyle(
-                                    alignment: Alignment.centerLeft,
-                                  ),
-                                  child: Text(
-                                    country.krName,
-                                    style: getSearchFont(),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(10.0),
+                                        child: Text(
+                                          country.krName,
+                                          style: getSearchFont(),
+                                        ),
+                                      )
+                                    ],
                                   ),
                                 ),
                               ],

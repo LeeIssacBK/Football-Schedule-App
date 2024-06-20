@@ -34,20 +34,34 @@ class _SearchLeague extends State<SearchLeague> {
                           return const CircularProgressIndicator();
                         }
                         List<League> leagues = snapshot.data!;
+                        if (leagues.isEmpty) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const SizedBox(height: 100.0,),
+                              Text('리그 정보를 찾을 수 없습니다.', style: getSearchFont(),),
+                            ],
+                          );
+                        }
                         return Column(
                           children: leagues.map((league) {
                             return Column(
                               children: [
-                                TextButton(
-                                  onPressed: () {
+                                InkWell(
+                                  onTap: () {
                                     Navigator.push(context, globalPageRoute(SearchTeam(leagueId: league.apiId)));
                                   },
-                                  style: const ButtonStyle(
-                                    alignment: Alignment.centerLeft,
-                                  ),
-                                  child: Text(
-                                    league.name,
-                                    style: getSearchFont(),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(10.0),
+                                        child: Text(
+                                          league.name,
+                                          style: getSearchFont(),
+                                        ),
+                                      )
+                                    ],
                                   ),
                                 ),
                               ],

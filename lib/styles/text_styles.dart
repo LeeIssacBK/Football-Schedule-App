@@ -25,7 +25,7 @@ TextStyle getDetailFont() {
 TextStyle getSearchFont() {
   return const TextStyle(
     color: Colors.indigo,
-    fontSize: 40.0,
+    fontSize: 37.0,
     fontWeight: FontWeight.bold,
     overflow: TextOverflow.ellipsis
   );
@@ -34,7 +34,7 @@ TextStyle getSearchFont() {
 TextStyle getMyPageFont() {
   return const TextStyle(
       color: Colors.indigo,
-      fontSize: 30.0,
+      fontSize: 37.0,
       fontWeight: FontWeight.bold,
       overflow: TextOverflow.ellipsis
   );

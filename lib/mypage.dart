@@ -44,48 +44,92 @@ class _MyPageState extends State<MyPage> {
                 ],
               ),
             ),
-            TextButton(onPressed: () {
-              Navigator.push(context, globalPageRoute(MyInfo()));
-            },
-              child: Text('내 정보', style: getMyPageFont())),
-            TextButton(onPressed: () {
-              Navigator.push(context, globalPageRoute(Qna()));
-            },
-                child: Text('Q & A', style: getMyPageFont())),
-            TextButton(onPressed: () {
-              Navigator.push(context, globalPageRoute(Support()));
-            },
-                child: Text('문의', style: getMyPageFont())),
-            TextButton(onPressed: () {
-              showDialog(context: context, builder: (BuildContext context) {
-                return AlertDialog(
-                  title: Text('알림', style: getAlertDialogTitleStyle(),),
-                  content: Text('로그아웃 하시겠습니까?', style: getAlertDialogContentStyle()),
-                  actions: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(5.0),
-                          child: ElevatedButton(
-                              onPressed: () => deleteToken().then((_) => logout()),
-                              child: Text('예', style: getButtonTextColor(),)),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(5.0),
-                          child: ElevatedButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: Text('아니오', style: getButtonTextColor(),)),
-                        ),
-                      ],
-                    )
-                  ],
-                );
-              });
+            InkWell(
+              onTap: () {
+                Navigator.push(context, globalPageRoute(MyInfo()));
               },
-              child: Text('로그아웃', style: getMyPageFont()))
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Text('내 정보', style: getMyPageFont())
+                  )
+                ],
+              ),
+            ),
+
+            InkWell(
+              onTap: () {
+                Navigator.push(context, globalPageRoute(Qna()));              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Text('Q & A', style: getMyPageFont())
+                  )
+                ],
+              ),
+            ),
+
+            InkWell(
+              onTap: () {
+                Navigator.push(context, globalPageRoute(Support()));             },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Text('문의', style: getMyPageFont())
+                  )
+                ],
+              ),
+            ),
+
+            InkWell(
+              onTap: () {
+                showDialog(context: context, builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text('알림', style: getAlertDialogTitleStyle(),),
+                    content: Text(
+                        '로그아웃 하시겠습니까?', style: getAlertDialogContentStyle()),
+                    actions: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(5.0),
+                            child: ElevatedButton(
+                                onPressed: () =>
+                                    deleteToken().then((_) => logout()),
+                                child: Text('예', style: getButtonTextColor(),)),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(5.0),
+                            child: ElevatedButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text(
+                                  '아니오', style: getButtonTextColor(),)),
+                          ),
+                        ],
+                      )
+                    ],
+                  );
+                });
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Text('로그아웃', style: getMyPageFont())
+                  )
+                ],
+              ),
+            ),
           ],
         ),
       )

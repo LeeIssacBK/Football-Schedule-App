@@ -32,18 +32,21 @@ class _QnaState extends State<Qna> {
                       return Column(
                         children: qnaList.map((qna) {
                             return ExpansionTile(
+                              shape: const Border(),
                               title: Text(qna.title, style: getDetailFont()),
                               subtitle: Text(qna.subtitle),
                               leading: const Icon(Icons.question_mark),
                               trailing: const Icon(Icons.arrow_drop_down),
-                              backgroundColor: Colors.white,
+                              backgroundColor: Colors.indigo[100],
                               textColor: Colors.indigo,
                               iconColor: Colors.indigo,
                               collapsedBackgroundColor: Colors.white,
                               collapsedTextColor: Colors.indigo,
                               collapsedIconColor: Colors.indigo,
                               children: [
-                                ListTile(title: Text(qna.content))
+                                ListTile(
+                                    title: Text(qna.content),
+                                )
                               ],
                             );
                           }).toList(),

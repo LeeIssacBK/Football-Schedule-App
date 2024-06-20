@@ -3,6 +3,7 @@ import 'package:geolpo/qna.dart';
 import 'package:geolpo/support.dart';
 import 'package:geolpo/myinfo.dart';
 import 'package:geolpo/styles/text_styles.dart';
+import 'package:geolpo/utils/pageRoute.dart';
 import 'package:geolpo/widgets/global_widget.dart';
 import 'package:intl/intl.dart';
 
@@ -44,15 +45,15 @@ class _MyPageState extends State<MyPage> {
               ),
             ),
             TextButton(onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => MyInfo()));
+              Navigator.push(context, globalPageRoute(MyInfo()));
             },
               child: Text('내 정보', style: getMyPageFont())),
             TextButton(onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => Qna()));
+              Navigator.push(context, globalPageRoute(Qna()));
             },
                 child: Text('Q & A', style: getMyPageFont())),
             TextButton(onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => Support()));
+              Navigator.push(context, globalPageRoute(Support()));
             },
                 child: Text('문의', style: getMyPageFont())),
             TextButton(onPressed: () {

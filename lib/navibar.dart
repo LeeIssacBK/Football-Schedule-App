@@ -37,6 +37,32 @@ class _NavibarState extends State<Navibar> {
     });
   }
 
+  Future<bool> _onWillPop() async {
+    if (selectedIndex != 0) {
+      setState(() {
+        selectedIndex = 0;
+      });
+      return false;
+    } else {
+      return await showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text('Exit App'),
+          content: Text('Do you really want to exit the app?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text('No'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: Text('Yes'),
+            ),
+          ],
+        ),
+      ) ?? false;
+    }
+  }
 
   @override
   void initState() {

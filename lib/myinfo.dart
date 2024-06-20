@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:geolpo/api/auth_api.dart';
 import 'package:geolpo/api/mypage_api.dart';
 import 'package:geolpo/dto/myinfo_dto.dart';
@@ -33,7 +31,7 @@ class _MyInfoState extends State<MyInfo> {
           child: Center(
               child: Column(
                   children: [
-                    getGlobalLine('내정보', getMainFont()),
+                    getGlobalLine('내 정보', getMainFont()),
                     Container(
                       decoration: const BoxDecoration(
                           border: Border(

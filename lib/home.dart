@@ -4,6 +4,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:geolpo/styles/text_styles.dart';
 import 'package:geolpo/team.dart';
+import 'package:geolpo/utils/pageRoute.dart';
 import 'package:geolpo/utils/parser.dart';
 import 'package:geolpo/widgets/global_widget.dart';
 import 'package:intl/intl.dart';
@@ -403,7 +404,7 @@ class _HomeState extends State<Home> {
         children: [
           IconButton(
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => TeamInfo(subscribe: subscribe)));
+              Navigator.push(context, globalPageRoute(TeamInfo(subscribe: subscribe)));
             },
             icon: Image.network(subscribe.team!.logo)
           ),

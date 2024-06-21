@@ -74,13 +74,13 @@ class _HomeState extends State<Home> {
                                         padding: const EdgeInsets.only(top: 5.0),
                                         child: Text(
                                           '${fixture.home!.krName ?? fixture.home!.name} vs ${fixture.away!.krName ?? fixture.away!.name}',
-                                          style: const TextStyle(fontSize: 12.0),
+                                          style: const TextStyle(fontSize: 14.0),
                                         ),
                                       ),
                                       Text(
                                         DateFormat('y. M. d ${getKoreanWeekDay(fixture.date)} HH:mm')
                                             .format(fixture.date),
-                                        style: const TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold, color: Colors.indigo),
+                                        style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold, color: Colors.indigo),
                                       ),
                                     ],
                                   ),
@@ -294,7 +294,7 @@ class _HomeState extends State<Home> {
             child: Text(subscribe.team!.krName ?? subscribe.team!.name,
                 style: const TextStyle(
                     color: Colors.indigo,
-                    fontSize: 20.0,
+                    fontSize: 27.0,
                     fontWeight: FontWeight.bold)),
           ),
         ],

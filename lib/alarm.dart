@@ -122,13 +122,13 @@ class _AlarmState extends State<Alarm> {
                             padding: const EdgeInsets.only(top: 5.0),
                             child: Text(
                               '${item.fixture.home!.krName ?? item.fixture.home!.name} vs ${item.fixture.away!.krName ?? item.fixture.away!.name}',
-                              style: const TextStyle(fontSize: 12.0),
+                              style: const TextStyle(fontSize: 14.0),
                             ),
                           ),
                           Text(
                             DateFormat('y. M. d ${getKoreanWeekDay(item.fixture.date)} HH:mm')
                                 .format(item.fixture.date),
-                            style: const TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold, color: Colors.indigo),
+                            style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold, color: Colors.indigo),
                           ),
                         ],
                       ),
@@ -242,18 +242,18 @@ class _AlarmState extends State<Alarm> {
                                             updateAlert(item.fixture.apiId, selectedValue).then((_) => {
                                               ScaffoldMessenger.of(context).showSnackBar(
                                                   const SnackBar(
-                                                    content: Text('알람이 수정되었습니다.', textAlign: TextAlign.center, style: TextStyle(color: Colors.white),),
+                                                    content: Text('알람이 수정되었습니다.', textAlign: TextAlign.center, style: TextStyle(color: Colors.white)),
                                                     backgroundColor: Colors.teal,
-                                                    duration: Duration(milliseconds: 3000),))
+                                                    duration: Duration(milliseconds: 3000)))
                                             }).then((_) {
                                               _flush();
                                             });
                                           } catch(e) {
                                             ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                                               content: Text('알람 수정에 실패하였습니다. 다시 시도해주세요.', textAlign: TextAlign.center,
-                                                style: TextStyle(color: Colors.white),),
+                                                style: TextStyle(color: Colors.white)),
                                               backgroundColor: Colors.redAccent,
-                                              duration: Duration(milliseconds: 3000),));
+                                              duration: Duration(milliseconds: 3000)));
                                           }
                                           Navigator.of(context).pop();
                                         },

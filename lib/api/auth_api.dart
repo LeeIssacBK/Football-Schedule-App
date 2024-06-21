@@ -1,11 +1,8 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
 import 'package:geolpo/api/api_filter.dart';
 import 'package:geolpo/dto/api_user_dto.dart';
 import 'package:geolpo/dto/auth_dto.dart';
-import 'package:geolpo/main.dart';
-import 'package:geolpo/styles/text_styles.dart';
 import 'package:http/http.dart' as http;
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 

@@ -24,7 +24,7 @@ Widget getLeagueTile(League? league) {
           minimumSize: const Size(10, 20),
           padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 0.0)
       ),
-      child: Text(league.name, style: const TextStyle(color: Colors.white, fontSize: 9))
+      child: Text(league.name, style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold))
   );
 }
 

@@ -33,7 +33,7 @@ class _SupportState extends State<Support> {
                   padding: const EdgeInsets.all(10.0),
                   child: Column(
                     children: [
-                      Row(children: [Text('유형', style: getDetailFont())],),
+                      Row(children: [Text('유형', style: getDetailFont2())],),
                       DropdownButton(
                           isExpanded: true,
                           hint: const Text('문의 유형 선택', style: TextStyle(color: Colors.indigo, fontSize: 18)),
@@ -61,7 +61,7 @@ class _SupportState extends State<Support> {
                   padding: const EdgeInsets.all(10.0),
                   child: Column(
                     children: [
-                      Row(children: [Text('제목', style: getDetailFont())],),
+                      Row(children: [Text('제목', style: getDetailFont2())],),
                       TextField(
                         decoration: const InputDecoration(
                           enabledBorder: OutlineInputBorder(
@@ -82,7 +82,7 @@ class _SupportState extends State<Support> {
                   padding: const EdgeInsets.all(10.0),
                   child: Column(
                     children: [
-                      Row(children: [Text('내용', style: getDetailFont(),)],),
+                      Row(children: [Text('내용', style: getDetailFont2(),)],),
                       SizedBox(
                         height: 300.0,
                         child: TextField(

@@ -22,6 +22,10 @@ TextStyle getDetailFont() {
   return const TextStyle(color: Colors.black, fontSize: 20.0, overflow: TextOverflow.ellipsis);
 }
 
+TextStyle getDetailFont2() {
+  return const TextStyle(color: Colors.indigo, fontSize: 20.0, fontWeight: FontWeight.bold, overflow: TextOverflow.ellipsis);
+}
+
 TextStyle getSearchFont() {
   return const TextStyle(
     color: Colors.indigo,
@@ -58,5 +62,5 @@ TextStyle getMyInfoFont2() {
 }
 
 TextStyle getButtonTextColor() {
-  return const TextStyle(color: Colors.indigo);
+  return const TextStyle(fontSize: 20.0, color: Colors.indigo);
 }

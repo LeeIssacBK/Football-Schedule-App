@@ -34,7 +34,6 @@ dependencies:
   kakao_flutter_sdk: ^1.9.1+2
   flutter:
     sdk: flutter
-  flutter_native_splash: ^2.4.0
   json_annotation: ^4.5.0
   flutter_svg: ^2.0.10+1
 
@@ -51,6 +50,7 @@ dependencies:
   syncfusion_localizations: 25.2.4
   firebase_messaging: ^15.0.0
   device_info_plus: ^10.1.0
+  flutter_native_splash: ^2.4.0
 
 dev_dependencies:
   flutter_test:

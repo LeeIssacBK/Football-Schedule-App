@@ -15,7 +15,7 @@ Response processResponse(Response response) {
     showDialog(context: context, builder: (BuildContext context) {
       return AlertDialog(
         title: Text('알림', style: getAlertDialogTitleStyle(),),
-        content: Text('토큰이 만료되었습니다. 다시 로그인해주세요.', style: getAlertDialogContentStyle()),
+        content: Text('토큰이 만료되었습니다.\n다시 로그인해주세요.', style: getAlertDialogContentStyle()),
         actions: [
           Center(
             child: Padding(

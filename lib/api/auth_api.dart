@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter_naver_login/flutter_naver_login.dart';
 import 'package:geolpo/api/api_filter.dart';
 import 'package:geolpo/dto/api_user_dto.dart';
 import 'package:geolpo/dto/auth_dto.dart';
@@ -27,6 +28,15 @@ Future<void> kakaoLogin() async {
   if ('ENABLED' != user!.status) {
     exceptionMessage = '탈퇴 3일 후 재가입 가능합니다.';
     throw Exception('user status invalid');
+  }
+}
+
+Future<void> naverLogin() async {
+  final NaverLoginResult result = await FlutterNaverLogin.logIn();
+  if (NaverLoginStatus.loggedIn == result.status) {
+
+  } else {
+    throw Exception('naver login status invalid');
   }
 }
 

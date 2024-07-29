@@ -27,10 +27,58 @@
 			<dict>
 				<key>CFBundleURLSchemes</key>
 				<array>
+				    <!-- kakao login -->
 					<string>kakao6ef65107292ada731123dac02c2d72bc</string>
+					<!-- naver login -->
+					<string>geolpo</string>
 				</array>
 			</dict>
 		</array>
+
+        <key>LSApplicationQueriesSchemes</key>
+        <array>
+           <string>naversearchapp</string>
+           <string>naversearchthirdlogin</string>
+        </array>
+
+        <key>naverServiceAppUrlScheme</key>
+        <string>geolpo</string>
+
+        <!-- naver client_id -->
+        <key>naverConsumerKey</key>
+        <string>client-id</string>
+
+        <!-- naver client_secret -->
+        <key>naverConsumerSecret</key>
+        <string>client-secret</string>
+
+        <key>naverServiceAppName</key>
+        <string>app_name</string>
+
+        <!-- http allows configurations -->
+        <key>NSAppTransportSecurity</key>
+        <dict>
+           <key>NSAllowsArbitraryLoads</key>
+           <true/>
+           <key>NSExceptionDomains</key>
+           <dict>
+              <key>naver.com</key>
+              <dict>
+                 <key>NSExceptionRequiresForwardSecrecy</key>
+                 <false/>
+                 <key>NSIncludesSubdomains</key>
+                 <true/>
+              </dict>
+              <key>naver.net</key>
+              <dict>
+                 <key>NSExceptionRequiresForwardSecrecy</key>
+                 <false/>
+                 <key>NSIncludesSubdomains</key>
+                 <true/>
+              </dict>
+            </dict>
+        </dict>
+
 		<key>CFBundleVersion</key>
 		<string>$(FLUTTER_BUILD_NUMBER)</string>
 		<key>LSRequiresIPhoneOS</key>

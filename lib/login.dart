@@ -56,6 +56,7 @@ class Login extends StatelessWidget {
               ),
               IconButton(
                 onPressed: () {
+                  // naverLogin();
                   showDialog(context: context, builder: (BuildContext context) {
                     return AlertDialog(
                       title: Text('알림', style: getAlertDialogTitleStyle(),),

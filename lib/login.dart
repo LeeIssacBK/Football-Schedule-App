@@ -56,25 +56,34 @@ class Login extends StatelessWidget {
               ),
               IconButton(
                 onPressed: () {
-                  naverLogin();
-                  // showDialog(context: context, builder: (BuildContext context) {
-                  //   return AlertDialog(
-                  //     title: Text('알림', style: getAlertDialogTitleStyle(),),
-                  //     content: Text('서비스 준비중입니다.', style: getAlertDialogContentStyle()),
-                  //     actions: [
-                  //       Center(
-                  //         child: Padding(
-                  //           padding: const EdgeInsets.all(5.0),
-                  //           child: ElevatedButton(
-                  //               onPressed: () {
-                  //                 Navigator.of(context).pop();
-                  //               },
-                  //               child: Text('확인', style: getButtonTextColor())),
-                  //         ),
-                  //       ),
-                  //     ],
-                  //   );
-                  // });
+                  naverLogin().then((_) {
+                    return saveUserDeviceAndFcmToken();
+                  }).then((_) {
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => Navibar(selectedIndex: 0)));
+                  }).catchError((error) {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('알림', style: getAlertDialogTitleStyle()),
+                          content: Text(exceptionMessage, style: getAlertDialogContentStyle()),
+                          actions: [
+                            Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(5.0),
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text('확인', style: getButtonTextColor()),
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  });
                 },
                 icon: ClipRRect(
                   borderRadius: BorderRadius.circular(10.0),

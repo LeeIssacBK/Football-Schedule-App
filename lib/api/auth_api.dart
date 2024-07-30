@@ -20,7 +20,8 @@ Future<void> kakaoLogin() async {
       : await UserApi.instance.loginWithKakaoAccount();
   final authResponse = await http.get(Uri.parse('$baseUrl/oauth/kakao?token=${kakaoOauth.accessToken}'));
   if (authResponse.statusCode == 200) {
-    baseHeader['Authorization'] = 'Bearer ${Auth.fromJson(json.decode(authResponse.body)).accessToken}';
+    auth = Auth.fromJson(json.decode(authResponse.body));
+    baseHeader['Authorization'] = 'Bearer ${auth!.accessToken}';
     validateUser();
   } else {
     throw Exception('auth response invalid');
@@ -45,7 +46,8 @@ Future<void> naverLogin() async {
         )
     );
     if (authResponse.statusCode == 200) {
-      baseHeader['Authorization'] = 'Bearer ${Auth.fromJson(json.decode(authResponse.body)).accessToken}';
+      auth = Auth.fromJson(json.decode(authResponse.body));
+      baseHeader['Authorization'] = 'Bearer ${auth!.accessToken}';
       validateUser();
     } else {
       throw Exception('naver login status invalid');

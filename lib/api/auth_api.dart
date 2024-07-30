@@ -7,8 +7,7 @@ import 'package:geolpo/dto/auth_dto.dart';
 import 'package:http/http.dart' as http;
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 
-const String baseUrl = 'http://172.30.1.73:8090';
-// const String baseUrl = 'http://13.209.12.8:8090';
+const String baseUrl = 'http://13.209.12.8:8090';
 late Auth? auth;
 late ApiUser? user;
 Map<String, String> baseHeader = {};
